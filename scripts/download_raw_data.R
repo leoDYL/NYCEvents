@@ -1,5 +1,9 @@
 library(tidyverse)
 
+dir.create("data")
+dir.create("data/raw_data")
+dir.create("data/derived_data")
+
 csv_file_names = c(
   "nyc_parks_event_listing_events.csv",
   "nyc_parks_event_listing_categories.csv",
@@ -20,8 +24,7 @@ l_csv = length(csv_file_names)
 for (i in 1 : l_csv) {
   download.file(csv_urls[i],
                 destfile = paste("data/raw_data/", csv_file_names[i], sep = ""))
-}  
-
+}
 
 library(readxl)
 
@@ -53,8 +56,7 @@ park_crimes_file_names = c(
   "nyc_parks_crime_2015_q3.xlsx",
   "nyc_parks_crime_2015_q2.xlsx",
   "nyc_parks_crime_2015_q1.xlsx",
-  "nyc_parks_crime_2014_q4.xlsx",
-  "nyc_parks_crime_2014_q3.xls"
+  "nyc_parks_crime_2014_q4.xlsx"
 )
 
 park_crimes_urls = c(
@@ -85,8 +87,7 @@ park_crimes_urls = c(
   "https://www1.nyc.gov/assets/nypd/downloads/excel/crime_statistics/park-crime/nyc-park-crime-stats-q3-2015.xlsx",
   "https://www1.nyc.gov/assets/nypd/downloads/excel/crime_statistics/park-crime/nyc-park-crime-stats-q2-2015.xlsx",
   "https://www1.nyc.gov/assets/nypd/downloads/excel/crime_statistics/park-crime/nyc-park-crime-stats-q1-2015.xlsx",
-  "https://www1.nyc.gov/assets/nypd/downloads/excel/crime_statistics/park-crime/nyc-park-crime-stats-q4-2014.xlsx",
-  "https://www1.nyc.gov/assets/nypd/downloads/excel/crime_statistics/park-crime/nyc-park-crime-stats-q3-2014.xls"
+  "https://www1.nyc.gov/assets/nypd/downloads/excel/crime_statistics/park-crime/nyc-park-crime-stats-q4-2014.xlsx"
 )
 
 crime_quarters <- c(
@@ -117,8 +118,7 @@ crime_quarters <- c(
   "2015_q3",
   "2015_q2",
   "2015_q1",
-  "2014_q4",
-  "2014_q3"
+  "2014_q4"
 )
 
 l_park_crimes = length(park_crimes_file_names)
@@ -144,15 +144,10 @@ for (i in 1 : (l_park_crimes - 1)) {
   write.csv(df, gsub("xlsx", "csv", destfile), row.names=FALSE)
 }
 
-# 2014Q3 is the final special case as the file is different format
-
-destfile <- paste("data/raw_data/", "nyc_parks_crime_2014_q3.xls", sep = "")
-df <- head(read_excel(destfile, sheet = 1, skip = 4), -1)
-write.csv(df, gsub("xlsx", "csv", destfile), row.names=FALSE)
-
 data_all <- list.files(path = "data/raw_data/",
-                       pattern = "nyc_parks_crime_.*.csv", full.names = TRUE) %>%
+                       pattern = "nyc_parks_crime_20.*.csv", full.names = TRUE) %>%
   lapply(read_csv) %>%
   bind_rows
-write.csv(data_all, "data/raw_data/nyc_parks_crime_data_all.csv", row.names=FALSE)
+
+write.csv(data_all, "data/derived_data/nyc_parks_crime_data_all.csv", row.names=FALSE)
 

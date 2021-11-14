@@ -3,4 +3,5 @@
 .Rhistory
 .RData
 .Ruserdata
+data/derived_data/*
 data/raw_data/*
