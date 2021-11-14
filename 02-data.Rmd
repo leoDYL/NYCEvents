@@ -10,5 +10,5 @@ The data we are using for this project are listed as following:
 
 [NYC Parks Events Listing – Event Organizers](https://data.cityofnewyork.us/City-Government/NYC-Parks-Events-Listing-Event-Organizers/jk6k-yab4), which can be [downloaded as a CSV file](https://data.cityofnewyork.us/api/views/jk6k-yab4/rows.csv?accessType=DOWNLOAD)
 
-You can use our prepared script at https://github.com/leoDYL/NYCEvents/blob/main/sql/download_raw_data.R to download all the source raw data we used in this project. 
+You can use our prepared script at https://github.com/leoDYL/NYCEvents/blob/main/scripts/download_raw_data.R to download all the source raw data we used in this project. 
 This script will create a `data/raw_data` directory under the project root (please run this scrip under the project root) and download all the source data files we used under this directory.

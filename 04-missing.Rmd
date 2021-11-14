@@ -16,5 +16,4 @@ names(nyc_event_listing_events) <- c(
 missing_value_plot(nyc_event_listing_events, percent=FALSE)
 col_missing = colSums(is.na(nyc_event_listing_events)) %>% sort(decreasing = TRUE)
 col_missing
-
 ```
