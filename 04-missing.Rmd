@@ -2,11 +2,19 @@
 
 ```{r}
 library(tidyverse)
+source("projectlibs/missing_value_plot.R")
 ```
 
-```{r}
+```{r nyc event listing events missing data}
 nyc_event_listing_events <- read.csv("data/raw_data/nyc_parks_event_listing_events.csv", na.strings = "")
 
-col_missing = colSums(is.na(nyc_event_listing_events))%>%sort(decreasing = TRUE)
+names(nyc_event_listing_events) <- c(
+  "evtId", "Title", "Dt", "ST", "ET", "LcDs", "Ds", "Snp", "Ph", "Em", "CsFr", "CsDs",
+  "MtSe", "Url", "Ntc"
+)
+
+missing_value_plot(nyc_event_listing_events, percent=FALSE)
+col_missing = colSums(is.na(nyc_event_listing_events)) %>% sort(decreasing = TRUE)
 col_missing
+
 ```
