@@ -1,9 +1,13 @@
 --- 
-title: "YOUR TITLE HERE"
-author: "YOUR NAMES HERE"
+title: "NYC Events Analysis"
+author: "Leo Du, Hao Li"
 date: "`r Sys.Date()`"
 site: bookdown::bookdown_site
 ---
 
 # Introduction
 
+As Columbia students, we live in one of the most diverse and energetic cities in the world. 
+The city has many interesting public places to visit - New York City has more than 1,700 parks, playgrounds, and recreation facilities across the five boroughs. 
+With the large number of public facilities, there are almost always fun events happening in the city everyday.
+We’re very fascinated by the different events hosted by different organizations and cultural groups here in NYC, and would like to explore several aspects about this topic.

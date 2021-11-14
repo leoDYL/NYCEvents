@@ -1,2 +1,14 @@
 # Data sources
 
+The data we are using for this project are listed as following:
+
+[NYC Parks Events Listing – Event Listing](https://data.cityofnewyork.us/City-Government/NYC-Parks-Events-Listing-Event-Listing/fudw-fgrp), which can be [downloaded as a CSV file](https://data.cityofnewyork.us/api/views/fudw-fgrp/rows.csv?accessType=DOWNLOAD).
+
+[NYC Parks Events Listing – Event Categories](https://data.cityofnewyork.us/City-Government/NYC-Parks-Events-Listing-Event-Categories/xtsw-fqvh), which can be [downloaded as a CSV file](https://data.cityofnewyork.us/api/views/xtsw-fqvh/rows.csv?accessType=DOWNLOAD)
+
+[NYC Parks Events Listing – Event Locations](https://data.cityofnewyork.us/City-Government/NYC-Parks-Events-Listing-Event-Locations/cpcm-i88g), which can be [downloaded as a CSV file](https://data.cityofnewyork.us/api/views/cpcm-i88g/rows.csv?accessType=DOWNLOAD)
+
+[NYC Parks Events Listing – Event Organizers](https://data.cityofnewyork.us/City-Government/NYC-Parks-Events-Listing-Event-Organizers/jk6k-yab4), which can be [downloaded as a CSV file](https://data.cityofnewyork.us/api/views/jk6k-yab4/rows.csv?accessType=DOWNLOAD)
+
+You can use our prepared script at https://github.com/leoDYL/NYCEvents/blob/main/sql/download_raw_data.R to download all the source raw data we used in this project. 
+This script will create a `data/raw_data` directory under the project root (please run this scrip under the project root) and download all the source data files we used under this directory.
