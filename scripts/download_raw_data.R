@@ -15,7 +15,7 @@ csv_urls = c(
   "https://data.cityofnewyork.us/api/views/fudw-fgrp/rows.csv?accessType=DOWNLOAD",
   "https://data.cityofnewyork.us/api/views/xtsw-fqvh/rows.csv?accessType=DOWNLOAD",
   "https://data.cityofnewyork.us/api/views/cpcm-i88g/rows.csv?accessType=DOWNLOAD",
-  "https://data.cityofnewyork.us/api/views/jk6k-yab4/rows.csv?accessType=DOWNLOAD",
+  "https://data.cityofnewyork.us/api/views/jk6k-yab4/rows.csv?accessType=DOWNLOAD"
 )
 
 
