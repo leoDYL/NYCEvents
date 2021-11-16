@@ -24,7 +24,7 @@
 <meta name="author" content="Leo Du, Hao Li" />
 
 
-<meta name="date" content="2021-11-14" />
+<meta name="date" content="2021-11-16" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -75,7 +75,11 @@
 <li class="divider"></li>
 <li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Introduction</a></li>
 <li class="chapter" data-level="2" data-path="data-sources.html"><a href="data-sources.html"><i class="fa fa-check"></i><b>2</b> Data sources</a></li>
-<li class="chapter" data-level="3" data-path="data-transformation.html"><a href="data-transformation.html"><i class="fa fa-check"></i><b>3</b> Data transformation</a></li>
+<li class="chapter" data-level="3" data-path="data-transformation.html"><a href="data-transformation.html"><i class="fa fa-check"></i><b>3</b> Data transformation</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="data-transformation.html"><a href="data-transformation.html#read-raw-data"><i class="fa fa-check"></i><b>3.1</b> Read Raw Data</a></li>
+<li class="chapter" data-level="3.2" data-path="data-transformation.html"><a href="data-transformation.html#joining-events-with-event-categories"><i class="fa fa-check"></i><b>3.2</b> Joining events with event categories</a></li>
+</ul></li>
 <li class="chapter" data-level="4" data-path="missing-values.html"><a href="missing-values.html"><i class="fa fa-check"></i><b>4</b> Missing values</a></li>
 <li class="chapter" data-level="5" data-path="results.html"><a href="results.html"><i class="fa fa-check"></i><b>5</b> Results</a></li>
 <li class="chapter" data-level="6" data-path="interactive-component.html"><a href="interactive-component.html"><i class="fa fa-check"></i><b>6</b> Interactive component</a></li>
@@ -101,7 +105,86 @@
             <section class="normal" id="section-">
 <div id="data-transformation" class="section level1" number="3">
 <h1><span class="header-section-number">Chapter 3</span> Data transformation</h1>
+<p>(Work in progress)</p>
+<div id="read-raw-data" class="section level2" number="3.1">
+<h2><span class="header-section-number">3.1</span> Read Raw Data</h2>
+</div>
+<div id="joining-events-with-event-categories" class="section level2" number="3.2">
+<h2><span class="header-section-number">3.2</span> Joining events with event categories</h2>
+<p>The events listing data is the main data table, therefore, we want to keep all rows in the events listing table even if there is no matching row in the other tables. As a result, we are performing left outer joins and keeping all rows of the <code>nyc_event_listing_events</code> data frame.</p>
+<pre><code>## # A tibble: 91,715 × 2
+##    EvtId CatCt
+##    &lt;int&gt; &lt;int&gt;
+##  1 62223     2
+##  2 62224     2
+##  3 62225     2
+##  4 62226     2
+##  5 62227     2
+##  6 62228     2
+##  7 62229     2
+##  8 62230     2
+##  9 62231     2
+## 10 62232     2
+## # … with 91,705 more rows</code></pre>
+<pre><code>## # A tibble: 127 × 2
+##    Cat                                             count
+##    &lt;chr&gt;                                           &lt;int&gt;
+##  1 Accessible                                       6653
+##  2 Anchor Parks                                       12
+##  3 Art                                             12046
+##  4 Art in the Parks: Celebrating 50 Years            134
+##  5 Art in the Parks: UNIQLO Park Expressions Grant    57
+##  6 Arts &amp; Crafts                                    6888
+##  7 Arts, Culture &amp; Fun Series                        734
+##  8 Astronomy                                         353
+##  9 Best for Kids                                   19785
+## 10 Bike Month NYC                                     91
+## # … with 117 more rows</code></pre>
+<pre><code>## # A tibble: 85,503 × 2
+##    EvtId OrgCt
+##    &lt;int&gt; &lt;int&gt;
+##  1 62223     1
+##  2 62224     1
+##  3 62225     1
+##  4 62226     1
+##  5 62227     1
+##  6 62228     1
+##  7 62229     1
+##  8 62230     1
+##  9 62231     1
+## 10 62232     1
+## # … with 85,493 more rows</code></pre>
+<pre><code>## # A tibble: 2,302 × 2
+##    Org                            count
+##    &lt;chr&gt;                          &lt;int&gt;
+##  1 : East 43rd Street Community G     1
+##  2 (TASCA) The American Small Cra    72
+##  3 (TASCA)The American Small Craf     1
+##  4 106 St. Old Timers                 1
+##  5 106 St. Old Timers, Inc.           2
+##  6 10th &amp; Stuyvesant Streets Bloc     1
+##  7 132nd st Community Garden          1
+##  8 14 Sculptors                       7
+##  9 150 - 155th Street Edgecombe B     2
+## 10 150th-155th Street Edgecombe A    11
+## # … with 2,292 more rows</code></pre>
+<pre><code>## # A tibble: 2,302 × 3
+## # Groups:   grp [733]
+##    Org                            count   grp
+##    &lt;chr&gt;                          &lt;int&gt; &lt;int&gt;
+##  1 : East 43rd Street Community G     1     1
+##  2 Aberdeen Street Community Seed     1     1
+##  3 East Fourth Street Community G     1     1
+##  4 Java Street Community Garden       1     1
+##  5 Madison Street Community Garde     1     1
+##  6 Woodbine Street Community Gard     1     1
+##  7 East 4th Street Community Gard     3     1
+##  8 Poplar Street Community Garden     3     1
+##  9 East 43rd Street Community Gar     9     1
+## 10 (TASCA)The American Small Craf     1     2
+## # … with 2,292 more rows</code></pre>
 
+</div>
 </div>
             </section>
 
