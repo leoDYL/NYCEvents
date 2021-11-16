@@ -24,7 +24,7 @@
 <meta name="author" content="Leo Du, Hao Li" />
 
 
-<meta name="date" content="2021-11-15" />
+<meta name="date" content="2021-11-16" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -101,21 +101,29 @@
             <section class="normal" id="section-">
 <div id="missing-values" class="section level1" number="4">
 <h1><span class="header-section-number">Chapter 4</span> Missing values</h1>
-<p><img src="finalproj_files/figure-html/nyc%20event%20listing%20events%20missing%20data-1.png" width="672" /></p>
+<p><img src="finalproj_files/figure-html/nyc%20event%20listing%20events%20missing%20data-1.png" width="672" /><img src="finalproj_files/figure-html/nyc%20event%20listing%20events%20missing%20data-2.png" width="672" /></p>
 <pre><code>##  LcDs  CsDs    Em    Ph   Snp    Ds   Url evtId Title    Dt    ST    ET  CsFr 
 ## 60360 59790 22941 16896   310     4     2     0     0     0     0     0     0 
 ##  MtSe   Ntc 
 ##     0     0</code></pre>
 <p>As shown in the graph above, the majority of the data points have missing fields. The most missed fields are “location_description” and “cost_description”. 75% of the data points don’t have those fields. We also have a lot of “Email” and “Phone” missings (around 25% and 20% respectively).</p>
-<p><img src="finalproj_files/figure-html/nyc%20park%20crimes%20missing%20data-1.png" width="672" /></p>
-<pre><code>##   Park   Boro   Size    Cat    Mdr   Rape    Rob    Ass   Burg    G_L GL_M_V 
+<p><img src="finalproj_files/figure-html/nyc%20event%20listing%20events%20missing%20data%20pruned-1.png" width="672" /><img src="finalproj_files/figure-html/nyc%20event%20listing%20events%20missing%20data%20pruned-2.png" width="672" /></p>
+<pre><code>##   Snp    Ds   Url evtId Title    Dt    ST    ET  CsFr  MtSe   Ntc 
+##   310     4     2     0     0     0     0     0     0     0     0</code></pre>
+<p><img src="finalproj_files/figure-html/nyc%20event%20listing%20locations%20missing%20data-1.png" width="672" /><img src="finalproj_files/figure-html/nyc%20event%20listing%20locations%20missing%20data-2.png" width="672" /></p>
+<pre><code>##  Addr  Acce   Zip  pkId  Boro  Name evtId   Lat  Long 
+## 46061 42620 37826 12263  1479     2     0     0     0</code></pre>
+<pre><code>##  [1] &quot;PARK&quot;                           &quot;BOROUGH&quot;                       
+##  [3] &quot;SIZE..ACRES.&quot;                   &quot;CATEGORY&quot;                      
+##  [5] &quot;MURDER&quot;                         &quot;RAPE&quot;                          
+##  [7] &quot;ROBBERY&quot;                        &quot;FELONY.ASSAULT&quot;                
+##  [9] &quot;BURGLARY&quot;                       &quot;GRAND.LARCENY&quot;                 
+## [11] &quot;GRAND.LARCENY.OF.MOTOR.VEHICLE&quot; &quot;TOTAL&quot;                         
+## [13] &quot;QUARTER&quot;</code></pre>
+<p><img src="finalproj_files/figure-html/nyc%20park%20crimes%20missing%20data-1.png" width="672" /><img src="finalproj_files/figure-html/nyc%20park%20crimes%20missing%20data-2.png" width="672" /></p>
+<pre><code>##   Park    Qtr   Boro   Size    Cat    Mdr   Rape    Rob    Ass   Burg    G_L 
 ##      0      0      0      0      0      0      0      0      0      0      0 
-##    Tot    Qtr 
-##      0      0</code></pre>
-<p><img src="finalproj_files/figure-html/nyc%20park%20crimes%20missing%20data-2.png" width="672" /></p>
-<pre><code>##   Boro   Size    Cat    Mdr   Rape    Rob    Ass   Burg    G_L GL_M_V    Tot 
-##   1154   1154   1154   1154   1154   1154   1154   1154   1154   1154   1154 
-##   Park    Qtr 
+## GL_M_V    Tot 
 ##      0      0</code></pre>
 <p>The NYC park crime data originally comes in different files by quarter. We consolidated all the files there are to analyze the missing data pattern. At the beginning, there are no missing data pattern found in the data set. However, after complementing all the quarters in the quarter column for each park, we notice that there are a small portion of the parks that do not have data for certain quarters. Since the number of those parks are minimal, we have the option to remove them from our future studies.</p>
 
