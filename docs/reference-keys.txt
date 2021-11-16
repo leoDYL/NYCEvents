@@ -4,6 +4,8 @@ data-transformation
 read-raw-data
 joining-events-with-event-categories
 missing-values
+missing-values-for-individual-data-tables
+missing-values-for-organizers-and-categories
 results
 interactive-component
 conclusion
