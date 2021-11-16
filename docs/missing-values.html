@@ -24,7 +24,7 @@
 <meta name="author" content="Leo Du, Hao Li" />
 
 
-<meta name="date" content="2021-11-14" />
+<meta name="date" content="2021-11-15" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -106,6 +106,18 @@
 ## 60360 59790 22941 16896   310     4     2     0     0     0     0     0     0 
 ##  MtSe   Ntc 
 ##     0     0</code></pre>
+<p>As shown in the graph above, the majority of the data points have missing fields. The most missed fields are “location_description” and “cost_description”. 75% of the data points don’t have those fields. We also have a lot of “Email” and “Phone” missings (around 25% and 20% respectively).</p>
+<p><img src="finalproj_files/figure-html/nyc%20park%20crimes%20missing%20data-1.png" width="672" /></p>
+<pre><code>##   Park   Boro   Size    Cat    Mdr   Rape    Rob    Ass   Burg    G_L GL_M_V 
+##      0      0      0      0      0      0      0      0      0      0      0 
+##    Tot    Qtr 
+##      0      0</code></pre>
+<p><img src="finalproj_files/figure-html/nyc%20park%20crimes%20missing%20data-2.png" width="672" /></p>
+<pre><code>##   Boro   Size    Cat    Mdr   Rape    Rob    Ass   Burg    G_L GL_M_V    Tot 
+##   1154   1154   1154   1154   1154   1154   1154   1154   1154   1154   1154 
+##   Park    Qtr 
+##      0      0</code></pre>
+<p>The NYC park crime data originally comes in different files by quarter. We consolidated all the files there are to analyze the missing data pattern. At the beginning, there are no missing data pattern found in the data set. However, after complementing all the quarters in the quarter column for each park, we notice that there are a small portion of the parks that do not have data for certain quarters. Since the number of those parks are minimal, we have the option to remove them from our future studies.</p>
 
 </div>
             </section>
