@@ -7,19 +7,11 @@ source("projectlibs/missing_value_plot.R")
 
 ```{r nyc event listing events missing data}
 missing_value_plot(nyc_event_listing_events, percent=FALSE)
-col_missing = colSums(is.na(nyc_event_listing_events)) %>% sort(decreasing = TRUE)
-col_missing
+colSums(is.na(nyc_event_listing_events)) %>% sort(decreasing = TRUE)
 ```
 
+As shown in the graph above, the majority of the data points have missing fields. The most missed fields are "location_description" and "cost_description". 75% of the data points don't have those fields. We also have a lot of "Email" and "Phone" missings (around 25% and 20% respectively). 
 
-```{r}
-names(nyc_events_with_categories) <- c(
-  "EvtId", "Title", "Dt", "ST", "ET", "LcDs", "Ds", "Snp", "Ph", "Em", "CsFr", "CsDs",
-  "MtSe", "Url", "Ntc", "name"
-)
-missing_value_plot(nyc_events_with_categories, percent=FALSE)
-
-```
 
 ### Missing Values for individual data tables
 
@@ -62,4 +54,63 @@ When only looking at
 
 There are roughly 15% cases from the joined dataset that have registered an event_id, organizer and category 
 
+
+
+
+```{r nyc park crimes missing data}
+nyc_parks_crime <- read.csv("data/derived_data/nyc_parks_crime_data_all.csv", na.strings = "")
+
+names(nyc_parks_crime) <- c(
+  "Park", "Boro", "Size", "Cat", "Mdr", "Rape", "Rob", "Ass", "Burg", "G_L", "GL_M_V", "Tot", "Qtr"
+)
+
+crime_quarters <- c(
+  "2021_q3",
+  "2021_q2",
+  "2021_q1",
+  "2020_q4",
+  "2020_q3",
+  "2020_q2",
+  "2020_q1",
+  "2019_q4",
+  "2019_q3",
+  "2019_q2",
+  "2019_q1",
+  "2018_q4",
+  "2018_q3",
+  "2018_q2",
+  "2018_q1",
+  "2017_q4",
+  "2017_q3",
+  "2017_q2",
+  "2017_q1",
+  "2016_q4",
+  "2016_q3",
+  "2016_q2",
+  "2016_q1",
+  "2015_q4",
+  "2015_q3",
+  "2015_q2",
+  "2015_q1",
+  "2014_q4"
+)
+
+parks <- unique(nyc_parks_crime$Park)
+
+park_qtr_missing_check <- data.frame(
+  rep(parks, each = length(crime_quarters)), 
+  rep(crime_quarters, times = length(parks))
+  )
+names(park_qtr_missing_check) <- c("Park", "Qtr")
+nyc_parks_crime_complete_quarters <- merge(nyc_parks_crime, park_qtr_missing_check, by=c("Park", "Qtr"), all.y = TRUE) 
+
+missing_value_plot(nyc_parks_crime, percent=TRUE)
+col_missing = colSums(is.na(nyc_parks_crime)) %>% sort(decreasing = TRUE)
+col_missing
+
+missing_value_plot(nyc_parks_crime_complete_quarters, percent=TRUE)
+col_missing = colSums(is.na(nyc_parks_crime_complete_quarters)) %>% sort(decreasing = TRUE)
+col_missing
+```
+The NYC park crime data originally comes in different files by quarter. We consolidated all the files there are to analyze the missing data pattern. At the beginning, there are no missing data pattern found in the data set. However, after complementing all the quarters in the quarter column for each park, we notice that there are a small portion of the parks that do not have data for certain quarters. Since the number of those parks are minimal, we have the option to remove them from our future studies. 
 

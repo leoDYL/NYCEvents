@@ -114,11 +114,11 @@
 ## 60360 59790 22941 16896   310     4     2     0     0     0     0     0     0 
 ##  MtSe   Ntc 
 ##     0     0</code></pre>
-<p><img src="finalproj_files/figure-html/unnamed-chunk-10-1.png" width="672" /></p>
+<p>As shown in the graph above, the majority of the data points have missing fields. The most missed fields are “location_description” and “cost_description”. 75% of the data points don’t have those fields. We also have a lot of “Email” and “Phone” missings (around 25% and 20% respectively).</p>
 <div id="missing-values-for-individual-data-tables" class="section level3" number="4.0.1">
 <h3><span class="header-section-number">4.0.1</span> Missing Values for individual data tables</h3>
 <p>We also inspect the other individual data tables that we are planning to use for our analysis.</p>
-<p><img src="finalproj_files/figure-html/unnamed-chunk-11-1.png" width="672" /><img src="finalproj_files/figure-html/unnamed-chunk-11-2.png" width="672" /></p>
+<p><img src="finalproj_files/figure-html/unnamed-chunk-10-1.png" width="672" /><img src="finalproj_files/figure-html/unnamed-chunk-10-2.png" width="672" /></p>
 <pre><code>##   Org EvtId 
 ##     1     0</code></pre>
 <p>As can be clearly seen from the missing data plots, the event category table itself does not have any missing data, and the event organizer table has very few missing organizer rows, more precisely, it only has 1 row missing.</p>
@@ -127,9 +127,20 @@
 <div id="missing-values-for-organizers-and-categories" class="section level3" number="4.0.2">
 <h3><span class="header-section-number">4.0.2</span> Missing Values for Organizers and Categories</h3>
 <p>As analyzed above,</p>
-<p><img src="finalproj_files/figure-html/unnamed-chunk-12-1.png" width="672" /><img src="finalproj_files/figure-html/unnamed-chunk-12-2.png" width="672" /><img src="finalproj_files/figure-html/unnamed-chunk-12-3.png" width="672" /><img src="finalproj_files/figure-html/unnamed-chunk-12-4.png" width="672" /></p>
+<p><img src="finalproj_files/figure-html/unnamed-chunk-11-1.png" width="672" /><img src="finalproj_files/figure-html/unnamed-chunk-11-2.png" width="672" /><img src="finalproj_files/figure-html/unnamed-chunk-11-3.png" width="672" /><img src="finalproj_files/figure-html/unnamed-chunk-11-4.png" width="672" /></p>
 <p>When only looking at</p>
 <p>There are roughly 15% cases from the joined dataset that have registered an event_id, organizer and category</p>
+<p><img src="finalproj_files/figure-html/nyc%20park%20crimes%20missing%20data-1.png" width="672" /></p>
+<pre><code>##   Park   Boro   Size    Cat    Mdr   Rape    Rob    Ass   Burg    G_L GL_M_V 
+##      0      0      0      0      0      0      0      0      0      0      0 
+##    Tot    Qtr 
+##      0      0</code></pre>
+<p><img src="finalproj_files/figure-html/nyc%20park%20crimes%20missing%20data-2.png" width="672" /></p>
+<pre><code>##   Park    Qtr   Boro   Size    Cat    Mdr   Rape    Rob    Ass   Burg    G_L 
+##      0      0      0      0      0      0      0      0      0      0      0 
+## GL_M_V    Tot 
+##      0      0</code></pre>
+<p>The NYC park crime data originally comes in different files by quarter. We consolidated all the files there are to analyze the missing data pattern. At the beginning, there are no missing data pattern found in the data set. However, after complementing all the quarters in the quarter column for each park, we notice that there are a small portion of the parks that do not have data for certain quarters. Since the number of those parks are minimal, we have the option to remove them from our future studies.</p>
 
 </div>
 </div>
