@@ -78,12 +78,26 @@
 <li class="chapter" data-level="3" data-path="data-transformation.html"><a href="data-transformation.html"><i class="fa fa-check"></i><b>3</b> Data transformation</a>
 <ul>
 <li class="chapter" data-level="3.1" data-path="data-transformation.html"><a href="data-transformation.html#read-raw-data"><i class="fa fa-check"></i><b>3.1</b> Read Raw Data</a></li>
-<li class="chapter" data-level="3.2" data-path="data-transformation.html"><a href="data-transformation.html#joining-events-with-event-categories"><i class="fa fa-check"></i><b>3.2</b> Joining events with event categories</a></li>
+<li class="chapter" data-level="3.2" data-path="data-transformation.html"><a href="data-transformation.html#joining-events-with-other-tables"><i class="fa fa-check"></i><b>3.2</b> Joining events with other tables</a></li>
 </ul></li>
 <li class="chapter" data-level="4" data-path="missing-values.html"><a href="missing-values.html"><i class="fa fa-check"></i><b>4</b> Missing values</a>
 <ul>
-<li class="chapter" data-level="4.0.1" data-path="missing-values.html"><a href="missing-values.html#missing-values-for-individual-data-tables"><i class="fa fa-check"></i><b>4.0.1</b> Missing Values for individual data tables</a></li>
-<li class="chapter" data-level="4.0.2" data-path="missing-values.html"><a href="missing-values.html#missing-values-for-organizers-and-categories"><i class="fa fa-check"></i><b>4.0.2</b> Missing Values for Organizers and Categories</a></li>
+<li class="chapter" data-level="4.1" data-path="missing-values.html"><a href="missing-values.html#missing-values-by-individual-tables"><i class="fa fa-check"></i><b>4.1</b> Missing Values By Individual Tables</a>
+<ul>
+<li class="chapter" data-level="4.1.1" data-path="missing-values.html"><a href="missing-values.html#missing-values-for-main-events-listing-table"><i class="fa fa-check"></i><b>4.1.1</b> Missing Values for Main Events Listing Table</a></li>
+<li class="chapter" data-level="4.1.2" data-path="missing-values.html"><a href="missing-values.html#missing-values-for-auxiliary-tables"><i class="fa fa-check"></i><b>4.1.2</b> Missing Values for Auxiliary Tables</a></li>
+</ul></li>
+<li class="chapter" data-level="4.2" data-path="missing-values.html"><a href="missing-values.html#missing-values-for-joined-data-table"><i class="fa fa-check"></i><b>4.2</b> Missing Values for Joined Data Table</a>
+<ul>
+<li class="chapter" data-level="4.2.1" data-path="missing-values.html"><a href="missing-values.html#using-full-outer-joins"><i class="fa fa-check"></i><b>4.2.1</b> Using Full Outer Joins</a></li>
+<li class="chapter" data-level="4.2.2" data-path="missing-values.html"><a href="missing-values.html#using-left-outer-joins"><i class="fa fa-check"></i><b>4.2.2</b> Using Left Outer Joins</a></li>
+</ul></li>
+<li class="chapter" data-level="4.3" data-path="missing-values.html"><a href="missing-values.html#top-categories-with-missing-organizer"><i class="fa fa-check"></i><b>4.3</b> Top Categories with Missing Organizer</a>
+<ul>
+<li class="chapter" data-level="4.3.1" data-path="missing-values.html"><a href="missing-values.html#number-of-missing-category-by-organizer"><i class="fa fa-check"></i><b>4.3.1</b> Number of Missing Category By Organizer</a></li>
+<li class="chapter" data-level="4.3.2" data-path="missing-values.html"><a href="missing-values.html#number-of-missing-by-date"><i class="fa fa-check"></i><b>4.3.2</b> Number of Missing By Date</a></li>
+</ul></li>
+<li class="chapter" data-level="4.4" data-path="missing-values.html"><a href="missing-values.html#missing-values-for-crimes-in-parks"><i class="fa fa-check"></i><b>4.4</b> Missing Values for Crimes in Parks</a></li>
 </ul></li>
 <li class="chapter" data-level="5" data-path="results.html"><a href="results.html"><i class="fa fa-check"></i><b>5</b> Results</a></li>
 <li class="chapter" data-level="6" data-path="interactive-component.html"><a href="interactive-component.html"><i class="fa fa-check"></i><b>6</b> Interactive component</a></li>
@@ -113,9 +127,10 @@
 <div id="read-raw-data" class="section level2" number="3.1">
 <h2><span class="header-section-number">3.1</span> Read Raw Data</h2>
 </div>
-<div id="joining-events-with-event-categories" class="section level2" number="3.2">
-<h2><span class="header-section-number">3.2</span> Joining events with event categories</h2>
-<p>The events listing data is the main data table, therefore, we want to keep all rows in the events listing table even if there is no matching row in the other tables. As a result, we are performing left outer joins and keeping all rows of the <code>nyc_event_listing_events</code> data frame.</p>
+<div id="joining-events-with-other-tables" class="section level2" number="3.2">
+<h2><span class="header-section-number">3.2</span> Joining events with other tables</h2>
+<p>(TOOD: No longer accurate)
+The events listing data is the main data table, therefore, we want to keep all rows in the events listing table even if there is no matching row in the other tables. As a result, we are performing left outer joins and keeping all rows of the <code>nyc_event_listing_events</code> data frame.</p>
 <pre><code>## # A tibble: 91,715 × 2
 ##    EvtId CatCt
 ##    &lt;int&gt; &lt;int&gt;
@@ -144,7 +159,7 @@
 ##  9 Best for Kids                                   19785
 ## 10 Bike Month NYC                                     91
 ## # … with 117 more rows</code></pre>
-<pre><code>## # A tibble: 85,503 × 2
+<pre><code>## # A tibble: 85,502 × 2
 ##    EvtId OrgCt
 ##    &lt;int&gt; &lt;int&gt;
 ##  1 62223     1
@@ -157,7 +172,7 @@
 ##  8 62230     1
 ##  9 62231     1
 ## 10 62232     1
-## # … with 85,493 more rows</code></pre>
+## # … with 85,492 more rows</code></pre>
 <pre><code>## # A tibble: 2,302 × 2
 ##    Org                            count
 ##    &lt;chr&gt;                          &lt;int&gt;
