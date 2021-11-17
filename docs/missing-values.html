@@ -94,8 +94,7 @@
 </ul></li>
 <li class="chapter" data-level="4.3" data-path="missing-values.html"><a href="missing-values.html#top-categories-with-missing-organizer"><i class="fa fa-check"></i><b>4.3</b> Top Categories with Missing Organizer</a>
 <ul>
-<li class="chapter" data-level="4.3.1" data-path="missing-values.html"><a href="missing-values.html#number-of-missing-category-by-organizer"><i class="fa fa-check"></i><b>4.3.1</b> Number of Missing Category By Organizer</a></li>
-<li class="chapter" data-level="4.3.2" data-path="missing-values.html"><a href="missing-values.html#number-of-missing-by-date"><i class="fa fa-check"></i><b>4.3.2</b> Number of Missing By Date</a></li>
+<li class="chapter" data-level="4.3.1" data-path="missing-values.html"><a href="missing-values.html#number-of-missing-by-date"><i class="fa fa-check"></i><b>4.3.1</b> Number of Missing By Date</a></li>
 </ul></li>
 <li class="chapter" data-level="4.4" data-path="missing-values.html"><a href="missing-values.html#missing-values-for-crimes-in-parks"><i class="fa fa-check"></i><b>4.4</b> Missing Values for Crimes in Parks</a></li>
 </ul></li>
@@ -207,29 +206,10 @@ missing an organizer, as we thought all events should have an organizer. Therefo
 across the different categories would be higher than the number of events with missing organizers in the previous
 section.</p>
 <p><img src="finalproj_files/figure-html/unnamed-chunk-14-1.png" width="672" /></p>
-<p>So it seems like sports-related events (with Fitness/Running/Sports/Outdoor Fitness categories) are common themes
-for events missing organizer information in our dataset. A closer look at the specific event titles suggests that
-a lot of them were running events organized by “NYRR” in different parks:</p>
+<p>So it seems that sports-related events (with Fitness/Running/Sports/Outdoor Fitness categories) are the most common themes for events missing organizer information in our dataset. A closer look at the specific event titles suggests that a lot of them were running events organized by “NYRR” in different parks:</p>
 <p><img src="finalproj_files/figure-html/unnamed-chunk-15-1.png" width="672" /></p>
-<div id="number-of-missing-category-by-organizer" class="section level3" number="4.3.1">
-<h3><span class="header-section-number">4.3.1</span> Number of Missing Category By Organizer</h3>
-<pre><code>## # A tibble: 2,168 × 2
-##    Org                                 Total_Missing
-##    &lt;chr&gt;                                       &lt;int&gt;
-##  1 Bryant Park Corp.                             223
-##  2 &lt;NA&gt;                                           54
-##  3 NYC Parks: Bronx Recreation                    22
-##  4 Brooklyn Bridge Park Conservancy               21
-##  5 NYC Parks: Staten Island Recreation            20
-##  6 Prospect Park Alliance                         10
-##  7 City Parks Foundation                           7
-##  8 Queens Botanical Garden                         7
-##  9 Forest Park                                     6
-## 10 GrowNYC                                         6
-## # … with 2,158 more rows</code></pre>
-</div>
-<div id="number-of-missing-by-date" class="section level3" number="4.3.2">
-<h3><span class="header-section-number">4.3.2</span> Number of Missing By Date</h3>
+<div id="number-of-missing-by-date" class="section level3" number="4.3.1">
+<h3><span class="header-section-number">4.3.1</span> Number of Missing By Date</h3>
 </div>
 </div>
 <div id="missing-values-for-crimes-in-parks" class="section level2" number="4.4">

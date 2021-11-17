@@ -12,3 +12,4 @@ The data we are using for this project are listed as following:
 
 You can use our prepared script at https://github.com/leoDYL/NYCEvents/blob/main/scripts/download_raw_data.R to download all the source raw data we used in this project. 
 This script will create a `data/raw_data` directory under the project root (please run this scrip under the project root) and download all the source data files we used under this directory.
+
