@@ -84,7 +84,6 @@ crime_quarters <- c(
   "2015_q1",
   "2014_q4"
 )
-
 ```
 
 ## Joining events with other tables
@@ -107,6 +106,7 @@ nyc_events_joined <- nyc_event_listing_events %>%
     all.x = TRUE,
     all.y = TRUE)
 ```
+
 
 (TOOD: No longer accurate)
 The events listing data is the main data table, therefore, we want to keep all rows in the events listing table even if there is no matching row in the other tables. As a result, we are performing left outer joins and keeping all rows of the `nyc_event_listing_events` data frame.

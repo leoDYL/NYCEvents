@@ -10,6 +10,7 @@ source("projectlibs/missing_value_plot.R")
 We first analyze the missing values pattern for all of our tables individually.
 
 ### Missing Values for Main Events Listing Table
+
 As shown in the graph below, the majority of the data points have missing fields. The most missed fields are location_description (`LcDs`) and  cost_description (`CsDs`). 75% of the data points don't have those fields. We also have a lot of Email (`Em`) and Phone (`Ph`) missings (around 25% and 20% respectively). Those fields are not useful to our further analysis. For the description fields, they are textual and semantic, which would be interesting subjects for analysis and learning. However, the complexity of such analysis is beyond this study. As for contact information like email and phone number, they are not relevant to our analysis.
 
 ```{r nyc event listing events missing data}
@@ -30,7 +31,6 @@ missing_value_plot(nyc_envent_listing_events_sub, percent=FALSE)
 col_missing = colSums(is.na(nyc_envent_listing_events_sub)) %>% sort(decreasing = TRUE)
 col_missing
 ```
-
 
 ### Missing Values for Auxiliary Tables
 
@@ -100,7 +100,6 @@ nyc_events_joined[c("EvtId", "Title", "Lat", "Org", "Cat")] %>%
   ungroup()
 ```
 
-
 ```{r}
 nyc_events_with_is_na <- nyc_events_joined[c("EvtId", "Title", "Lat", "Org", "Cat")] %>%
   group_by(EvtId) %>%
@@ -133,6 +132,7 @@ It is also interesting to see that there are no cases of all organizer, category
 A potential explanation for the above facts might be that a placeholder event can be registered in the 
 system with a minimum one of these three pieces of information and an event_id was generated, but the event
 may or may not ultimately get listed and stored in the main event listing table.
+
 
 ### Using Left Outer Joins
 
@@ -215,9 +215,6 @@ nyc_events_left_joined %>%
   labs(x = "Number missing an organizer", y = "Event Title") +
   theme_linedraw() 
 ```
-
-
-### Number of Missing By Date
 
 ## Missing Values for Crimes in Parks
 
