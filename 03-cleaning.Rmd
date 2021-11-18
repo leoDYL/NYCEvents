@@ -24,10 +24,31 @@ names(nyc_event_organizers) <- c("EvtId", "Org") # event_id, event_organizer
 nyc_event_locations <- read.csv("data/raw_data/nyc_parks_event_listing_locations.csv", na.strings = "")
 names(nyc_event_locations) <- c("EvtId", "PkNm", "PkId", "Lat", "Long", "Addr", "Zip", "Bo", "Accs")
 
+
 ```
 
-## Joining events with event categories
+## Joining events with other tables
 
+```{r}
+nyc_events_joined <- nyc_event_listing_events %>%
+  merge(
+    y = nyc_event_categories, 
+    by = "EvtId", 
+    all.x = TRUE,
+    all.y = TRUE) %>%
+  merge(
+    y = nyc_event_organizers, 
+    by = "EvtId", 
+    all.x = TRUE,
+    all.y = TRUE) %>%
+  merge(
+    y = nyc_event_locations, 
+    by = "EvtId", 
+    all.x = TRUE,
+    all.y = TRUE)
+```
+
+(TOOD: No longer accurate)
 The events listing data is the main data table, therefore, we want to keep all rows in the events listing table even if there is no matching row in the other tables. As a result, we are performing left outer joins and keeping all rows of the `nyc_event_listing_events` data frame.
 
 
@@ -39,6 +60,7 @@ nyc_events_with_categories <-
         all.x = TRUE)
 
 nyc_events_with_category_counts <- nyc_event_categories %>%
+  drop_na() %>%
   group_by(EvtId) %>%
   summarize(CatCt = n()) %>%
   ungroup()
@@ -54,6 +76,7 @@ nyc_events_with_categories %>%
 
 ```{r}
 nyc_events_with_organizer_counts <- nyc_event_organizers %>%
+  drop_na() %>%
   group_by(EvtId) %>%
   summarize(OrgCt = n()) %>%
   ungroup()
@@ -69,6 +92,8 @@ nyc_events_with_cat_org_counts <- nyc_event_listing_events %>%
         by = "EvtId", 
         all.x = TRUE, all.y = TRUE)
 ```
+
+
 
 
 ```{r scratch work}

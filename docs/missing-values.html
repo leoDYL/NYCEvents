@@ -78,12 +78,25 @@
 <li class="chapter" data-level="3" data-path="data-transformation.html"><a href="data-transformation.html"><i class="fa fa-check"></i><b>3</b> Data transformation</a>
 <ul>
 <li class="chapter" data-level="3.1" data-path="data-transformation.html"><a href="data-transformation.html#read-raw-data"><i class="fa fa-check"></i><b>3.1</b> Read Raw Data</a></li>
-<li class="chapter" data-level="3.2" data-path="data-transformation.html"><a href="data-transformation.html#joining-events-with-event-categories"><i class="fa fa-check"></i><b>3.2</b> Joining events with event categories</a></li>
+<li class="chapter" data-level="3.2" data-path="data-transformation.html"><a href="data-transformation.html#joining-events-with-other-tables"><i class="fa fa-check"></i><b>3.2</b> Joining events with other tables</a></li>
 </ul></li>
 <li class="chapter" data-level="4" data-path="missing-values.html"><a href="missing-values.html"><i class="fa fa-check"></i><b>4</b> Missing values</a>
 <ul>
-<li class="chapter" data-level="4.0.1" data-path="missing-values.html"><a href="missing-values.html#missing-values-for-individual-data-tables"><i class="fa fa-check"></i><b>4.0.1</b> Missing Values for individual data tables</a></li>
-<li class="chapter" data-level="4.0.2" data-path="missing-values.html"><a href="missing-values.html#missing-values-for-organizers-and-categories"><i class="fa fa-check"></i><b>4.0.2</b> Missing Values for Organizers and Categories</a></li>
+<li class="chapter" data-level="4.1" data-path="missing-values.html"><a href="missing-values.html#missing-values-by-individual-tables"><i class="fa fa-check"></i><b>4.1</b> Missing Values By Individual Tables</a>
+<ul>
+<li class="chapter" data-level="4.1.1" data-path="missing-values.html"><a href="missing-values.html#missing-values-for-main-events-listing-table"><i class="fa fa-check"></i><b>4.1.1</b> Missing Values for Main Events Listing Table</a></li>
+<li class="chapter" data-level="4.1.2" data-path="missing-values.html"><a href="missing-values.html#missing-values-for-auxiliary-tables"><i class="fa fa-check"></i><b>4.1.2</b> Missing Values for Auxiliary Tables</a></li>
+</ul></li>
+<li class="chapter" data-level="4.2" data-path="missing-values.html"><a href="missing-values.html#missing-values-for-joined-data-table"><i class="fa fa-check"></i><b>4.2</b> Missing Values for Joined Data Table</a>
+<ul>
+<li class="chapter" data-level="4.2.1" data-path="missing-values.html"><a href="missing-values.html#using-full-outer-joins"><i class="fa fa-check"></i><b>4.2.1</b> Using Full Outer Joins</a></li>
+<li class="chapter" data-level="4.2.2" data-path="missing-values.html"><a href="missing-values.html#using-left-outer-joins"><i class="fa fa-check"></i><b>4.2.2</b> Using Left Outer Joins</a></li>
+</ul></li>
+<li class="chapter" data-level="4.3" data-path="missing-values.html"><a href="missing-values.html#top-categories-with-missing-organizer"><i class="fa fa-check"></i><b>4.3</b> Top Categories with Missing Organizer</a>
+<ul>
+<li class="chapter" data-level="4.3.1" data-path="missing-values.html"><a href="missing-values.html#number-of-missing-by-date"><i class="fa fa-check"></i><b>4.3.1</b> Number of Missing By Date</a></li>
+</ul></li>
+<li class="chapter" data-level="4.4" data-path="missing-values.html"><a href="missing-values.html#missing-values-for-crimes-in-parks"><i class="fa fa-check"></i><b>4.4</b> Missing Values for Crimes in Parks</a></li>
 </ul></li>
 <li class="chapter" data-level="5" data-path="results.html"><a href="results.html"><i class="fa fa-check"></i><b>5</b> Results</a></li>
 <li class="chapter" data-level="6" data-path="interactive-component.html"><a href="interactive-component.html"><i class="fa fa-check"></i><b>6</b> Interactive component</a></li>
@@ -109,27 +122,98 @@
             <section class="normal" id="section-">
 <div id="missing-values" class="section level1" number="4">
 <h1><span class="header-section-number">Chapter 4</span> Missing values</h1>
+<div id="missing-values-by-individual-tables" class="section level2" number="4.1">
+<h2><span class="header-section-number">4.1</span> Missing Values By Individual Tables</h2>
+<p>We first analyze the missing values pattern for all of our tables individually.</p>
+<div id="missing-values-for-main-events-listing-table" class="section level3" number="4.1.1">
+<h3><span class="header-section-number">4.1.1</span> Missing Values for Main Events Listing Table</h3>
 <p><img src="finalproj_files/figure-html/nyc%20event%20listing%20events%20missing%20data-1.png" width="672" /></p>
 <pre><code>##  LcDs  CsDs    Em    Ph   Snp    Ds   Url EvtId Title    Dt    ST    ET  CsFr 
 ## 60360 59790 22941 16896   310     4     2     0     0     0     0     0     0 
 ##  MtSe   Ntc 
 ##     0     0</code></pre>
 <p>As shown in the graph above, the majority of the data points have missing fields. The most missed fields are “location_description” and “cost_description”. 75% of the data points don’t have those fields. We also have a lot of “Email” and “Phone” missings (around 25% and 20% respectively).</p>
-<div id="missing-values-for-individual-data-tables" class="section level3" number="4.0.1">
-<h3><span class="header-section-number">4.0.1</span> Missing Values for individual data tables</h3>
-<p>We also inspect the other individual data tables that we are planning to use for our analysis.</p>
-<p><img src="finalproj_files/figure-html/unnamed-chunk-10-1.png" width="672" /><img src="finalproj_files/figure-html/unnamed-chunk-10-2.png" width="672" /></p>
+</div>
+<div id="missing-values-for-auxiliary-tables" class="section level3" number="4.1.2">
+<h3><span class="header-section-number">4.1.2</span> Missing Values for Auxiliary Tables</h3>
+<p>We also inspect the other auxiliary data tables that we are planning to use for our analysis.</p>
+<p><img src="finalproj_files/figure-html/unnamed-chunk-11-1.png" width="672" /><img src="finalproj_files/figure-html/unnamed-chunk-11-2.png" width="672" /></p>
 <pre><code>##   Org EvtId 
 ##     1     0</code></pre>
-<p>As can be clearly seen from the missing data plots, the event category table itself does not have any missing data, and the event organizer table has very few missing organizer rows, more precisely, it only has 1 row missing.</p>
-<p>How about joining the individual additional information tables (categories, locations, and organizers) with the main events listing table? We will explore in the following section.</p>
+<p>As can be clearly seen from the missing data plots, the event category table itself does not have any missing data, and the event organizer table has very few missing organizer rows, more precisely, it only has 1 row of organizer missing.</p>
+<p>The event id (<code>EvtId</code>) appears to be a unique identifier for events, and is always present in all rows of all tables we analyze.</p>
+<p>How about the missing patterns when joining the individual additional information tables (categories, locations, and organizers) with the main events listing table? We will explore in the following section.</p>
 </div>
-<div id="missing-values-for-organizers-and-categories" class="section level3" number="4.0.2">
-<h3><span class="header-section-number">4.0.2</span> Missing Values for Organizers and Categories</h3>
-<p>As analyzed above,</p>
-<p><img src="finalproj_files/figure-html/unnamed-chunk-11-1.png" width="672" /><img src="finalproj_files/figure-html/unnamed-chunk-11-2.png" width="672" /><img src="finalproj_files/figure-html/unnamed-chunk-11-3.png" width="672" /><img src="finalproj_files/figure-html/unnamed-chunk-11-4.png" width="672" /></p>
-<p>When only looking at</p>
-<p>There are roughly 15% cases from the joined dataset that have registered an event_id, organizer and category</p>
+</div>
+<div id="missing-values-for-joined-data-table" class="section level2" number="4.2">
+<h2><span class="header-section-number">4.2</span> Missing Values for Joined Data Table</h2>
+<p>Next, we analyze the missing value patterns when we join our main events listing table with the auxiliary tables.</p>
+<div id="using-full-outer-joins" class="section level3" number="4.2.1">
+<h3><span class="header-section-number">4.2.1</span> Using Full Outer Joins</h3>
+<p>As previously discussed, the location description (<code>LcDs</code>), cost description (<code>CsDs</code>), email (<code>Em</code>), phone (<code>Ph</code>),
+snippet (<code>Snp</code>), description (<code>Ds</code>), url (<code>url</code>) are not interesting variables for the purpose of our project, as
+most of them are free-form text data, thus we are dropping them in this section for analyzing the missing patterns
+for the events listing data joined with other additional information tablesm since we do not really care if they are missing or not.</p>
+<p>Also, as disccused previously, title
+(<code>Title</code>), is cost free (<code>CsFr</code>), date (<code>Dt</code>), end time (<code>ET</code>), is must see (<code>MtSe</code>), notice (<code>Ntc</code>), start time
+(<code>ST</code>) all have no missing data in the main events listing data table, we will only keep title (<code>Title</code>) to
+represent these variables in this section.</p>
+<p>As analyzed above, <code>Lat</code> / <code>Long</code> are always present in the locations table, thus we will use <code>Lat</code> to count the
+number of unique locations per <code>EvtId</code>, thus we used the following code snippet to prepare the data frame that we
+analyze the missing data patterns on, where <code>nyc_events_joined</code> is prepared with full outer joins.</p>
+<pre><code>nyc_events_joined[c(&quot;EvtId&quot;, &quot;Title&quot;, &quot;Lat&quot;, &quot;Org&quot;, &quot;Cat&quot;)] %&gt;%
+  group_by(EvtId) %&gt;%
+  summarize(
+    Title = sum(!is.na(Title)),
+    Org = sum(!is.na(Org)),
+    Cat = sum(!is.na(Cat)),
+    Loc = sum(!is.na(Lat))
+  ) %&gt;%
+  mutate_all(na_if, 0) %&gt;%
+  ungroup()</code></pre>
+<p><img src="finalproj_files/figure-html/unnamed-chunk-12-1.png" width="672" /></p>
+<pre><code>## Title   Org   Cat   Loc EvtId 
+## 19406  8784  2571  2010     0</code></pre>
+<p>When only looking at these variables, almost 75% of the rows have complete information.</p>
+<p>There are roughly 15% cases from the joined dataset that have all of the event_id, organizer, category, and
+location information, but missing the title (and thus the other variables information) only, meaning that there
+are close to 15% of the events with an event_id that appear in all of the auxiliary tables but not the main event
+listing table. Therefore, if we performed left outer joins on the tables (where we keep the main event listing
+table on the left), we should be getting close to 90% of complete cases.</p>
+<p>Also, roughly more than 20% of the cases are missing title, these are the events with event_id appear in at least one of the auxiliary tables but not in the main table.</p>
+<p>It is also interesting to see that there are no cases of all organizer, category, location information missing but with title information present. So any listed events in the main dataset have at least one of the three information (organizer, category, location).</p>
+<p>A potential explanation for the above facts might be that a placeholder event can be registered in the
+system with a minimum one of these three pieces of information and an event_id was generated, but the event
+may or may not ultimately get listed and stored in the main event listing table.</p>
+</div>
+<div id="using-left-outer-joins" class="section level3" number="4.2.2">
+<h3><span class="header-section-number">4.2.2</span> Using Left Outer Joins</h3>
+<p>The following plot demonstrates the missing pattern analysis when we instead perform left joins of the main table
+with the auxiliary tables. It confirms that we have close to 90% (from the plots, more than 87.5%) of complete
+cases among these variables, and the top missing variable is organizer (less than 12.5%), followed by category,
+followed by location information.</p>
+<p><img src="finalproj_files/figure-html/unnamed-chunk-13-1.png" width="672" /></p>
+<p>As a result of the analysis in this section, we will use the table produced by the left outer join (including the
+variables that were left out in this section due to the <code>Title</code> representation) for our main
+analysis in later chapters, since it includes the most complete and interesting information.</p>
+</div>
+</div>
+<div id="top-categories-with-missing-organizer" class="section level2" number="4.3">
+<h2><span class="header-section-number">4.3</span> Top Categories with Missing Organizer</h2>
+<p>It is still pretty surprising to us that after the left outer join, we still have more than 10% of the cases
+missing an organizer, as we thought all events should have an organizer. Therefore, we wanted to see what are the top categories of events without the organizer information.</p>
+<p>Note here that an event might be associated with multiple categories, so the total number of missing organizers
+across the different categories would be higher than the number of events with missing organizers in the previous
+section.</p>
+<p><img src="finalproj_files/figure-html/unnamed-chunk-14-1.png" width="672" /></p>
+<p>So it seems that sports-related events (with Fitness/Running/Sports/Outdoor Fitness categories) are the most common themes for events missing organizer information in our dataset. A closer look at the specific event titles suggests that a lot of them were running events organized by “NYRR” in different parks:</p>
+<p><img src="finalproj_files/figure-html/unnamed-chunk-15-1.png" width="672" /></p>
+<div id="number-of-missing-by-date" class="section level3" number="4.3.1">
+<h3><span class="header-section-number">4.3.1</span> Number of Missing By Date</h3>
+</div>
+</div>
+<div id="missing-values-for-crimes-in-parks" class="section level2" number="4.4">
+<h2><span class="header-section-number">4.4</span> Missing Values for Crimes in Parks</h2>
 <p><img src="finalproj_files/figure-html/nyc%20park%20crimes%20missing%20data-1.png" width="672" /></p>
 <pre><code>##   Park   Boro   Size    Cat    Mdr   Rape    Rob    Ass   Burg    G_L GL_M_V 
 ##      0      0      0      0      0      0      0      0      0      0      0 
