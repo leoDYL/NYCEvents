@@ -1,1 +1,98 @@
 # Data transformation
+
+(Work in progress)
+
+## Read Raw Data
+
+```{r read raw daata}
+library(tidyverse)
+
+nyc_event_listing_events <- read.csv("data/raw_data/nyc_parks_event_listing_events.csv", na.strings = "")
+names(nyc_event_listing_events) <- c(
+  "EvtId", "Title", "Dt", "ST",  # event_id, title, date, start_time
+  "ET", "LcDs", "Ds", "Snp", # end_time, location_description, description, snippet
+  "Ph", "Em", "CsFr", "CsDs", # phone, email, cost_free, cost_description
+  "MtSe", "Url", "Ntc" # must_see, url, notice
+)
+
+nyc_event_categories <- read.csv("data/raw_data/nyc_parks_event_listing_categories.csv", na.strings = "")
+names(nyc_event_categories) <- c("EvtId", "Cat") # event_id, category
+
+nyc_event_organizers <- read.csv("data/raw_data/nyc_parks_event_listing_organizers.csv", na.strings = "")
+names(nyc_event_organizers) <- c("EvtId", "Org") # event_id, event_organizer
+
+nyc_event_locations <- read.csv("data/raw_data/nyc_parks_event_listing_locations.csv", na.strings = "")
+names(nyc_event_locations) <- c("EvtId", "PkNm", "PkId", "Lat", "Long", "Addr", "Zip", "Bo", "Accs")
+
+```
+
+## Joining events with event categories
+
+The events listing data is the main data table, therefore, we want to keep all rows in the events listing table even if there is no matching row in the other tables. As a result, we are performing left outer joins and keeping all rows of the `nyc_event_listing_events` data frame.
+
+
+```{r events join categories}
+nyc_events_with_categories <- 
+  merge(x = nyc_event_listing_events, 
+        y = nyc_event_categories, 
+        by = "EvtId", 
+        all.x = TRUE)
+
+nyc_events_with_category_counts <- nyc_event_categories %>%
+  group_by(EvtId) %>%
+  summarize(CatCt = n()) %>%
+  ungroup()
+nyc_events_with_category_counts
+```
+
+
+```{r}
+nyc_events_with_categories %>%
+  group_by(Cat) %>%
+  summarize(count=n())
+```
+
+```{r}
+nyc_events_with_organizer_counts <- nyc_event_organizers %>%
+  group_by(EvtId) %>%
+  summarize(OrgCt = n()) %>%
+  ungroup()
+nyc_events_with_organizer_counts
+```
+
+```{r events with organizer and category counts}
+nyc_events_with_cat_org_counts <- nyc_event_listing_events %>%
+  merge(y = nyc_events_with_category_counts, 
+        by = "EvtId", 
+        all.x = TRUE, all.y = TRUE) %>%
+  merge(y = nyc_events_with_organizer_counts, 
+        by = "EvtId", 
+        all.x = TRUE, all.y = TRUE)
+```
+
+
+```{r scratch work}
+test <- nyc_event_organizers %>%
+  mutate(Org = str_sub(Org, 1, 30)) %>%
+  group_by(Org) %>%
+  summarize(count=n()) %>%
+  drop_na()
+test
+```
+
+```{r}
+library(stringdist)
+
+test_grp <- test %>%
+  mutate(grp = 
+           cutree(hclust(stringdistmatrix(test$Org, method = "lv")), 
+                  h = 15)) %>%
+  group_by(grp) 
+
+```
+
+```{r}
+# Does not work very well
+test_grp %>%
+  arrange(grp, count)
+```

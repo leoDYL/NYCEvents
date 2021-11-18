@@ -6,30 +6,13 @@ source("projectlibs/missing_value_plot.R")
 ```
 
 ```{r nyc event listing events missing data}
-nyc_event_listing_events <- read.csv("data/raw_data/nyc_parks_event_listing_events.csv", na.strings = "")
-names(nyc_event_listing_events) <- c(
-  "evtId", #event_id
-  "Title", #title
-  "Dt", #date
-  "ST", #start_time
-  "ET", #end_time
-  "LcDs", #location_description
-  "Ds", #description
-  "Snp", #snippet
-  "Ph", #phone
-  "Em", #email
-  "CsFr",#cost_free 
-  "CsDs",#cost_description
-  "MtSe", #must_see
-  "Url", #url
-  "Ntc" #notice
-)
 
 missing_value_plot(nyc_event_listing_events, percent=TRUE)
 missing_value_plot(nyc_event_listing_events, percent=FALSE)
 col_missing = colSums(is.na(nyc_event_listing_events)) %>% sort(decreasing = TRUE)
 col_missing
 ```
+
 As shown in the graph above, the majority of the data points have missing fields. The most missed fields are "location_description" and "cost_description". 75% of the data points don't have those fields. We also have a lot of "Email" and "Phone" missings (around 25% and 20% respectively). 
 
 ```{r nyc event listing events missing data pruned}
@@ -42,6 +25,47 @@ col_missing = colSums(is.na(nyc_envent_listing_events_sub)) %>% sort(decreasing 
 col_missing
 ```
 
+
+### Missing Values for individual data tables
+
+We also inspect the other individual data tables that we are planning to use for our analysis.
+
+```{r}
+missing_value_plot(nyc_event_categories, percent = TRUE)
+missing_value_plot(nyc_event_organizers, percent = TRUE)
+colSums(is.na(nyc_event_organizers)) %>% sort(decreasing = TRUE)
+```
+
+As can be clearly seen from the missing data plots, the event category table itself does not have any missing data, and the event organizer table has very few missing organizer rows, more precisely, it only has 1 row missing.
+
+How about joining the individual additional information tables (categories, locations, and organizers) with the main events listing table? We will explore in the following section.
+
+
+### Missing Values for Organizers and Categories
+
+As analyzed above, 
+
+```{r}
+
+missing_value_plot(nyc_events_with_cat_org_counts[c("EvtId", "OrgCt", "CatCt", "Title")], percent = TRUE)
+missing_value_plot(nyc_events_with_cat_org_counts, percent = TRUE)
+
+nyc_event_listing_events %>%
+  merge(y = nyc_events_with_category_counts, 
+        by = "EvtId", 
+        all.x = TRUE, all.y = TRUE) %>%
+  missing_value_plot(percent = TRUE)
+
+nyc_event_listing_events %>%
+  merge(y = nyc_events_with_organizer_counts, 
+        by = "EvtId", 
+        all.x = TRUE, all.y = TRUE) %>%
+  missing_value_plot(percent = TRUE)
+```
+
+When only looking at 
+
+There are roughly 15% cases from the joined dataset that have registered an event_id, organizer and category 
 
 ```{r nyc event listing locations missing data}
 nyc_event_listing_locations <- read.csv("data/raw_data/nyc_parks_event_listing_locations.csv", na.strings = "")
@@ -130,5 +154,3 @@ col_missing = colSums(is.na(nyc_parks_crime_complete_quarters)) %>% sort(decreas
 col_missing
 ```
 The NYC park crime data originally comes in different files by quarter. We consolidated all the files there are to analyze the missing data pattern. At the beginning, there are no missing data pattern found in the data set. However, after complementing all the quarters in the quarter column for each park, we notice that there are a small portion of the parks that do not have data for certain quarters. Since the number of those parks are minimal, we have the option to remove them from our future studies. 
-
-
