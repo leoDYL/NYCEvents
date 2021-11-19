@@ -11,7 +11,7 @@ We first analyze the missing values pattern for all of our tables individually.
 
 ### Missing Values for Main Events Listing Table
 
-As shown in the graph below, the majority of the data points have missing fields. The most missed fields are location_description (`LcDs`) and  cost_description (`CsDs`). 75% of the data points don't have those fields. We also have a lot of Email (`Em`) and Phone (`Ph`) missings (around 25% and 20% respectively). Those fields are not useful to our further analysis. For the description fields, they are textual and semantic, which would be interesting subjects for analysis and learning. However, the complexity of such analysis is beyond this study. As for contact information like email and phone number, they are not relevant to our analysis.
+As shown in the graph below, the majority of the data points have missing fields. The most missed fields are location_description (`LcDs`) and  cost_description (`CsDs`). 75% of the data points don't have those fields. We also have a lot of Email (`Em`) and Phone (`Ph`) missings (around 25% and 20% respectively). Those fields are not useful to our further analysis. For the description fields, they are textual and semantic, which would be interesting subjects for analysis and learning. However, the complexity of such analysis is beyond this study. As for contact information like email and phone number, they are not relevant to our analysis. The top three missing patterns are (`LcDs`, `CsDs`), (`LcDs`) and (`CsDs`). And the top 9 missing patterns are all involved with `LcDs`, `CsDs`, `Em` and `Ph`. 
 
 ```{r nyc event listing events missing data}
 
@@ -53,7 +53,7 @@ missing_value_plot(nyc_event_listing_locations, percent=FALSE)
 col_missing = colSums(is.na(nyc_event_listing_locations)) %>% sort(decreasing = TRUE)
 col_missing
 ```
-After dropping "Addr", "Accs", "pkId", "Zip" columns in the data set, we can have a closer look at the missing data percentage for Borough (`Bo`) and Location Name (`LcNm`). Location name is not a reliable source of information for location identification, since locations are sketchy and not rigidly defined. The missing data in the Borough (`Bo`) fields are minimal, whish would not affect our coarse-grained location-based studies. 
+After dropping "Addr", "Accs", "pkId", "Zip" columns in the data set, we can have a closer look at the missing data percentage for Borough (`Bo`) and Location Name (`LcNm`). Location name is not a reliable source of information for location identification, since locations are sketchy and not rigidly defined. The missing data in the Borough (`Bo`) fields are minimal, whish would not affect our coarse-grained location-based studies. Most data are still complete cases. The data records missing only zip code (`Zip`) or address (`Addr`) comes second and third. Although the accessibility (`Accs`) field is missed by around 45% of the data records, there is no data record that misses only the accessibility field. Interestingly, park ID (`pkId`) is not missed in the top 7 missing patterns while being the fourth most missed fields in the data set. 
 ```{r nyc event listing locations missing data w/ dropped columns}
 drop <- c("Addr", "Accs", "pkId", "Zip")
 nyc_event_listing_locations_sub <- nyc_event_listing_locations[,!(names(nyc_event_listing_locations) %in% drop)]
