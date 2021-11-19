@@ -168,18 +168,8 @@ for the events listing data joined with other additional information tables sinc
 (<code>ST</code>) all have no missing data in the main events listing data table, we will only keep title (<code>Title</code>) to
 represent these variables in this section.</p>
 <p>As analyzed above, <code>Lat</code> / <code>Long</code> are always present in the locations table, thus we will use <code>Lat</code> to count the
-number of unique locations per <code>EvtId</code>, thus we used the following code snippet to prepare the data frame that we
-analyze the missing data patterns on, where <code>nyc_events_joined</code> is prepared with full outer joins.</p>
-<pre><code>nyc_events_joined[c(&quot;EvtId&quot;, &quot;Title&quot;, &quot;Lat&quot;, &quot;Org&quot;, &quot;Cat&quot;)] %&gt;%
-  group_by(EvtId) %&gt;%
-  summarize(
-    Title = sum(!is.na(Title)),
-    Org = sum(!is.na(Org)),
-    Cat = sum(!is.na(Cat)),
-    Loc = sum(!is.na(Lat))
-  ) %&gt;%
-  mutate_all(na_if, 0) %&gt;%
-  ungroup()</code></pre>
+number of unique locations per <code>EvtId</code>, thus we used it to determine if location information is missing or not in
+the joined table.</p>
 <p><img src="finalproj_files/figure-html/unnamed-chunk-12-1.png" width="672" /></p>
 <pre><code>## Title   Org   Cat   Loc EvtId 
 ## 19406  8784  2571  2010     0</code></pre>
