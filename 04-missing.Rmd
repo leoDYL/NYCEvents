@@ -84,21 +84,9 @@ Also, as disccused previously, title
 represent these variables in this section.
 
 As analyzed above, `Lat` / `Long` are always present in the locations table, thus we will use `Lat` to count the 
-number of unique locations per `EvtId`, thus we used the following code snippet to prepare the data frame that we 
-analyze the missing data patterns on, where `nyc_events_joined` is prepared with full outer joins.
+number of unique locations per `EvtId`, thus we used it to determine if location information is missing or not in 
+the joined table.
 
-```
-nyc_events_joined[c("EvtId", "Title", "Lat", "Org", "Cat")] %>%
-  group_by(EvtId) %>%
-  summarize(
-    Title = sum(!is.na(Title)),
-    Org = sum(!is.na(Org)),
-    Cat = sum(!is.na(Cat)),
-    Loc = sum(!is.na(Lat))
-  ) %>%
-  mutate_all(na_if, 0) %>%
-  ungroup()
-```
 
 ```{r}
 nyc_events_with_is_na <- nyc_events_joined[c("EvtId", "Title", "Lat", "Org", "Cat")] %>%
