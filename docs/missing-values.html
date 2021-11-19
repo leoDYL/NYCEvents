@@ -24,7 +24,7 @@
 <meta name="author" content="Leo Du, Hao Li" />
 
 
-<meta name="date" content="2021-11-16" />
+<meta name="date" content="2021-11-18" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -92,10 +92,7 @@
 <li class="chapter" data-level="4.2.1" data-path="missing-values.html"><a href="missing-values.html#using-full-outer-joins"><i class="fa fa-check"></i><b>4.2.1</b> Using Full Outer Joins</a></li>
 <li class="chapter" data-level="4.2.2" data-path="missing-values.html"><a href="missing-values.html#using-left-outer-joins"><i class="fa fa-check"></i><b>4.2.2</b> Using Left Outer Joins</a></li>
 </ul></li>
-<li class="chapter" data-level="4.3" data-path="missing-values.html"><a href="missing-values.html#top-categories-with-missing-organizer"><i class="fa fa-check"></i><b>4.3</b> Top Categories with Missing Organizer</a>
-<ul>
-<li class="chapter" data-level="4.3.1" data-path="missing-values.html"><a href="missing-values.html#number-of-missing-by-date"><i class="fa fa-check"></i><b>4.3.1</b> Number of Missing By Date</a></li>
-</ul></li>
+<li class="chapter" data-level="4.3" data-path="missing-values.html"><a href="missing-values.html#top-categories-with-missing-organizer"><i class="fa fa-check"></i><b>4.3</b> Top Categories with Missing Organizer</a></li>
 <li class="chapter" data-level="4.4" data-path="missing-values.html"><a href="missing-values.html#missing-values-for-crimes-in-parks"><i class="fa fa-check"></i><b>4.4</b> Missing Values for Crimes in Parks</a></li>
 </ul></li>
 <li class="chapter" data-level="5" data-path="results.html"><a href="results.html"><i class="fa fa-check"></i><b>5</b> Results</a></li>
@@ -127,12 +124,16 @@
 <p>We first analyze the missing values pattern for all of our tables individually.</p>
 <div id="missing-values-for-main-events-listing-table" class="section level3" number="4.1.1">
 <h3><span class="header-section-number">4.1.1</span> Missing Values for Main Events Listing Table</h3>
-<p><img src="finalproj_files/figure-html/nyc%20event%20listing%20events%20missing%20data-1.png" width="672" /></p>
+<p>As shown in the graph below, the majority of the data points have missing fields. The most missed fields are location_description (<code>LcDs</code>) and cost_description (<code>CsDs</code>). 75% of the data points don’t have those fields. We also have a lot of Email (<code>Em</code>) and Phone (<code>Ph</code>) missings (around 25% and 20% respectively). Those fields are not useful to our further analysis. For the description fields, they are textual and semantic, which would be interesting subjects for analysis and learning. However, the complexity of such analysis is beyond this study. As for contact information like email and phone number, they are not relevant to our analysis.</p>
+<p><img src="finalproj_files/figure-html/nyc%20event%20listing%20events%20missing%20data-1.png" width="672" /><img src="finalproj_files/figure-html/nyc%20event%20listing%20events%20missing%20data-2.png" width="672" /></p>
 <pre><code>##  LcDs  CsDs    Em    Ph   Snp    Ds   Url EvtId Title    Dt    ST    ET  CsFr 
 ## 60360 59790 22941 16896   310     4     2     0     0     0     0     0     0 
 ##  MtSe   Ntc 
 ##     0     0</code></pre>
-<p>As shown in the graph above, the majority of the data points have missing fields. The most missed fields are “location_description” and “cost_description”. 75% of the data points don’t have those fields. We also have a lot of “Email” and “Phone” missings (around 25% and 20% respectively).</p>
+<p>In the chart below, we dropped the fields mentioned above. As shown in the graph, almost all the data points are complete cases now. The few missing data in snippet (<code>Snp</code>), description (<code>Ds</code>) and url (<code>Url</code>) fields are not needed in our study.</p>
+<p><img src="finalproj_files/figure-html/nyc%20event%20listing%20events%20missing%20data%20pruned-1.png" width="672" /><img src="finalproj_files/figure-html/nyc%20event%20listing%20events%20missing%20data%20pruned-2.png" width="672" /></p>
+<pre><code>##   Snp    Ds   Url EvtId Title    Dt    ST    ET  CsFr  MtSe   Ntc 
+##   310     4     2     0     0     0     0     0     0     0     0</code></pre>
 </div>
 <div id="missing-values-for-auxiliary-tables" class="section level3" number="4.1.2">
 <h3><span class="header-section-number">4.1.2</span> Missing Values for Auxiliary Tables</h3>
@@ -142,6 +143,14 @@
 ##     1     0</code></pre>
 <p>As can be clearly seen from the missing data plots, the event category table itself does not have any missing data, and the event organizer table has very few missing organizer rows, more precisely, it only has 1 row of organizer missing.</p>
 <p>The event id (<code>EvtId</code>) appears to be a unique identifier for events, and is always present in all rows of all tables we analyze.</p>
+<p>As for the location data for the park events, as we can see from the char below, there are decent amount of missing fields in the data set. The most unfortunate missing field is zip (<code>Zip</code>), which can help us allocate the parks into smaller regions for further location-based studies. Since we have around 30% of the zip code data missing, the only location information for us to perform fine-grained regionalization of the parks is the longitude (<code>Long</code>) and latitude (<code>Lat</code>) field pair, in which we have 0 missing data. But the complexity would be much higher. Other missing data in address (<code>Addr</code>), accessibility (<code>Accs</code>) and park_id (<code>pkId</code>) are not study subjects in our project. It is interesting though, that the data set has complete longitude and latitude records for the events while misses 30% of the zip code data. With zip code being the apparent easier location data to acquire, we suspect that the longitude and latitude data are required for event registration so that it could be located on a map instantly.
+<img src="finalproj_files/figure-html/nyc%20event%20listing%20locations%20missing%20data-1.png" width="672" /><img src="finalproj_files/figure-html/nyc%20event%20listing%20locations%20missing%20data-2.png" width="672" /></p>
+<pre><code>##  Addr  Accs   Zip  pkId    Bo  LcNm EvtId   Lat  Long 
+## 46061 42620 37826 12263  1479     2     0     0     0</code></pre>
+<p>After dropping “Addr”, “Accs”, “pkId”, “Zip” columns in the data set, we can have a closer look at the missing data percentage for Borough (<code>Bo</code>) and Location Name (<code>LcNm</code>). Location name is not a reliable source of information for location identification, since locations are sketchy and not rigidly defined. The missing data in the Borough (<code>Bo</code>) fields are minimal, whish would not affect our coarse-grained location-based studies.
+<img src="finalproj_files/figure-html/nyc%20event%20listing%20locations%20missing%20data%20w/%20dropped%20columns-1.png" width="672" /><img src="finalproj_files/figure-html/nyc%20event%20listing%20locations%20missing%20data%20w/%20dropped%20columns-2.png" width="672" /></p>
+<pre><code>##    Bo  LcNm EvtId   Lat  Long 
+##  1479     2     0     0     0</code></pre>
 <p>How about the missing patterns when joining the individual additional information tables (categories, locations, and organizers) with the main events listing table? We will explore in the following section.</p>
 </div>
 </div>
@@ -153,7 +162,7 @@
 <p>As previously discussed, the location description (<code>LcDs</code>), cost description (<code>CsDs</code>), email (<code>Em</code>), phone (<code>Ph</code>),
 snippet (<code>Snp</code>), description (<code>Ds</code>), url (<code>url</code>) are not interesting variables for the purpose of our project, as
 most of them are free-form text data, thus we are dropping them in this section for analyzing the missing patterns
-for the events listing data joined with other additional information tablesm since we do not really care if they are missing or not.</p>
+for the events listing data joined with other additional information tables since we do not really care if they are missing or not.</p>
 <p>Also, as disccused previously, title
 (<code>Title</code>), is cost free (<code>CsFr</code>), date (<code>Dt</code>), end time (<code>ET</code>), is must see (<code>MtSe</code>), notice (<code>Ntc</code>), start time
 (<code>ST</code>) all have no missing data in the main events listing data table, we will only keep title (<code>Title</code>) to
@@ -208,23 +217,15 @@ section.</p>
 <p><img src="finalproj_files/figure-html/unnamed-chunk-14-1.png" width="672" /></p>
 <p>So it seems that sports-related events (with Fitness/Running/Sports/Outdoor Fitness categories) are the most common themes for events missing organizer information in our dataset. A closer look at the specific event titles suggests that a lot of them were running events organized by “NYRR” in different parks:</p>
 <p><img src="finalproj_files/figure-html/unnamed-chunk-15-1.png" width="672" /></p>
-<div id="number-of-missing-by-date" class="section level3" number="4.3.1">
-<h3><span class="header-section-number">4.3.1</span> Number of Missing By Date</h3>
-</div>
 </div>
 <div id="missing-values-for-crimes-in-parks" class="section level2" number="4.4">
 <h2><span class="header-section-number">4.4</span> Missing Values for Crimes in Parks</h2>
 <p><img src="finalproj_files/figure-html/nyc%20park%20crimes%20missing%20data-1.png" width="672" /></p>
-<pre><code>##   Park   Boro   Size    Cat    Mdr   Rape    Rob    Ass   Burg    G_L GL_M_V 
-##      0      0      0      0      0      0      0      0      0      0      0 
-##    Tot    Qtr 
-##      0      0</code></pre>
-<p><img src="finalproj_files/figure-html/nyc%20park%20crimes%20missing%20data-2.png" width="672" /></p>
 <pre><code>##   Park    Qtr   Boro   Size    Cat    Mdr   Rape    Rob    Ass   Burg    G_L 
 ##      0      0      0      0      0      0      0      0      0      0      0 
 ## GL_M_V    Tot 
 ##      0      0</code></pre>
-<p>The NYC park crime data originally comes in different files by quarter. We consolidated all the files there are to analyze the missing data pattern. At the beginning, there are no missing data pattern found in the data set. However, after complementing all the quarters in the quarter column for each park, we notice that there are a small portion of the parks that do not have data for certain quarters. Since the number of those parks are minimal, we have the option to remove them from our future studies.</p>
+<p>The NYC park crime data originally comes in different files by quarter. We consolidated all of them to analyze the missing data pattern. In order to ensure that no parks are missed in any of the data files, we created a data set with all the &lt;park, quarter&gt; pairs there could possibly be in the crime data set. Then we merge the new data set with the crime data set to perform the missing data analysis. As shown in the graph above, there is indeed no missing data in the crime data set.</p>
 
 </div>
 </div>
