@@ -129,7 +129,7 @@ for (i in 1 : l_park_crimes) {
                 destfile = destfile)
 }
 
-for (i in 1 : (l_park_crimes - 1)) {
+for (i in 1 : l_park_crimes) {
   destfile <- paste("data/raw_data/", park_crimes_file_names[i], sep = "")
   # Handling special cases
   if (i == 1) {

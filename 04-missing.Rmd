@@ -11,13 +11,26 @@ We first analyze the missing values pattern for all of our tables individually.
 
 ### Missing Values for Main Events Listing Table
 
+As shown in the graph below, the majority of the data points have missing fields. The most missed fields are location_description (`LcDs`) and  cost_description (`CsDs`). 75% of the data points don't have those fields. We also have a lot of Email (`Em`) and Phone (`Ph`) missings (around 25% and 20% respectively). Those fields are not useful to our further analysis. For the description fields, they are textual and semantic, which would be interesting subjects for analysis and learning. However, the complexity of such analysis is beyond this study. As for contact information like email and phone number, they are not relevant to our analysis.
+
 ```{r nyc event listing events missing data}
+
+missing_value_plot(nyc_event_listing_events, percent=TRUE)
 missing_value_plot(nyc_event_listing_events, percent=FALSE)
-colSums(is.na(nyc_event_listing_events)) %>% sort(decreasing = TRUE)
+col_missing = colSums(is.na(nyc_event_listing_events)) %>% sort(decreasing = TRUE)
+col_missing
 ```
+In the chart below, we dropped the fields mentioned above. As shown in the graph, almost all the data points are complete cases now. The few missing data in snippet (`Snp`), description (`Ds`) and url (`Url`) fields are not needed in our study. 
 
-As shown in the graph above, the majority of the data points have missing fields. The most missed fields are "location_description" and "cost_description". 75% of the data points don't have those fields. We also have a lot of "Email" and "Phone" missings (around 25% and 20% respectively). 
+```{r nyc event listing events missing data pruned}
+drop <- c("LcDs", "CsDs", "Ph", "Em")
+nyc_envent_listing_events_sub <- nyc_event_listing_events[,!(names(nyc_event_listing_events) %in% drop)]
 
+missing_value_plot(nyc_envent_listing_events_sub, percent=TRUE)
+missing_value_plot(nyc_envent_listing_events_sub, percent=FALSE)
+col_missing = colSums(is.na(nyc_envent_listing_events_sub)) %>% sort(decreasing = TRUE)
+col_missing
+```
 
 ### Missing Values for Auxiliary Tables
 
@@ -33,7 +46,25 @@ As can be clearly seen from the missing data plots, the event category table its
 
 The event id (`EvtId`) appears to be a unique identifier for events, and is always present in all rows of all tables we analyze.
 
+As for the location data for the park events, as we can see from the char below, there are decent amount of missing fields in the data set. The most unfortunate missing field is zip (`Zip`), which can help us allocate the parks into smaller regions for further location-based studies. Since we have around 30% of the zip code data missing, the only location information for us to perform fine-grained regionalization of the parks is the longitude (`Long`) and latitude (`Lat`) field pair, in which we have 0 missing data. But the complexity would be much higher. Other missing data in address (`Addr`), accessibility (`Accs`) and park_id (`pkId`) are not study subjects in our project. It is interesting though, that the data set has complete longitude and latitude records for the events while misses 30% of the zip code data. With zip code being the apparent easier location data to acquire, we suspect that the longitude and latitude data are required for event registration so that it could be located on a map instantly. 
+```{r nyc event listing locations missing data}
+missing_value_plot(nyc_event_listing_locations, percent=TRUE)
+missing_value_plot(nyc_event_listing_locations, percent=FALSE)
+col_missing = colSums(is.na(nyc_event_listing_locations)) %>% sort(decreasing = TRUE)
+col_missing
+```
+After dropping "Addr", "Accs", "pkId", "Zip" columns in the data set, we can have a closer look at the missing data percentage for Borough (`Bo`) and Location Name (`LcNm`). Location name is not a reliable source of information for location identification, since locations are sketchy and not rigidly defined. The missing data in the Borough (`Bo`) fields are minimal, whish would not affect our coarse-grained location-based studies. 
+```{r nyc event listing locations missing data w/ dropped columns}
+drop <- c("Addr", "Accs", "pkId", "Zip")
+nyc_event_listing_locations_sub <- nyc_event_listing_locations[,!(names(nyc_event_listing_locations) %in% drop)]
+missing_value_plot(nyc_event_listing_locations_sub, percent=TRUE)
+missing_value_plot(nyc_event_listing_locations_sub, percent=FALSE)
+col_missing = colSums(is.na(nyc_event_listing_locations_sub)) %>% sort(decreasing = TRUE)
+col_missing
+```
+
 How about the missing patterns when joining the individual additional information tables (categories, locations, and organizers) with the main events listing table? We will explore in the following section.
+
 
 
 ## Missing Values for Joined Data Table
@@ -45,7 +76,7 @@ Next, we analyze the missing value patterns when we join our main events listing
 As previously discussed, the location description (`LcDs`), cost description (`CsDs`), email (`Em`), phone (`Ph`),
 snippet (`Snp`), description (`Ds`), url (`url`) are not interesting variables for the purpose of our project, as 
 most of them are free-form text data, thus we are dropping them in this section for analyzing the missing patterns
-for the events listing data joined with other additional information tablesm since we do not really care if they are missing or not. 
+for the events listing data joined with other additional information tables since we do not really care if they are missing or not. 
 
 Also, as disccused previously, title
 (`Title`), is cost free (`CsFr`), date (`Dt`), end time (`ET`), is must see (`MtSe`), notice (`Ntc`), start time
@@ -68,7 +99,6 @@ nyc_events_joined[c("EvtId", "Title", "Lat", "Org", "Cat")] %>%
   mutate_all(na_if, 0) %>%
   ungroup()
 ```
-
 
 ```{r}
 nyc_events_with_is_na <- nyc_events_joined[c("EvtId", "Title", "Lat", "Org", "Cat")] %>%
@@ -102,6 +132,7 @@ It is also interesting to see that there are no cases of all organizer, category
 A potential explanation for the above facts might be that a placeholder event can be registered in the 
 system with a minimum one of these three pieces of information and an event_id was generated, but the event
 may or may not ultimately get listed and stored in the main event listing table.
+
 
 ### Using Left Outer Joins
 
@@ -185,51 +216,9 @@ nyc_events_left_joined %>%
   theme_linedraw() 
 ```
 
-
-### Number of Missing By Date
-
-
 ## Missing Values for Crimes in Parks
 
-
 ```{r nyc park crimes missing data}
-nyc_parks_crime <- read.csv("data/derived_data/nyc_parks_crime_data_all.csv", na.strings = "")
-
-names(nyc_parks_crime) <- c(
-  "Park", "Boro", "Size", "Cat", "Mdr", "Rape", "Rob", "Ass", "Burg", "G_L", "GL_M_V", "Tot", "Qtr"
-)
-
-crime_quarters <- c(
-  "2021_q3",
-  "2021_q2",
-  "2021_q1",
-  "2020_q4",
-  "2020_q3",
-  "2020_q2",
-  "2020_q1",
-  "2019_q4",
-  "2019_q3",
-  "2019_q2",
-  "2019_q1",
-  "2018_q4",
-  "2018_q3",
-  "2018_q2",
-  "2018_q1",
-  "2017_q4",
-  "2017_q3",
-  "2017_q2",
-  "2017_q1",
-  "2016_q4",
-  "2016_q3",
-  "2016_q2",
-  "2016_q1",
-  "2015_q4",
-  "2015_q3",
-  "2015_q2",
-  "2015_q1",
-  "2014_q4"
-)
-
 parks <- unique(nyc_parks_crime$Park)
 
 park_qtr_missing_check <- data.frame(
@@ -237,15 +226,10 @@ park_qtr_missing_check <- data.frame(
   rep(crime_quarters, times = length(parks))
   )
 names(park_qtr_missing_check) <- c("Park", "Qtr")
-nyc_parks_crime_complete_quarters <- merge(nyc_parks_crime, park_qtr_missing_check, by=c("Park", "Qtr"), all.y = TRUE) 
-
-missing_value_plot(nyc_parks_crime, percent=TRUE)
-col_missing = colSums(is.na(nyc_parks_crime)) %>% sort(decreasing = TRUE)
-col_missing
+nyc_parks_crime_complete_quarters <- merge(nyc_parks_crime, park_qtr_missing_check, by=c("Park", "Qtr"), all.y = TRUE)
 
 missing_value_plot(nyc_parks_crime_complete_quarters, percent=TRUE)
 col_missing = colSums(is.na(nyc_parks_crime_complete_quarters)) %>% sort(decreasing = TRUE)
 col_missing
 ```
-The NYC park crime data originally comes in different files by quarter. We consolidated all the files there are to analyze the missing data pattern. At the beginning, there are no missing data pattern found in the data set. However, after complementing all the quarters in the quarter column for each park, we notice that there are a small portion of the parks that do not have data for certain quarters. Since the number of those parks are minimal, we have the option to remove them from our future studies. 
-
+The NYC park crime data originally comes in different files by quarter. We consolidated all of them to analyze the missing data pattern. In order to ensure that no parks are missed in any of the data files, we created a data set with all the <park, quarter> pairs there could possibly be in the crime data set. Then we merge the new data set with the crime data set to perform the missing data analysis. As shown in the graph above, there is indeed no missing data in the crime data set. 
