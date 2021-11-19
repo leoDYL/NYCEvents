@@ -24,7 +24,7 @@
 <meta name="author" content="Leo Du, Hao Li" />
 
 
-<meta name="date" content="2021-11-18" />
+<meta name="date" content="2021-11-19" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -124,7 +124,7 @@
 <p>We first analyze the missing values pattern for all of our tables individually.</p>
 <div id="missing-values-for-main-events-listing-table" class="section level3" number="4.1.1">
 <h3><span class="header-section-number">4.1.1</span> Missing Values for Main Events Listing Table</h3>
-<p>As shown in the graph below, the majority of the data points have missing fields. The most missed fields are location_description (<code>LcDs</code>) and cost_description (<code>CsDs</code>). 75% of the data points don’t have those fields. We also have a lot of Email (<code>Em</code>) and Phone (<code>Ph</code>) missings (around 25% and 20% respectively). Those fields are not useful to our further analysis. For the description fields, they are textual and semantic, which would be interesting subjects for analysis and learning. However, the complexity of such analysis is beyond this study. As for contact information like email and phone number, they are not relevant to our analysis.</p>
+<p>As shown in the graph below, the majority of the data points have missing fields. The most missed fields are location_description (<code>LcDs</code>) and cost_description (<code>CsDs</code>). 75% of the data points don’t have those fields. We also have a lot of Email (<code>Em</code>) and Phone (<code>Ph</code>) missings (around 25% and 20% respectively). Those fields are not useful to our further analysis. For the description fields, they are textual and semantic, which would be interesting subjects for analysis and learning. However, the complexity of such analysis is beyond this study. As for contact information like email and phone number, they are not relevant to our analysis. The top three missing patterns are (<code>LcDs</code>, <code>CsDs</code>), (<code>LcDs</code>) and (<code>CsDs</code>). And the top 9 missing patterns are all involved with <code>LcDs</code>, <code>CsDs</code>, <code>Em</code> and <code>Ph</code>.</p>
 <p><img src="finalproj_files/figure-html/nyc%20event%20listing%20events%20missing%20data-1.png" width="672" /><img src="finalproj_files/figure-html/nyc%20event%20listing%20events%20missing%20data-2.png" width="672" /></p>
 <pre><code>##  LcDs  CsDs    Em    Ph   Snp    Ds   Url EvtId Title    Dt    ST    ET  CsFr 
 ## 60360 59790 22941 16896   310     4     2     0     0     0     0     0     0 
@@ -147,7 +147,7 @@
 <img src="finalproj_files/figure-html/nyc%20event%20listing%20locations%20missing%20data-1.png" width="672" /><img src="finalproj_files/figure-html/nyc%20event%20listing%20locations%20missing%20data-2.png" width="672" /></p>
 <pre><code>##  Addr  Accs   Zip  pkId    Bo  LcNm EvtId   Lat  Long 
 ## 46061 42620 37826 12263  1479     2     0     0     0</code></pre>
-<p>After dropping “Addr”, “Accs”, “pkId”, “Zip” columns in the data set, we can have a closer look at the missing data percentage for Borough (<code>Bo</code>) and Location Name (<code>LcNm</code>). Location name is not a reliable source of information for location identification, since locations are sketchy and not rigidly defined. The missing data in the Borough (<code>Bo</code>) fields are minimal, whish would not affect our coarse-grained location-based studies.
+<p>After dropping “Addr”, “Accs”, “pkId”, “Zip” columns in the data set, we can have a closer look at the missing data percentage for Borough (<code>Bo</code>) and Location Name (<code>LcNm</code>). Location name is not a reliable source of information for location identification, since locations are sketchy and not rigidly defined. The missing data in the Borough (<code>Bo</code>) fields are minimal, whish would not affect our coarse-grained location-based studies. Most data are still complete cases. The data records missing only zip code (<code>Zip</code>) or address (<code>Addr</code>) comes second and third. Although the accessibility (<code>Accs</code>) field is missed by around 45% of the data records, there is no data record that misses only the accessibility field. Interestingly, park ID (<code>pkId</code>) is not missed in the top 7 missing patterns while being the fourth most missed fields in the data set.
 <img src="finalproj_files/figure-html/nyc%20event%20listing%20locations%20missing%20data%20w/%20dropped%20columns-1.png" width="672" /><img src="finalproj_files/figure-html/nyc%20event%20listing%20locations%20missing%20data%20w/%20dropped%20columns-2.png" width="672" /></p>
 <pre><code>##    Bo  LcNm EvtId   Lat  Long 
 ##  1479     2     0     0     0</code></pre>
@@ -168,18 +168,8 @@ for the events listing data joined with other additional information tables sinc
 (<code>ST</code>) all have no missing data in the main events listing data table, we will only keep title (<code>Title</code>) to
 represent these variables in this section.</p>
 <p>As analyzed above, <code>Lat</code> / <code>Long</code> are always present in the locations table, thus we will use <code>Lat</code> to count the
-number of unique locations per <code>EvtId</code>, thus we used the following code snippet to prepare the data frame that we
-analyze the missing data patterns on, where <code>nyc_events_joined</code> is prepared with full outer joins.</p>
-<pre><code>nyc_events_joined[c(&quot;EvtId&quot;, &quot;Title&quot;, &quot;Lat&quot;, &quot;Org&quot;, &quot;Cat&quot;)] %&gt;%
-  group_by(EvtId) %&gt;%
-  summarize(
-    Title = sum(!is.na(Title)),
-    Org = sum(!is.na(Org)),
-    Cat = sum(!is.na(Cat)),
-    Loc = sum(!is.na(Lat))
-  ) %&gt;%
-  mutate_all(na_if, 0) %&gt;%
-  ungroup()</code></pre>
+number of unique locations per <code>EvtId</code>, thus we used it to determine if location information is missing or not in
+the joined table.</p>
 <p><img src="finalproj_files/figure-html/unnamed-chunk-12-1.png" width="672" /></p>
 <pre><code>## Title   Org   Cat   Loc EvtId 
 ## 19406  8784  2571  2010     0</code></pre>
