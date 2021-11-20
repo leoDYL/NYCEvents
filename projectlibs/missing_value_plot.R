@@ -72,7 +72,7 @@ missing_value_plot <- function(dataset, percent) {
     coord_flip() +
     ylim(0, ifelse(percent, 100, max(missing_patterns$count))) +
     theme_bw() + 
-    theme(legend.position = "none")
+    theme(legend.position = "none", axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
   
   layout <- "
   BBBBB#
