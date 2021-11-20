@@ -225,7 +225,7 @@ nyc_events_left_joined %>%
   top_n(20) %>%
   ggplot(aes(x = Num_Missing_Org, y = fct_reorder(Title, Num_Missing_Org))) + 
   geom_point(color = "blue") +
-  ggtitle("Top event categories missing an organizer") +
+  ggtitle("Top event titles missing an organizer") +
   labs(x = "Number missing an organizer", y = "Event Title") +
   theme_linedraw() 
 ```
