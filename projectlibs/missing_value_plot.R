@@ -59,7 +59,7 @@ missing_value_plot <- function(dataset, percent) {
     ggplot() + 
     geom_col(aes(x = factor(key, levels = variable_levels), y = rows_missing, alpha = 0.5), fill = "cornflowerblue") +
     ylim(0, ifelse(percent, 100, max(row_missing_data$rows_missing))) + 
-    labs(x = "", y = "num rows \n missing") + 
+    labs(x = "", y = ifelse(percent, "num rows \n missing (%)", "num rows \n missing")) + 
     ggtitle("Missing value patterns") + 
     theme_bw() +
     theme(legend.position="none")
@@ -68,11 +68,11 @@ missing_value_plot <- function(dataset, percent) {
     ggplot() +
     geom_col(aes(x = factor(row_num, levels = case_levels), y = count / ifelse(percent == TRUE, sum(count)/100, 1), alpha = c(num_missing_variables==0)), fill = "cornflowerblue") +
     scale_alpha_manual(values = c(0.5, 1.0), breaks = c(FALSE, TRUE)) +
-    labs(x = "", y = "row count") + 
+    labs(x = "", y = ifelse(percent, "row count (%)" , "row count")) + 
     coord_flip() +
     ylim(0, ifelse(percent, 100, max(missing_patterns$count))) +
     theme_bw() + 
-    theme(legend.position = "none", axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
+    theme(legend.position = "none", axis.text.x = element_text(angle = 45, vjust = 1, hjust=1))
   
   layout <- "
   BBBBB#
