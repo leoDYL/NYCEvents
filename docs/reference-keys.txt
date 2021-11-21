@@ -13,5 +13,10 @@ using-left-outer-joins
 top-categories-with-missing-organizer
 missing-values-for-crimes-in-parks
 results
+spatial-analysis
+cost
+by-category
+by-organizer
+references
 interactive-component
 conclusion
