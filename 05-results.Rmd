@@ -1,1 +1,125 @@
 # Results
+
+```{r}
+library(ggmap)
+library(tidyverse)
+library(leaflet)
+```
+
+Top Event Categories
+
+```{r}
+top_categories <- nyc_event_categories %>%
+  group_by(Cat) %>%
+  summarize(count = n()) %>%
+  arrange(desc(count)) %>%
+  top_n(20)
+
+top_categories
+```
+
+
+## Spatial Analysis
+
+### Cost
+
+From the missing values chapter, we do not have missing data for `CsFr`, `Lat`, `Long`
+
+```{r}
+
+nyc_events_fee_location <- nyc_event_listing_events[c("EvtId", "CsFr")] %>%
+  merge(
+    y = nyc_event_locations, 
+    by = "EvtId", 
+    all.x = TRUE) %>% 
+  .[c("EvtId", "CsFr", "Lat", "Long")] %>%
+  group_by(CsFr, Lat, Long) %>%
+  summarize(count = n()) %>%
+  ungroup()
+
+# qmplot(Long, Lat, data = test, maptype = "toner-lite", color = I("red"))
+```
+
+
+TODO Too much data for this, select a year maybe
+
+```{r}
+cost_palette <- colorFactor(palette='RdBu', domain=nyc_events_fee_location$CsFr)
+
+leaflet(nyc_events_fee_location) %>%
+  addTiles() %>%
+  setView(-74.00, 40.71, zoom = 10) %>%
+  addCircleMarkers(~Long, ~Lat, radius = 5, stroke=FALSE, fillOpacity = 0.5, fillColor = ~ cost_palette(CsFr)) %>%
+  addLegend("topright", pal = cost_palette, values = nyc_events_fee_location$CsFr, title = "Is Free")
+```
+
+
+
+### By Category
+
+```{r}
+
+test_cats <- c("Waterfront", "Games", "Festivals")
+
+top_category_events_locations <- nyc_event_listing_events[c("EvtId")] %>%
+  merge(
+    y = nyc_event_categories, 
+    by = "EvtId", 
+    all.x = TRUE) %>%
+  merge(
+    y = nyc_event_locations, 
+    by = "EvtId", 
+    all.x = TRUE) %>% 
+  .[c("EvtId", "Cat", "Lat", "Long")] %>%
+  filter(Cat %in% test_cats)
+  #filter(Cat %in% top_categories$Cat)
+
+categories_palette <- colorFactor(palette='Set1', domain=top_category_events_locations$Cat)
+  
+leaflet(top_category_events_locations) %>%
+  addTiles() %>%
+  setView(-74.00, 40.71, zoom = 10) %>%
+  addCircleMarkers(~Long, ~Lat, radius = 5, stroke=FALSE, fillOpacity = 0.5, fillColor = ~ categories_palette(Cat)) %>%
+  addLegend("topright", pal = categories_palette, values = top_category_events_locations$Cat, title = "Category")
+```
+
+
+### By Organizer
+
+
+```{r}
+top_organizers <- nyc_event_organizers %>%
+  group_by(Org) %>%
+  summarize(count = n()) %>%
+  arrange(desc(count)) %>%
+  top_n(8)
+
+top_organizers
+
+top_orgs_events_locations <- nyc_event_listing_events[c("EvtId")] %>%
+  merge(
+    y = nyc_event_organizers, 
+    by = "EvtId", 
+    all.x = TRUE) %>%
+  merge(
+    y = nyc_event_locations, 
+    by = "EvtId", 
+    all.x = TRUE) %>% 
+  .[c("EvtId", "Org", "Lat", "Long")] %>%
+  filter(Org %in% top_organizers$Org)
+
+organizers_palette <- colorFactor(palette='Set1', domain=top_orgs_events_locations$Org)
+  
+leaflet(top_orgs_events_locations) %>%
+  addTiles() %>%
+  setView(-74.00, 40.71, zoom = 10) %>%
+  addCircleMarkers(~Long, ~Lat, radius = 5, stroke=FALSE, fillOpacity = 0.5, fillColor = ~ organizers_palette(Org)) %>%
+  addLegend("topright", pal = organizers_palette, values = top_orgs_events_locations$Org, title = "Organizer")
+```
+
+
+## References
+
+D. Kahle and H. Wickham. ggmap: Spatial Visualization with ggplot2. The R Journal, 5(1), 144-161. URL
+  http://journal.r-project.org/archive/2013-1/kahle-wickham.pdf
+
