@@ -13,6 +13,10 @@ using-left-outer-joins
 top-categories-with-missing-organizer
 missing-values-for-crimes-in-parks
 results
+events-and-parks-analysis
+most-lively-parks
+most-diversified-park
+ratio-of-free-events-in-parks
 spatial-analysis
 cost
 by-category
