@@ -18,6 +18,53 @@ top_categories <- nyc_event_categories %>%
 top_categories
 ```
 
+## Events and Parks Analysis
+
+### Most lively parks
+```{r}
+nyc_events_joined %>%
+  drop_na(EvtId, Lat, Long) %>%
+  mutate(gps_location=paste(Lat,Long, sep=",")) %>%
+  group_by(gps_location) %>%
+  summarise(num_events=n()) %>%
+  arrange(desc(num_events)) %>%
+  top_n(10) %>%
+  ggplot(aes(x = num_events, y = fct_reorder(gps_location, num_events))) +
+  geom_point(color = "blue") +
+  ggtitle("Most lively parks") +
+  labs(x = "Number of events", y = "Park Location") +
+  theme_linedraw()
+```
+
+### Most Diversified Park
+```{r}
+nyc_events_joined %>%
+  drop_na(EvtId, Lat, Long, Cat) %>%
+  mutate(gps_location=paste(Lat,Long, sep=",")) %>%
+  group_by(gps_location) %>%
+  summarise(num_cats=length(unique(Cat))) %>%
+  arrange(desc(num_cats)) %>%
+  top_n(10) %>%
+  ggplot(aes(x = num_cats, y = fct_reorder(gps_location, num_cats))) +
+  geom_point(color = "blue") +
+  ggtitle("Most diversified parks") +
+  labs(x = "Number of event categories", y = "Park Location") +
+  theme_linedraw()
+```
+
+### Ratio of free events in parks
+```{r}
+nyc_events_joined %>%
+  drop_na(EvtId, Lat, Long, CsFr) %>%
+  mutate(gps_location=paste(Lat,Long, sep=",")) %>%
+  group_by(gps_location) %>%
+  #filter(n() > 100) %>%
+  summarise(free_ratio=sum(CsFr)/n()) %>%
+  ggplot(aes(free_ratio)) +
+  geom_histogram(color = "blue", fill = "lightblue", binwidth=0.1) +
+  ggtitle("Histogram of free event ratio")
+```
+
 
 ## Spatial Analysis
 
