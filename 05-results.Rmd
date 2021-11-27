@@ -4,6 +4,7 @@
 library(ggmap)
 library(tidyverse)
 library(leaflet)
+library(lubridate)
 ```
 
 Top Event Categories
@@ -66,23 +67,107 @@ nyc_events_joined %>%
 ```
 
 
+
+## Timeseries Analysis
+
+Now, it is natural to think that there is some seasonality in the events that happen in the NYC public locations.
+Here we are going to perform an analysis on what are some interesting seasonal patterns
+
+### Timeseries Analysis on NYC Parks Events
+
+First, we simply take an overview look at the count of listed events over time:
+
+```{r}
+nyc_events_timeseries <- nyc_event_listing_events %>%
+  group_by(Dt) %>%
+  summarize(Count = n()) %>%
+  ungroup()
+
+ggplot(nyc_events_timeseries, aes(Dt, Count)) + 
+  geom_line() + 
+  labs(x = "Date", y = "Count of Events") +
+  ggtitle("Count of NYC Events in Parks Over Time")
+```
+
+Here, we observe a few things at first sight:
+
+* The data counts appears to be abnormally low after the start of 2019, probably due to limited data availablility in the dataset, therefore, we are going to only use data prior to 2019 in our following timeseries analysis on the events daata in this section.
+* The seasonality pattern looks similar for each year.
+* There is definitely fewer events in winters around Janurary and generally more events in the summers.
+
+The previous plot, although helps us identify the general pattern, looks pretty noisy, so next let's take a different view, which is less noisy:
+
+```{r}
+nyc_events_timeseries_monthly <- nyc_event_listing_events %>%
+  filter(Dt < as.Date("2019-01-01")) %>%
+  mutate(Year = year(Dt), Month = factor(month.abb[month(Dt)], levels = month.abb)) %>%
+  group_by(Year, Month) %>%
+  summarize(Count = n())
+
+ggplot(nyc_events_timeseries_monthly, aes(Month, Count)) +
+  geom_col() +
+  facet_grid(Year~.)+
+  ggtitle("Monthly Count of NYC Events in Parks")
+```
+
+Here, we are aggregating the event counts by month, and plotted bar charts faceted by year. It is very clear from 
+these charts that the monthly counts and trends do indeed have a very similar pattern across the years 2013-2018. 
+Other than some fluctuations, January through March are typically the more quiet months with fewer than 500 events
+in most years, then the number of events gradually increases in April, May and June, and peaks in July or August 
+with more than 1500 events, and then gradually decreases into the winter season, with around 500 events in 
+December.
+
+Now, how about different days of week? It's certainly natural to speculate that there will be more events over 
+weekends than during weekdays. Here, since we have concluded in the previous section that the seasonal trend is 
+similar across the years, we take a closer look at the number of listed events by day of week in 2017 
+to get an idea.
+
+```{r}
+nyc_events_timeseries %>%
+  filter(year(Dt) == "2017") %>%
+  ggplot(aes(Dt, Count)) +
+  geom_line(color = "grey30") + geom_point(size = 1) +
+  scale_x_date(date_labels = "%b",
+               date_breaks = "3 months") +
+  facet_grid(.~wday(Dt, label = TRUE))
+```
+
+As expected, Saturdays do typically have a lot more events than the other days, especially during the summer 
+season. It is somewhat surprising that Sundays only have about similar number of events as Tuesdays, Wednesdays 
+and Thursdays. We speculate that for weekends, people prefer to stay at home with family and prepare for the new 
+week on Sundays and prefer to go out to events on Saturdays, and therefore the event organizers have a preference 
+to organize events on Saturdays. It is not surprising that Monday have the fewest events since people are 
+typically busy on the first business day of the week. Fridays also appear to have the 2nd fewest number of events 
+among the different days of week, as people wrap up the work for the week, and usually have corporate events or 
+team bonding activities on Fridays.
+
+### Timeseries Analysis on Event Categories
+
+After the initial timeseries analysis, we feel that it's likely that other than the general seasonality and weekly
+trends, different event sub-categories could have very different trends. Thus we will take a closer look in this section.
+
+
+
 ## Spatial Analysis
 
 ### Cost
 
 From the missing values chapter, we do not have missing data for `CsFr`, `Lat`, `Long`
 
-```{r}
+TODO analyze weekends vs weekdays
 
-nyc_events_fee_location <- nyc_event_listing_events[c("EvtId", "CsFr")] %>%
+```{r}
+nyc_events_fee_location <- nyc_event_listing_events[c("EvtId", "CsFr", "Dt")] %>%
   merge(
     y = nyc_event_locations, 
     by = "EvtId", 
     all.x = TRUE) %>% 
-  .[c("EvtId", "CsFr", "Lat", "Long")] %>%
-  group_by(CsFr, Lat, Long) %>%
-  summarize(count = n()) %>%
-  ungroup()
+  .[c("EvtId", "CsFr", "Lat", "Long", "Dt")] %>%
+  filter(year(.$Dt) == 2018) %>%
+  filter(wday(Dt) == 7)
+  #group_by(CsFr, Lat, Long) %>%
+  #summarize(count = n()) %>%
+  #ungroup()
 
 # qmplot(Long, Lat, data = test, maptype = "toner-lite", color = I("red"))
 ```

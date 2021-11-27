@@ -17,6 +17,9 @@ events-and-parks-analysis
 most-lively-parks
 most-diversified-park
 ratio-of-free-events-in-parks
+timeseries-analysis
+timeseries-analysis-on-nyc-parks-events
+timeseries-analysis-on-event-categories
 spatial-analysis
 cost
 by-category
