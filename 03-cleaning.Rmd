@@ -14,6 +14,8 @@ names(nyc_event_listing_events) <- c(
   "Ph", "Em", "CsFr", "CsDs", # phone, email, cost_free, cost_description
   "MtSe", "Url", "Ntc" # must_see, url, notice
 )
+nyc_event_listing_events <- nyc_event_listing_events %>%
+  mutate(Dt = as.Date(Dt, format = "%m/%d/%Y"))
 
 nyc_event_categories <- read.csv("data/raw_data/nyc_parks_event_listing_categories.csv", na.strings = "")
 names(nyc_event_categories) <- c("EvtId", "Cat") # event_id, category
