@@ -107,9 +107,10 @@
 <ul>
 <li class="chapter" data-level="5.1" data-path="results.html"><a href="results.html#events-and-parks-analysis"><i class="fa fa-check"></i><b>5.1</b> Events and Parks Analysis</a>
 <ul>
-<li class="chapter" data-level="5.1.1" data-path="results.html"><a href="results.html#most-lively-parks"><i class="fa fa-check"></i><b>5.1.1</b> Most lively parks</a></li>
-<li class="chapter" data-level="5.1.2" data-path="results.html"><a href="results.html#most-diversified-park"><i class="fa fa-check"></i><b>5.1.2</b> Most Diversified Park</a></li>
-<li class="chapter" data-level="5.1.3" data-path="results.html"><a href="results.html#ratio-of-free-events-in-parks"><i class="fa fa-check"></i><b>5.1.3</b> Ratio of free events in parks</a></li>
+<li class="chapter" data-level="5.1.1" data-path="results.html"><a href="results.html#top-event-categories-organizers-and-locations"><i class="fa fa-check"></i><b>5.1.1</b> Top Event Categories, Organizers, and Locations</a></li>
+<li class="chapter" data-level="5.1.2" data-path="results.html"><a href="results.html#most-lively-parks"><i class="fa fa-check"></i><b>5.1.2</b> Most lively parks</a></li>
+<li class="chapter" data-level="5.1.3" data-path="results.html"><a href="results.html#most-diversified-park"><i class="fa fa-check"></i><b>5.1.3</b> Most Diversified Park</a></li>
+<li class="chapter" data-level="5.1.4" data-path="results.html"><a href="results.html#ratio-of-free-events-in-parks"><i class="fa fa-check"></i><b>5.1.4</b> Ratio of free events in parks</a></li>
 </ul></li>
 <li class="chapter" data-level="5.2" data-path="results.html"><a href="results.html#timeseries-analysis"><i class="fa fa-check"></i><b>5.2</b> Timeseries Analysis</a>
 <ul>
@@ -196,12 +197,12 @@ latitude data are required for event registration so that it could be located on
 of the dataset. The data records missing only zip code (<code>Zip</code>) or address (<code>Addr</code>) comes second and third, then
 followed by the pattern of data missing all of address, zip code, and accessibility information.</p>
 <p><img src="finalproj_files/figure-html/nyc%20event%20listing%20locations%20missing%20data-1.png" width="672" /><img src="finalproj_files/figure-html/nyc%20event%20listing%20locations%20missing%20data-2.png" width="672" /></p>
-<pre><code>##  Addr  Accs   Zip  pkId    Bo  LcNm EvtId   Lat  Long 
+<pre><code>##  Addr  Accs   Zip  PkId    Bo  LcNm EvtId   Lat  Long 
 ## 46061 42620 37826 12263  1479     2     0     0     0</code></pre>
 <p>After dropping “Addr”, “Accs”, “pkId”, “Zip” columns in the data set, we can have a closer look at the missing data percentage for Borough (<code>Bo</code>) and Location Name (<code>LcNm</code>). Location name is not a reliable source of information for location identification, since locations are sketchy and not rigidly defined. The missing data in the Borough (<code>Bo</code>) fields are minimal, which would not affect our coarse-grained location-based studies.</p>
 <p><img src="finalproj_files/figure-html/nyc%20event%20listing%20locations%20missing%20data%20w/%20dropped%20columns-1.png" width="672" /><img src="finalproj_files/figure-html/nyc%20event%20listing%20locations%20missing%20data%20w/%20dropped%20columns-2.png" width="672" /></p>
-<pre><code>##    Bo  LcNm EvtId   Lat  Long 
-##  1479     2     0     0     0</code></pre>
+<pre><code>##  PkId    Bo  LcNm EvtId   Lat  Long 
+## 12263  1479     2     0     0     0</code></pre>
 <p>How about the missing patterns when joining the individual additional information tables (categories, locations, and organizers) with the main events listing table? We will explore in the following section.</p>
 </div>
 </div>

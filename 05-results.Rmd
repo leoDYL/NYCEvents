@@ -7,7 +7,12 @@ library(leaflet)
 library(lubridate)
 ```
 
-Top Event Categories
+
+## Events and Parks Analysis
+
+### Top Event Categories, Organizers, and Locations
+
+We first take a look at what are the top event categories, organizers, and parks locations
 
 ```{r}
 top_categories <- nyc_event_categories %>%
@@ -17,9 +22,46 @@ top_categories <- nyc_event_categories %>%
   top_n(30)
 
 top_categories_levels <- levels(fct_reorder(top_categories$Cat, top_categories$count))
+
+ggplot(top_categories, aes(x = count, y = fct_reorder(Cat, count))) +
+  geom_point(color = "blue") +
+  ggtitle("Top Event Categories") +
+  labs(x = "Number of events", y = "Event Category") +
+  theme_linedraw()
+
 ```
 
-## Events and Parks Analysis
+```{r}
+
+top_organizers <- nyc_event_organizers %>%
+  group_by(Org) %>%
+  summarize(count = n()) %>%
+  arrange(desc(count)) %>%
+  top_n(30)
+
+ggplot(top_organizers, aes(x = count, y = fct_reorder(Org, count))) +
+  geom_point(color = "blue") +
+  ggtitle("Top Event Organizers") +
+  labs(x = "Number of events", y = "Event Organizer") +
+  theme_linedraw()
+
+```
+
+```{r}
+
+top_locations <- nyc_event_listing_locations %>%
+  group_by(LcNm) %>%
+  summarize(count = n()) %>%
+  arrange(desc(count)) %>%
+  top_n(30)
+
+ggplot(top_locations, aes(x = count, y = fct_reorder(LcNm, count))) +
+  geom_point(color = "blue") +
+  ggtitle("Top Event Locations") +
+  labs(x = "Number of events", y = "Event Location") +
+  theme_linedraw()
+
+```
 
 ### Most lively parks
 ```{r}
@@ -252,7 +294,7 @@ TODO analyze weekends vs weekdays
 ```{r}
 nyc_events_fee_location <- nyc_event_listing_events[c("EvtId", "CsFr", "Dt")] %>%
   merge(
-    y = nyc_event_locations, 
+    y = nyc_event_listing_locations, 
     by = "EvtId", 
     all.x = TRUE) %>% 
   .[c("EvtId", "CsFr", "Lat", "Long", "Dt")] %>%
@@ -292,7 +334,7 @@ top_category_events_locations <- nyc_event_listing_events[c("EvtId")] %>%
     by = "EvtId", 
     all.x = TRUE) %>%
   merge(
-    y = nyc_event_locations, 
+    y = nyc_event_listing_locations, 
     by = "EvtId", 
     all.x = TRUE) %>% 
   .[c("EvtId", "Cat", "Lat", "Long")] %>%
@@ -327,7 +369,7 @@ top_orgs_events_locations <- nyc_event_listing_events[c("EvtId")] %>%
     by = "EvtId", 
     all.x = TRUE) %>%
   merge(
-    y = nyc_event_locations, 
+    y = nyc_event_listing_locations, 
     by = "EvtId", 
     all.x = TRUE) %>% 
   .[c("EvtId", "Org", "Lat", "Long")] %>%
