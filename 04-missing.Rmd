@@ -79,10 +79,10 @@ missing_value_plot(nyc_event_listing_locations, percent=FALSE)
 col_missing = colSums(is.na(nyc_event_listing_locations)) %>% sort(decreasing = TRUE)
 col_missing
 ```
-After dropping "Addr", "Accs", "pkId", "Zip" columns in the data set, we can have a closer look at the missing data percentage for Borough (`Bo`) and Location Name (`LcNm`). Location name is not a reliable source of information for location identification, since locations are sketchy and not rigidly defined. The missing data in the Borough (`Bo`) fields are minimal, which would not affect our coarse-grained location-based studies. 
+After dropping "Addr", "Accs", "PkId", "Zip" columns in the data set, we can have a closer look at the missing data percentage for Borough (`Bo`) and Location Name (`LcNm`). Location name is not a reliable source of information for location identification, since locations are sketchy and not rigidly defined. The missing data in the Borough (`Bo`) fields are minimal, which would not affect our coarse-grained location-based studies. 
 
 ```{r nyc event listing locations missing data w/ dropped columns}
-drop <- c("Addr", "Accs", "pkId", "Zip")
+drop <- c("Addr", "Accs", "PkId", "Zip")
 nyc_event_listing_locations_sub <- nyc_event_listing_locations[,!(names(nyc_event_listing_locations) %in% drop)]
 missing_value_plot(nyc_event_listing_locations_sub, percent=TRUE)
 missing_value_plot(nyc_event_listing_locations_sub, percent=FALSE)
