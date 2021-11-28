@@ -167,7 +167,7 @@ nyc_events_left_joined <- nyc_event_listing_events %>%
     by = "EvtId", 
     all.x = TRUE) %>%
   merge(
-    y = nyc_event_locations, 
+    y = nyc_event_listing_locations, 
     by = "EvtId", 
     all.x = TRUE)
 

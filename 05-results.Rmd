@@ -6,61 +6,81 @@ library(tidyverse)
 library(leaflet)
 library(lubridate)
 ```
+
 ## Events and Parks Analysis
-### Top Event Categories
 
-```{r}
-nyc_event_categories %>%
-  group_by(Cat) %>%
-  summarize(count = n()) %>%
-  arrange(desc(count)) %>%
-  top_n(20) %>%
-  ggplot(aes(x = count, y = fct_reorder(Cat, count))) +
-  geom_point(color = "blue") +
-  ggtitle("Most popular event categories") +
-  labs(x = "Event Frequency", y = "Park Location Name") +
-  theme_linedraw()
-```
+### Top Event Categories, Organizers, Locations and Durations
 
-### Top Event Durations
+We first take a look at what are the top event categories, organizers, and parks locations
+
+
+
 ```{r}
 #Change to histogram 
 #Facet with category, location etc. 
-nyc_event_listing_events %>%
-  drop_na(EvtId, Dt, ST, ET) %>%
-  mutate(
-    Duration=as.character(
-      sprintf("%.2f", 
-              abs( #There are negative time differences somehow.
-                difftime(
-                  strptime(paste(format(Dt, "%m/%d/%Y"), ET), "%m/%d/%Y %H:%M"), 
-                  strptime(paste(format(Dt, "%m/%d/%Y"), ST), "%m/%d/%Y %H:%M"))
-                /3600)
-              )
-      )
-    ) %>%
-  group_by(Duration) %>%
+top_categories <- nyc_event_categories %>%
+  group_by(Cat) %>%
   summarize(count = n()) %>%
   arrange(desc(count)) %>%
-  top_n(20) %>%
-  ggplot(aes(x = count, y = fct_reorder(Duration, count))) +
+  top_n(30)
+
+top_categories_levels <- levels(fct_reorder(top_categories$Cat, top_categories$count))
+
+ggplot(top_categories, aes(x = count, y = fct_reorder(Cat, count))) +
   geom_point(color = "blue") +
-  ggtitle("Most popular events") +
-  labs(x = "Event Frequency", y = "Park Location Name") +
+  ggtitle("Top Event Categories") +
+  labs(x = "Number of events", y = "Event Category") +
   theme_linedraw()
 
+top_organizers <- nyc_event_organizers %>%
+  group_by(Org) %>%
+  summarize(count = n()) %>%
+  arrange(desc(count)) %>%
+  top_n(30)
+
+ggplot(top_organizers, aes(x = count, y = fct_reorder(Org, count))) +
+  geom_point(color = "blue") +
+  ggtitle("Top Event Organizers") +
+  labs(x = "Number of events", y = "Event Organizer") +
+  theme_linedraw()
 
 ```
+
+```{r}
+
+top_locations <- nyc_event_listing_locations %>%
+  group_by(LcNm) %>%
+  summarize(count = n()) %>%
+  arrange(desc(count)) %>%
+  top_n(30)
+
+ggplot(top_locations, aes(x = count, y = fct_reorder(LcNm, count))) +
+  geom_point(color = "blue") +
+  ggtitle("Top Event Locations") +
+  labs(x = "Number of events", y = "Event Location") +
+  theme_linedraw()
+
+```
+
+
+
+
+TODO Top Organizer's Favorite Locations
+
+TODO Top Organizer's Favorite Event Categories
+
+TODO Top Park's Most Frequent Event Categories
+
 
 ### Most Lively Parks
 ```{r}
 nyc_events_joined %>%
-  drop_na(EvtId, PkNm) %>%
-  group_by(PkNm) %>%
+  drop_na(EvtId, LcNm) %>%
+  group_by(LcNm) %>%
   summarise(num_events=n_distinct(EvtId)) %>%
   arrange(desc(num_events)) %>%
   top_n(20) %>%
-  ggplot(aes(x = num_events, y = fct_reorder(PkNm, num_events))) +
+  ggplot(aes(x = num_events, y = fct_reorder(LcNm, num_events))) +
   geom_point(color = "blue") +
   ggtitle("Most lively parks") +
   labs(x = "Number of events", y = "Park Location Name") +
@@ -70,12 +90,12 @@ nyc_events_joined %>%
 ### Parks with Most Diversified Events
 ```{r}
 nyc_events_joined %>%
-  drop_na(EvtId, PkNm, Cat) %>%
-  group_by(PkNm) %>%
+  drop_na(EvtId, LcNm, Cat) %>%
+  group_by(LcNm) %>%
   summarise(num_cats=length(unique(Cat))) %>%
   arrange(desc(num_cats)) %>%
   top_n(20) %>%
-  ggplot(aes(x = num_cats, y = fct_reorder(PkNm, num_cats))) +
+  ggplot(aes(x = num_cats, y = fct_reorder(LcNm, num_cats))) +
   geom_point(color = "blue") +
   ggtitle("Most diversified parks") +
   labs(x = "Number of event categories", y = "Park Location Name") +
@@ -129,7 +149,7 @@ The previous plot, although helps us identify the general pattern, looks pretty 
 ```{r}
 nyc_events_timeseries_monthly <- nyc_event_listing_events %>%
   filter(Dt < as.Date("2019-01-01")) %>%
-  mutate(Year = year(Dt), Month = factor(month.abb[month(Dt)], levels = month.abb)) %>%
+  mutate(Year = year(Dt), Month = month(Dt, label = TRUE, abbr = TRUE)) %>%
   group_by(Year, Month) %>%
   summarize(Count = n())
 
@@ -155,10 +175,14 @@ to get an idea.
 nyc_events_timeseries %>%
   filter(year(Dt) == "2017") %>%
   ggplot(aes(Dt, Count)) +
-  geom_line(color = "grey30") + geom_point(size = 1) +
+  geom_line(color = "grey30") + 
+  geom_point(size = 1) +
   scale_x_date(date_labels = "%b",
                date_breaks = "3 months") +
-  facet_grid(.~wday(Dt, label = TRUE))
+  facet_grid(.~wday(Dt, label = TRUE)) + 
+  labs(x = "Date", y = "Count of Events") +
+  ggtitle("Count of NYC Events in Parks By Day of Week in 2017") +
+  theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust=1))
 ```
 
 As expected, Saturdays do typically have a lot more events than the other days, especially during the summer 
@@ -173,8 +197,97 @@ team bonding activities on Fridays.
 ### Timeseries Analysis on Event Categories
 
 After the initial timeseries analysis, we feel that it's likely that other than the general seasonality and weekly
-trends, different event sub-categories could have very different trends. Thus we will take a closer look in this section.
+trends, different event sub-categories could have very different trends. Thus we will take a closer look at the top 30 categories for NYC parks events in this section.
 
+```{r}
+nyc_events_categories_timeseries_monthly <- nyc_event_listing_events %>%
+  merge(
+    y = nyc_event_categories, 
+    by = "EvtId", 
+    all.x = TRUE) %>%
+  filter(Dt < as.Date("2019-01-01")) %>%
+  filter(Cat %in% top_categories$Cat) %>%
+  mutate(Year = year(Dt), 
+         Month = month(Dt, label = TRUE, abbr = TRUE), 
+         DoW = wday(Dt, label = TRUE),
+         Cat = fct_rev(factor(Cat, levels = top_categories_levels)))
+```
+
+First, we look at if there are trends in the numbers of events for different categories over the years.
+
+
+```{r, fig.height=9}
+
+nyc_events_categories_timeseries_monthly %>%
+  group_by(Year, Cat) %>%
+  summarize(Count = n()) %>%
+  ungroup() %>%
+  ggplot(aes(Year, Count)) +
+  geom_col() +
+  facet_wrap(~Cat, ncol = 4) +
+  ggtitle("Yearly Count of Events for top 30 Event Categories in NYC Parks") + 
+  labs(x = "Year", y = "Count of Events") + 
+  theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust=1))
+```
+
+
+We can notice on this plot that for most of the top categories, the number of events listed in each year from 2013
+to 2018 more or less just fluctuates and stays mostly flat. However, for category "Education", there is a very 
+noticeable increase for year 2018, and for categories "Seniors", "Accessible", "Film", "Dance", "Free Summer 
+Movies", there appear to be an uptrend, whereas for categories like "Games" and "Birding", there appear to be a 
+downtrend.
+
+Next, we look at if all categories follow the general seasonality discussed in the previous section, or there are 
+noticeable differences in the different categories.
+
+
+```{r, fig.height=9}
+nyc_events_categories_timeseries_monthly %>%
+  group_by(Month, Cat) %>%
+  summarize(Count = n()) %>%
+  ungroup() %>%
+  ggplot(aes(Month, Count)) +
+  geom_col() +
+  scale_x_discrete(breaks=c("Mar", "Jun", "Sep", "Dec"),) + 
+  facet_wrap(~Cat, ncol = 4) +
+  ggtitle("Monthly Count of Events for top 30 Event Categories in NYC Parks") + 
+  labs(x = "Month", y = "Count of Events") + 
+  theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust=1))
+```
+
+
+Here, we can see that yes, for most of the top 30 categories, they mostly follow the "more events in the summer, 
+fewer in the winter" general rule, with some other interesting observations, most noticeably:
+
+* "Nature" events appear to be relatively flat from April through October, which is Spring through Autumn for NYC, then reduces during winter.
+* "Arts & Crafts", "Poe Park Visitor Center", "Urban Park Rangers", and "Talks" events look to be relatively flat and just fluctuates throughout the year, with no apparent peaks.
+* "Volunteer", "It's My Park" and "City Parks Foundation" events appear to have peaks in May and October.
+* "History", "Tours", and "Historic House Trust Sites" events appear to increase from Januray through October, peaks at October, and then decreases in November and December.
+* "Birding" has peaks in April and May.
+
+Lastly, we also inspect the day of week pattern of when the top 30 event categories happen.
+
+```{r, fig.height=9}
+nyc_events_categories_timeseries_monthly %>%
+  group_by(DoW, Cat) %>%
+  summarize(Count = n()) %>%
+  ungroup() %>%
+  ggplot(aes(DoW, Count)) +
+  geom_col() +
+  facet_wrap(~Cat, ncol = 4) +
+  ggtitle("Day of Week Count of Events for top 30 Event Categories in NYC Parks") + 
+  labs(x = "Day of Week", y = "Count of Events") + 
+  theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust=1))
+```
+
+As we can see from this plot, most of the top 30 event categories again follow the general "most events on Saturdays, fewest on Mondays" rule, again with some other interesting observations, most noticeably:
+
+* "Seniors" has fewest events on Sundays and most events on Tuesdays, and relatively about the same count of events for different days of the week.
+* "Volunteer", "It's My Park", "Urban Park Rangers", and "Birding" events happen primarily over weekends, and have very few events during weekdays.
+* "Accessible", "Sports", and "Games" events happen about the same number of times during different days of the week.
+* "Film" and "Free Summer Movies" have peaks on Fridays.
+* "City Parks Foundation" events happen more frequently during weekdays than during weekends.
+* "Poe Park Visitor Center" events do not occur on Sundays and Mondays.
 
 
 ## Spatial Analysis
@@ -188,7 +301,7 @@ TODO analyze weekends vs weekdays
 ```{r}
 nyc_events_fee_location <- nyc_event_listing_events[c("EvtId", "CsFr", "Dt")] %>%
   merge(
-    y = nyc_event_locations, 
+    y = nyc_event_listing_locations, 
     by = "EvtId", 
     all.x = TRUE) %>% 
   .[c("EvtId", "CsFr", "Lat", "Long", "Dt")] %>%
@@ -228,7 +341,7 @@ top_category_events_locations <- nyc_event_listing_events[c("EvtId")] %>%
     by = "EvtId", 
     all.x = TRUE) %>%
   merge(
-    y = nyc_event_locations, 
+    y = nyc_event_listing_locations, 
     by = "EvtId", 
     all.x = TRUE) %>% 
   .[c("EvtId", "Cat", "Lat", "Long")] %>%
@@ -263,7 +376,7 @@ top_orgs_events_locations <- nyc_event_listing_events[c("EvtId")] %>%
     by = "EvtId", 
     all.x = TRUE) %>%
   merge(
-    y = nyc_event_locations, 
+    y = nyc_event_listing_locations, 
     by = "EvtId", 
     all.x = TRUE) %>% 
   .[c("EvtId", "Org", "Lat", "Long")] %>%
