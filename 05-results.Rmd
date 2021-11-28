@@ -63,16 +63,6 @@ ggplot(top_locations, aes(x = count, y = fct_reorder(LcNm, count))) +
 ```
 
 ```{r}
-
-ggplot(top_locations, aes(x = count, y = fct_reorder(LcNm, count))) +
-  geom_point(color = "blue") +
-  ggtitle("Top Event Locations") +
-  labs(x = "Number of events", y = "Event Location") +
-  theme_linedraw()
-
-```
-
-```{r}
 nyc_event_listing_events %>%
   mutate(Duration=sprintf("%.2f",difftime(strptime(paste(Dt, ET), "%Y-%m-%d %H:%M"), strptime(paste(Dt, ST), "%Y-%m-%d %H:%M"))/3600)) %>%
   filter(Duration > 0) %>%
@@ -84,14 +74,96 @@ nyc_event_listing_events %>%
   theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust=1))
 ```
 
-TODO Top Organizer's Favorite Locations
+### Most Diversified Park
 
-TODO Top Organizer's Favorite Event Categories
+After seeing that the top event locations are hosting several thousands of events over the years 2013-2019, we 
+wonder which of them are the most diverse ones, in the sense that they have a lot of distinct event organizers 
+organizing events of different categories in them.
 
-TODO Top Park's Most Frequent Event Categories
+```{r}
+
+nyc_events_left_joined %>%
+  drop_na(LcNm, Org, Cat) %>%
+  group_by(LcNm) %>%
+  summarize(UniqueCats = n_distinct(Cat), UniqueOrgs = n_distinct(Org)) %>%
+  ggplot(aes(UniqueOrgs, UniqueCats)) +
+  geom_point(alpha = 0.4, size = 2, stroke = 0) +
+  geom_text(aes(label = ifelse((UniqueOrgs > 24) | (UniqueCats > 45), as.character(LcNm),'')), 
+            size = 2,
+            hjust = 0.75, 
+            vjust = 0.9) +
+  labs(x = "Count of Distinct Organizers", y = "Count of Distinct Event Categories") + 
+  ggtitle("Parks Hosting Different Event Categories Organized by Different Event Organizers") + 
+  theme(panel.background = element_blank())
+
+```
+
+Surprisingly, the most famous parks like "Central Park" and "Washington Square Park" do not show up. From the 
+location names, we realize these parks might be too large and have different sub locations (e.g. "Visitor Center" 
+inside of "Conference House Park") listed as the location name in the datasets we have. We then again plot the 
+scatterplot using `PkId`:
+
+```{r}
+
+nyc_events_left_joined %>%
+  drop_na(PkId, Org, Cat) %>%
+  group_by(PkId) %>%
+  summarize(UniqueCats = n_distinct(Cat), UniqueOrgs = n_distinct(Org)) %>%
+  ggplot(aes(UniqueOrgs, UniqueCats)) +
+  geom_point(alpha = 0.4, size = 2, stroke = 0) +
+  geom_text(aes(label = ifelse((UniqueOrgs > 40) | (UniqueCats > 60), as.character(PkId),'')), 
+            size = 3,
+            hjust = 1, 
+            vjust = 1) +
+  labs(x = "Count of Distinct Organizers", y = "Count of Distinct Event Categories") + 
+  ggtitle("Parks Hosting Different Event Categories Organized by Different Event Organizers") + 
+  theme(panel.background = element_blank())
+
+```
+
+A quick Googling using the longitude and latitude of these park ids tells us that, the labels from left to right are:
+
+* "X039" is "Pelham Bay Park"
+* "B073" is "Prospect Park"
+* "X104" is "Williamsbridge Oval Skate Park"
+* "X092" is "Van Cortlandt Park"
+* "X045" is "St. Mary's Park"
+* "M029" is "Fort Tryon Park"
+* "R006" is "Conference House Park" in Staten Island
+* "M098" is "Washington Square Park"
+* "M042" is "Inwood Hill Park"
+* "Q099" is "Flushing Meadows Corona Park"
+* "M010" is "Central Park"
+
+all of which are more well-known parks in NYC.
+
+From this scatter plot, it is certainly apparent that there seems to be a correlation that the parks with more 
+diverse groups of organizers choosing them as event locations tend to have events with more diverse categories as 
+well, which makes us wonder if different organizers have preferences over certain event categories.
+
+### Top Organizers' Event Categories and Locations Preferences
+
+TODO, WIP
 
 
-### Most Lively Parks
+```{r}
+
+nyc_events_left_joined[c("EvtId", "Org", "Cat")] %>%
+  filter(Org %in% top_organizers$Org) %>%
+  filter(Cat %in% top_categories$Cat) %>%
+  group_by(Org, Cat) %>%
+  summarize(UniqueEvts = n_distinct(EvtId))
+
+```
+
+
+TODO Top Park's Most Frequent Event Categories???
+
+TODO Events with multiple organizers / the most "collaborative" organizers
+
+
+### Most lively parks
+
 ```{r}
 nyc_events_joined %>%
   drop_na(EvtId, LcNm) %>%
@@ -106,20 +178,6 @@ nyc_events_joined %>%
   theme_linedraw()
 ```
 
-### Parks with Most Diversified Events
-```{r}
-nyc_events_joined %>%
-  drop_na(EvtId, LcNm, Cat) %>%
-  group_by(LcNm) %>%
-  summarise(num_cats=length(unique(Cat))) %>%
-  arrange(desc(num_cats)) %>%
-  top_n(20) %>%
-  ggplot(aes(x = num_cats, y = fct_reorder(LcNm, num_cats))) +
-  geom_point(color = "blue") +
-  ggtitle("Most diversified parks") +
-  labs(x = "Number of event categories", y = "Park Location Name") +
-  theme_linedraw()
-```
 
 ### Ratio of free events in parks
 ```{r}
