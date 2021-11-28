@@ -62,8 +62,27 @@ ggplot(top_locations, aes(x = count, y = fct_reorder(LcNm, count))) +
 
 ```
 
+```{r}
 
+ggplot(top_locations, aes(x = count, y = fct_reorder(LcNm, count))) +
+  geom_point(color = "blue") +
+  ggtitle("Top Event Locations") +
+  labs(x = "Number of events", y = "Event Location") +
+  theme_linedraw()
 
+```
+
+```{r}
+nyc_event_listing_events %>%
+  mutate(Duration=sprintf("%.2f",difftime(strptime(paste(Dt, ET), "%Y-%m-%d %H:%M"), strptime(paste(Dt, ST), "%Y-%m-%d %H:%M"))/3600)) %>%
+  filter(Duration > 0) %>%
+  group_by(Duration) %>%
+  summarize(count=n()) %>%
+  top_n(30) %>%
+  ggplot(aes(x=fct_reorder(Duration,as.numeric(Duration)),y=count)) +
+  geom_bar(stat="identity", color = "blue", fill = "lightblue") +
+  theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust=1))
+```
 
 TODO Top Organizer's Favorite Locations
 
