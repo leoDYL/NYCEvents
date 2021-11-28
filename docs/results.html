@@ -148,29 +148,6 @@
 <div id="results" class="section level1" number="5">
 <h1><span class="header-section-number">Chapter 5</span> Results</h1>
 <p>Top Event Categories</p>
-<pre><code>## # A tibble: 20 × 2
-##    Cat                        count
-##    &lt;chr&gt;                      &lt;int&gt;
-##  1 Best for Kids              23280
-##  2 Nature                     20432
-##  3 Fitness                    18705
-##  4 Education                  17052
-##  5 Art                        16199
-##  6 Seniors                    11970
-##  7 History                    11965
-##  8 Tours                      10663
-##  9 Accessible                  9903
-## 10 Sports                      8731
-## 11 Arts &amp; Crafts               8486
-## 12 Volunteer                   8217
-## 13 Outdoor Fitness             7859
-## 14 Waterfront                  6238
-## 15 Historic House Trust Sites  5610
-## 16 Games                       5472
-## 17 Festivals                   4178
-## 18 Poe Park Visitor Center     3984
-## 19 It&#39;s My Park                3754
-## 20 Northern Manhattan Parks    3675</code></pre>
 <div id="events-and-parks-analysis" class="section level2" number="5.1">
 <h2><span class="header-section-number">5.1</span> Events and Parks Analysis</h2>
 <div id="most-lively-parks" class="section level3" number="5.1.1">
@@ -225,7 +202,37 @@ team bonding activities on Fridays.</p>
 <div id="timeseries-analysis-on-event-categories" class="section level3" number="5.2.2">
 <h3><span class="header-section-number">5.2.2</span> Timeseries Analysis on Event Categories</h3>
 <p>After the initial timeseries analysis, we feel that it’s likely that other than the general seasonality and weekly
-trends, different event sub-categories could have very different trends. Thus we will take a closer look in this section.</p>
+trends, different event sub-categories could have very different trends. Thus we will take a closer look at the top 30 categories for NYC parks events in this section.</p>
+<p>First, we look at if there are trends in the numbers of events for different categories over the years.</p>
+<p><img src="finalproj_files/figure-html/unnamed-chunk-26-1.png" width="672" /></p>
+<p>We can notice on this plot that for most of the top categories, the number of events listed in each year from 2013
+to 2018 more or less just fluctuates and stays mostly flat. However, for category “Education”, there is a very
+noticeable increase for year 2018, and for categories “Seniors”, “Accessible”, “Film”, “Dance”, “Free Summer
+Movies”, there appear to be an uptrend, whereas for categories like “Games” and “Birding”, there appear to be a
+downtrend.</p>
+<p>Next, we look at if all categories follow the general seasonality discussed in the previous section, or there are
+noticeable differences in the different categories.</p>
+<p><img src="finalproj_files/figure-html/unnamed-chunk-27-1.png" width="672" /></p>
+<p>Here, we can see that yes, for most of the top 30 categories, they mostly follow the “more events in the summer,
+fewer in the winter” general rule, with some other interesting observations, most noticeably:</p>
+<ul>
+<li>“Nature” events appear to be relatively flat from April through October, which is Spring through Autumn for NYC, then reduces during winter.</li>
+<li>“Arts &amp; Crafts”, “Poe Park Visitor Center”, “Urban Park Rangers”, and “Talks” events look to be relatively flat and just fluctuates throughout the year, with no apparent peaks.</li>
+<li>“Volunteer”, “It’s My Park” and “City Parks Foundation” events appear to have peaks in May and October.</li>
+<li>“History”, “Tours”, and “Historic House Trust Sites” events appear to increase from Januray through October, peaks at October, and then decreases in November and December.</li>
+<li>“Birding” has peaks in April and May.</li>
+</ul>
+<p>Lastly, we also inspect the day of week pattern of when the top 30 event categories happen.</p>
+<p><img src="finalproj_files/figure-html/unnamed-chunk-28-1.png" width="672" /></p>
+<p>As we can see from this plot, most of the top 30 event categories again follow the general “most events on Saturdays, fewest on Mondays” rule, again with some other interesting observations, most noticeably:</p>
+<ul>
+<li>“Seniors” has fewest events on Sundays and most events on Tuesdays, and relatively about the same count of events for different days of the week.</li>
+<li>“Volunteer”, “It’s My Park”, “Urban Park Rangers”, and “Birding” events happen primarily over weekends, and have very few events during weekdays.</li>
+<li>“Accessible”, “Sports”, and “Games” events happen about the same number of times during different days of the week.</li>
+<li>“Film” and “Free Summer Movies” have peaks on Fridays.</li>
+<li>“City Parks Foundation” events happen more frequently during weekdays than during weekends.</li>
+<li>“Poe Park Visitor Center” events do not occur on Sundays and Mondays.</li>
+</ul>
 </div>
 </div>
 <div id="spatial-analysis" class="section level2" number="5.3">
