@@ -2,9 +2,12 @@
 
 ```{r}
 library(ggmap)
-library(tidyverse)
 library(leaflet)
 library(lubridate)
+library(vcd)
+library(vcdExtra)
+library(RColorBrewer)
+library(tidyverse)
 ```
 
 
@@ -162,7 +165,7 @@ nyc_events_joined %>%
   drop_na(EvtId, Lat, Long) %>%
   mutate(gps_location=paste(Lat,Long, sep=",")) %>%
   group_by(gps_location) %>%
-  summarise(num_events=n()) %>%
+  summarize(num_events=n()) %>%
   arrange(desc(num_events)) %>%
   top_n(10) %>%
   ggplot(aes(x = num_events, y = fct_reorder(gps_location, num_events))) +
@@ -180,7 +183,7 @@ nyc_events_joined %>%
   mutate(gps_location=paste(Lat,Long, sep=",")) %>%
   group_by(gps_location) %>%
   #filter(n() > 100) %>%
-  summarise(free_ratio=sum(CsFr)/n()) %>%
+  summarize(free_ratio=sum(CsFr)/n()) %>%
   ggplot(aes(free_ratio)) +
   geom_histogram(color = "blue", fill = "lightblue", binwidth=0.1) +
   ggtitle("Histogram of free event ratio")
@@ -359,6 +362,48 @@ As we can see from this plot, most of the top 30 event categories again follow t
 * "Film" and "Free Summer Movies" have peaks on Fridays.
 * "City Parks Foundation" events happen more frequently during weekdays than during weekends.
 * "Poe Park Visitor Center" events do not occur on Sundays and Mondays.
+
+## Crimes in Parks
+
+Now we take a look at the crimes in the NYC parks recorded by NYPD.
+
+### Crimes in Parks Overview
+
+```{r}
+fills7 <- brewer.pal(7, 'Accent')
+
+nyc_parks_crimes_total <- nyc_parks_crime %>%
+  group_by(Boro) %>%
+  summarize(Mdr = sum(Mdr), 
+            Rape = sum(Rape), 
+            Rob = sum(Rob), 
+            Aslt = sum(Ass), 
+            Burg = sum(Burg), 
+            GL = sum(G_L), 
+            GLM = sum(GL_M_V)) %>%
+  pivot_longer(!Boro, names_to = "CrimeType", values_to = "Freq") %>%
+  mutate(CrimeType = fct_relevel(CrimeType, "GLM", "Rob", "Rape", "Mdr", after = Inf)) %>%
+  mutate(Boro = fct_recode(Boro, 
+                           B = "BROOKLYN", 
+                           M = "MANHATTAN", 
+                           R = "STATEN ISLAND", 
+                           Q = "QUEENS", 
+                           X = "BRONX", 
+                           "B/Q" = "BROOKLYN/QUEENS")) %>%
+  mutate(Boro = fct_relevel(Boro, "B/Q"))
+
+vcd::mosaic(CrimeType ~ Boro, 
+            nyc_parks_crimes_total, 
+            direction = c("v", "h"),
+            labeling = labeling_border(tl_labels = c(FALSE, FALSE),
+                                       gp_labels = gpar(fontsize = 9),
+                                       set_varnames = c(Boro = "Borough", CrimeType = "Crime Type"),
+                                       rot_labels = c(0, 0, 0, 0)),
+            highlighting_fill = fills7,
+            main = "Mosaic Plot of Crime Types in Boroughs of NYC")
+```
+
+The distribution of crime types in the different Boroughs of NYC over the years of 2014 through 2021 is actually different, especially around "Grand Larceny" and "Robbery" - for example, Manhattan has more "Grand Larceny" than "Robbery", whereas Staten Island and Bronx both have more "Robbery" than "Grand Larceny".
 
 
 ## Spatial Analysis
