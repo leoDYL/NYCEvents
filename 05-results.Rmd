@@ -6,50 +6,79 @@ library(tidyverse)
 library(leaflet)
 library(lubridate)
 ```
-
-Top Event Categories
+## Events and Parks Analysis
+### Top Event Categories
 
 ```{r}
-top_categories <- nyc_event_categories %>%
+nyc_event_categories %>%
   group_by(Cat) %>%
   summarize(count = n()) %>%
   arrange(desc(count)) %>%
-  top_n(20)
-
-top_categories
-```
-
-## Events and Parks Analysis
-
-### Most lively parks
-```{r}
-nyc_events_joined %>%
-  drop_na(EvtId, Lat, Long) %>%
-  mutate(gps_location=paste(Lat,Long, sep=",")) %>%
-  group_by(gps_location) %>%
-  summarise(num_events=n()) %>%
-  arrange(desc(num_events)) %>%
-  top_n(10) %>%
-  ggplot(aes(x = num_events, y = fct_reorder(gps_location, num_events))) +
+  top_n(20) %>%
+  ggplot(aes(x = count, y = fct_reorder(Cat, count))) +
   geom_point(color = "blue") +
-  ggtitle("Most lively parks") +
-  labs(x = "Number of events", y = "Park Location") +
+  ggtitle("Most popular event categories") +
+  labs(x = "Event Frequency", y = "Park Location Name") +
   theme_linedraw()
 ```
 
-### Most Diversified Park
+### Top Event Durations
+```{r}
+#Change to histogram 
+#Facet with category, location etc. 
+nyc_event_listing_events %>%
+  drop_na(EvtId, Dt, ST, ET) %>%
+  mutate(
+    Duration=as.character(
+      sprintf("%.2f", 
+              abs( #There are negative time differences somehow.
+                difftime(
+                  strptime(paste(format(Dt, "%m/%d/%Y"), ET), "%m/%d/%Y %H:%M"), 
+                  strptime(paste(format(Dt, "%m/%d/%Y"), ST), "%m/%d/%Y %H:%M"))
+                /3600)
+              )
+      )
+    ) %>%
+  group_by(Duration) %>%
+  summarize(count = n()) %>%
+  arrange(desc(count)) %>%
+  top_n(20) %>%
+  ggplot(aes(x = count, y = fct_reorder(Duration, count))) +
+  geom_point(color = "blue") +
+  ggtitle("Most popular events") +
+  labs(x = "Event Frequency", y = "Park Location Name") +
+  theme_linedraw()
+
+
+```
+
+### Most Lively Parks
 ```{r}
 nyc_events_joined %>%
-  drop_na(EvtId, Lat, Long, Cat) %>%
-  mutate(gps_location=paste(Lat,Long, sep=",")) %>%
-  group_by(gps_location) %>%
+  drop_na(EvtId, PkNm) %>%
+  group_by(PkNm) %>%
+  summarise(num_events=n_distinct(EvtId)) %>%
+  arrange(desc(num_events)) %>%
+  top_n(20) %>%
+  ggplot(aes(x = num_events, y = fct_reorder(PkNm, num_events))) +
+  geom_point(color = "blue") +
+  ggtitle("Most lively parks") +
+  labs(x = "Number of events", y = "Park Location Name") +
+  theme_linedraw()
+```
+
+### Parks with Most Diversified Events
+```{r}
+nyc_events_joined %>%
+  drop_na(EvtId, PkNm, Cat) %>%
+  group_by(PkNm) %>%
   summarise(num_cats=length(unique(Cat))) %>%
   arrange(desc(num_cats)) %>%
-  top_n(10) %>%
-  ggplot(aes(x = num_cats, y = fct_reorder(gps_location, num_cats))) +
+  top_n(20) %>%
+  ggplot(aes(x = num_cats, y = fct_reorder(PkNm, num_cats))) +
   geom_point(color = "blue") +
   ggtitle("Most diversified parks") +
-  labs(x = "Number of event categories", y = "Park Location") +
+  labs(x = "Number of event categories", y = "Park Location Name") +
   theme_linedraw()
 ```
 

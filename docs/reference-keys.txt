@@ -14,8 +14,10 @@ top-categories-with-missing-organizer
 missing-values-for-crimes-in-parks
 results
 events-and-parks-analysis
+top-event-categories
+top-event-durations
 most-lively-parks
-most-diversified-park
+parks-with-most-diversified-events
 ratio-of-free-events-in-parks
 timeseries-analysis
 timeseries-analysis-on-nyc-parks-events
