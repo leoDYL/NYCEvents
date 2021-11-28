@@ -107,9 +107,10 @@
 <ul>
 <li class="chapter" data-level="5.1" data-path="results.html"><a href="results.html#events-and-parks-analysis"><i class="fa fa-check"></i><b>5.1</b> Events and Parks Analysis</a>
 <ul>
-<li class="chapter" data-level="5.1.1" data-path="results.html"><a href="results.html#most-lively-parks"><i class="fa fa-check"></i><b>5.1.1</b> Most lively parks</a></li>
-<li class="chapter" data-level="5.1.2" data-path="results.html"><a href="results.html#most-diversified-park"><i class="fa fa-check"></i><b>5.1.2</b> Most Diversified Park</a></li>
-<li class="chapter" data-level="5.1.3" data-path="results.html"><a href="results.html#ratio-of-free-events-in-parks"><i class="fa fa-check"></i><b>5.1.3</b> Ratio of free events in parks</a></li>
+<li class="chapter" data-level="5.1.1" data-path="results.html"><a href="results.html#top-event-categories-organizers-and-locations"><i class="fa fa-check"></i><b>5.1.1</b> Top Event Categories, Organizers, and Locations</a></li>
+<li class="chapter" data-level="5.1.2" data-path="results.html"><a href="results.html#most-lively-parks"><i class="fa fa-check"></i><b>5.1.2</b> Most lively parks</a></li>
+<li class="chapter" data-level="5.1.3" data-path="results.html"><a href="results.html#most-diversified-park"><i class="fa fa-check"></i><b>5.1.3</b> Most Diversified Park</a></li>
+<li class="chapter" data-level="5.1.4" data-path="results.html"><a href="results.html#ratio-of-free-events-in-parks"><i class="fa fa-check"></i><b>5.1.4</b> Ratio of free events in parks</a></li>
 </ul></li>
 <li class="chapter" data-level="5.2" data-path="results.html"><a href="results.html#timeseries-analysis"><i class="fa fa-check"></i><b>5.2</b> Timeseries Analysis</a>
 <ul>
@@ -147,43 +148,26 @@
             <section class="normal" id="section-">
 <div id="results" class="section level1" number="5">
 <h1><span class="header-section-number">Chapter 5</span> Results</h1>
-<p>Top Event Categories</p>
-<pre><code>## # A tibble: 20 × 2
-##    Cat                        count
-##    &lt;chr&gt;                      &lt;int&gt;
-##  1 Best for Kids              23280
-##  2 Nature                     20432
-##  3 Fitness                    18705
-##  4 Education                  17052
-##  5 Art                        16199
-##  6 Seniors                    11970
-##  7 History                    11965
-##  8 Tours                      10663
-##  9 Accessible                  9903
-## 10 Sports                      8731
-## 11 Arts &amp; Crafts               8486
-## 12 Volunteer                   8217
-## 13 Outdoor Fitness             7859
-## 14 Waterfront                  6238
-## 15 Historic House Trust Sites  5610
-## 16 Games                       5472
-## 17 Festivals                   4178
-## 18 Poe Park Visitor Center     3984
-## 19 It&#39;s My Park                3754
-## 20 Northern Manhattan Parks    3675</code></pre>
 <div id="events-and-parks-analysis" class="section level2" number="5.1">
 <h2><span class="header-section-number">5.1</span> Events and Parks Analysis</h2>
-<div id="most-lively-parks" class="section level3" number="5.1.1">
-<h3><span class="header-section-number">5.1.1</span> Most lively parks</h3>
+<div id="top-event-categories-organizers-and-locations" class="section level3" number="5.1.1">
+<h3><span class="header-section-number">5.1.1</span> Top Event Categories, Organizers, and Locations</h3>
+<p>We first take a look at what are the top event categories, organizers, and parks locations</p>
+<p><img src="finalproj_files/figure-html/unnamed-chunk-18-1.png" width="672" /></p>
 <p><img src="finalproj_files/figure-html/unnamed-chunk-19-1.png" width="672" /></p>
-</div>
-<div id="most-diversified-park" class="section level3" number="5.1.2">
-<h3><span class="header-section-number">5.1.2</span> Most Diversified Park</h3>
 <p><img src="finalproj_files/figure-html/unnamed-chunk-20-1.png" width="672" /></p>
 </div>
-<div id="ratio-of-free-events-in-parks" class="section level3" number="5.1.3">
-<h3><span class="header-section-number">5.1.3</span> Ratio of free events in parks</h3>
+<div id="most-lively-parks" class="section level3" number="5.1.2">
+<h3><span class="header-section-number">5.1.2</span> Most lively parks</h3>
 <p><img src="finalproj_files/figure-html/unnamed-chunk-21-1.png" width="672" /></p>
+</div>
+<div id="most-diversified-park" class="section level3" number="5.1.3">
+<h3><span class="header-section-number">5.1.3</span> Most Diversified Park</h3>
+<p><img src="finalproj_files/figure-html/unnamed-chunk-22-1.png" width="672" /></p>
+</div>
+<div id="ratio-of-free-events-in-parks" class="section level3" number="5.1.4">
+<h3><span class="header-section-number">5.1.4</span> Ratio of free events in parks</h3>
+<p><img src="finalproj_files/figure-html/unnamed-chunk-23-1.png" width="672" /></p>
 </div>
 </div>
 <div id="timeseries-analysis" class="section level2" number="5.2">
@@ -193,7 +177,7 @@ Here we are going to perform an analysis on what are some interesting seasonal p
 <div id="timeseries-analysis-on-nyc-parks-events" class="section level3" number="5.2.1">
 <h3><span class="header-section-number">5.2.1</span> Timeseries Analysis on NYC Parks Events</h3>
 <p>First, we simply take an overview look at the count of listed events over time:</p>
-<p><img src="finalproj_files/figure-html/unnamed-chunk-22-1.png" width="672" /></p>
+<p><img src="finalproj_files/figure-html/unnamed-chunk-24-1.png" width="672" /></p>
 <p>Here, we observe a few things at first sight:</p>
 <ul>
 <li>The data counts appears to be abnormally low after the start of 2019, probably due to limited data availablility in the dataset, therefore, we are going to only use data prior to 2019 in our following timeseries analysis on the events daata in this section.</li>
@@ -201,7 +185,7 @@ Here we are going to perform an analysis on what are some interesting seasonal p
 <li>There is definitely fewer events in winters around Janurary and generally more events in the summers.</li>
 </ul>
 <p>The previous plot, although helps us identify the general pattern, looks pretty noisy, so next let’s take a different view, which is less noisy:</p>
-<p><img src="finalproj_files/figure-html/unnamed-chunk-23-1.png" width="672" /></p>
+<p><img src="finalproj_files/figure-html/unnamed-chunk-25-1.png" width="672" /></p>
 <p>Here, we are aggregating the event counts by month, and plotted bar charts faceted by year. It is very clear from
 these charts that the monthly counts and trends do indeed have a very similar pattern across the years 2013-2018.
 Other than some fluctuations, January through March are typically the more quiet months with fewer than 500 events
@@ -212,7 +196,7 @@ December.</p>
 weekends than during weekdays. Here, since we have concluded in the previous section that the seasonal trend is
 similar across the years, we take a closer look at the number of listed events by day of week in 2017
 to get an idea.</p>
-<p><img src="finalproj_files/figure-html/unnamed-chunk-24-1.png" width="672" /></p>
+<p><img src="finalproj_files/figure-html/unnamed-chunk-26-1.png" width="672" /></p>
 <p>As expected, Saturdays do typically have a lot more events than the other days, especially during the summer
 season. It is somewhat surprising that Sundays only have about similar number of events as Tuesdays, Wednesdays
 and Thursdays. We speculate that for weekends, people prefer to stay at home with family and prepare for the new
@@ -225,7 +209,37 @@ team bonding activities on Fridays.</p>
 <div id="timeseries-analysis-on-event-categories" class="section level3" number="5.2.2">
 <h3><span class="header-section-number">5.2.2</span> Timeseries Analysis on Event Categories</h3>
 <p>After the initial timeseries analysis, we feel that it’s likely that other than the general seasonality and weekly
-trends, different event sub-categories could have very different trends. Thus we will take a closer look in this section.</p>
+trends, different event sub-categories could have very different trends. Thus we will take a closer look at the top 30 categories for NYC parks events in this section.</p>
+<p>First, we look at if there are trends in the numbers of events for different categories over the years.</p>
+<p><img src="finalproj_files/figure-html/unnamed-chunk-28-1.png" width="672" /></p>
+<p>We can notice on this plot that for most of the top categories, the number of events listed in each year from 2013
+to 2018 more or less just fluctuates and stays mostly flat. However, for category “Education”, there is a very
+noticeable increase for year 2018, and for categories “Seniors”, “Accessible”, “Film”, “Dance”, “Free Summer
+Movies”, there appear to be an uptrend, whereas for categories like “Games” and “Birding”, there appear to be a
+downtrend.</p>
+<p>Next, we look at if all categories follow the general seasonality discussed in the previous section, or there are
+noticeable differences in the different categories.</p>
+<p><img src="finalproj_files/figure-html/unnamed-chunk-29-1.png" width="672" /></p>
+<p>Here, we can see that yes, for most of the top 30 categories, they mostly follow the “more events in the summer,
+fewer in the winter” general rule, with some other interesting observations, most noticeably:</p>
+<ul>
+<li>“Nature” events appear to be relatively flat from April through October, which is Spring through Autumn for NYC, then reduces during winter.</li>
+<li>“Arts &amp; Crafts”, “Poe Park Visitor Center”, “Urban Park Rangers”, and “Talks” events look to be relatively flat and just fluctuates throughout the year, with no apparent peaks.</li>
+<li>“Volunteer”, “It’s My Park” and “City Parks Foundation” events appear to have peaks in May and October.</li>
+<li>“History”, “Tours”, and “Historic House Trust Sites” events appear to increase from Januray through October, peaks at October, and then decreases in November and December.</li>
+<li>“Birding” has peaks in April and May.</li>
+</ul>
+<p>Lastly, we also inspect the day of week pattern of when the top 30 event categories happen.</p>
+<p><img src="finalproj_files/figure-html/unnamed-chunk-30-1.png" width="672" /></p>
+<p>As we can see from this plot, most of the top 30 event categories again follow the general “most events on Saturdays, fewest on Mondays” rule, again with some other interesting observations, most noticeably:</p>
+<ul>
+<li>“Seniors” has fewest events on Sundays and most events on Tuesdays, and relatively about the same count of events for different days of the week.</li>
+<li>“Volunteer”, “It’s My Park”, “Urban Park Rangers”, and “Birding” events happen primarily over weekends, and have very few events during weekdays.</li>
+<li>“Accessible”, “Sports”, and “Games” events happen about the same number of times during different days of the week.</li>
+<li>“Film” and “Free Summer Movies” have peaks on Fridays.</li>
+<li>“City Parks Foundation” events happen more frequently during weekdays than during weekends.</li>
+<li>“Poe Park Visitor Center” events do not occur on Sundays and Mondays.</li>
+</ul>
 </div>
 </div>
 <div id="spatial-analysis" class="section level2" number="5.3">
