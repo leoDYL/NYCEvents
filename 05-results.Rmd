@@ -63,6 +63,17 @@ ggplot(top_locations, aes(x = count, y = fct_reorder(LcNm, count))) +
 
 ```
 
+
+
+
+TODO Top Organizer's Favorite Locations
+
+TODO Top Organizer's Favorite Event Categories
+
+TODO Top Park's Most Frequent Event Categories
+
+
+
 ### Most lively parks
 ```{r}
 nyc_events_joined %>%
