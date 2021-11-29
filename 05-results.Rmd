@@ -16,11 +16,7 @@ library(tidyverse)
 
 We first take a look at what are the top event categories, organizers, and parks locations
 
-
-
 ```{r}
-#Change to histogram 
-#Facet with category, location etc. 
 top_categories <- nyc_event_categories %>%
   group_by(Cat) %>%
   summarize(count = n()) %>%
@@ -67,14 +63,46 @@ ggplot(top_locations, aes(x = count, y = fct_reorder(LcNm, count))) +
 
 ```{r}
 nyc_event_listing_events %>%
-  mutate(Duration=sprintf("%.2f",difftime(strptime(paste(Dt, ET), "%Y-%m-%d %H:%M"), strptime(paste(Dt, ST), "%Y-%m-%d %H:%M"))/3600)) %>%
+  mutate(Duration=difftime(strptime(paste(Dt, ET), "%Y-%m-%d %H:%M"), strptime(paste(Dt, ST), "%Y-%m-%d %H:%M"))/3600) %>%
   filter(Duration > 0) %>%
-  group_by(Duration) %>%
-  summarize(count=n()) %>%
-  top_n(30) %>%
-  ggplot(aes(x=fct_reorder(Duration,as.numeric(Duration)),y=count)) +
-  geom_bar(stat="identity", color = "blue", fill = "lightblue") +
-  theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust=1))
+  ggplot(aes(Duration)) +
+  geom_histogram(binwidth=1, color = "blue", fill = "lightblue") +
+  ggtitle("Histogram for Event Durations") +
+  labs(x = "Event Duration", y = "Count of Events")
+```
+
+### Top Events Categories for Inidividual Organizers
+```{r, fig.width=14, fig.height=14}
+nyc_events_left_joined %>%
+  drop_na(Org, Cat) %>%
+  subset(Org %in% top_organizers$Org) %>%
+  subset(Cat %in% top_categories$Cat) %>%
+  group_by(Org, Cat) %>%
+  summarize(Count=n_distinct(EvtId)) %>%
+  ggplot(aes(Cat, Count)) +
+  geom_col() +
+  facet_wrap(.~Org, ncol = 4) +
+  ggtitle("Barchart for Event Categories by Organizers") +
+  labs(x = "Event Category", y = "Count of Events") +
+  theme(axis.text.x = element_text(angle = 90, vjust = 1, hjust=1))
+  
+```
+
+### Top Events Locations for Inidividual Organizers
+```{r, fig.width=14, fig.height=14}
+nyc_events_left_joined %>%
+  drop_na(Org, LcNm) %>%
+  subset(Org %in% top_organizers$Org) %>%
+  subset(LcNm %in% top_locations$LcNm) %>%
+  group_by(Org, LcNm) %>%
+  summarize(Count=n_distinct(EvtId)) %>%
+  ggplot(aes(LcNm, Count)) +
+  geom_col() +
+  facet_wrap(.~Org, ncol = 4) +
+  ggtitle("Barchart for Event Locations by Organizers") +
+  labs(x = "Event Location", y = "Count of Events") +
+  theme(axis.text.x = element_text(angle = 90, vjust = 1, hjust=1))
+  
 ```
 
 ### Most Diversified Park
@@ -157,6 +185,7 @@ nyc_events_left_joined[c("EvtId", "Org", "Cat")] %>%
   group_by(Org, Cat) %>%
   summarize(UniqueEvts = n_distinct(EvtId))
 
+
 ```
 
 
@@ -168,10 +197,10 @@ nyc_events_left_joined[c("EvtId", "Org", "Cat")] %>%
 ### Most lively parks
 
 ```{r}
-nyc_events_joined %>%
+nyc_events_left_joined %>%
   drop_na(EvtId, LcNm) %>%
   group_by(LcNm) %>%
-  summarize(num_events=n()) %>%
+  summarize(num_events=n_distinct(EvtId)) %>%
   arrange(desc(num_events)) %>%
   top_n(20) %>%
   ggplot(aes(x = num_events, y = fct_reorder(LcNm, num_events))) +
@@ -274,6 +303,22 @@ to organize events on Saturdays. It is not surprising that Monday have the fewes
 typically busy on the first business day of the week. Fridays also appear to have the 2nd fewest number of events 
 among the different days of week, as people wrap up the work for the week, and usually have corporate events or 
 team bonding activities on Fridays.
+
+```{r, fig.width=10}
+nyc_events_timeseries_weekly <- nyc_event_listing_events %>%
+  filter(Dt < as.Date("2019-01-01")) %>%
+  mutate(Month = month(Dt, label=TRUE, abbr=TRUE), Wday = wday(Dt, label = TRUE, abbr = TRUE)) %>%
+  group_by(Month, Wday) %>%
+  summarize(Count = n())
+
+ggplot(nyc_events_timeseries_weekly, aes(Wday, Count)) +
+  geom_bar(stat="identity", color = "blue", fill = "lightblue") +
+  facet_grid(.~Month)+
+  ggtitle("Weekly Count of Park Events by Month") + 
+  labs(x = "Weekday", y = "Count of Events") +
+  ggtitle("Count of NYC Events in Parks By Weekday in Each Month") +
+  theme(axis.text.x = element_text(angle = 90, vjust = 1, hjust=1))
+```
 
 ### Timeseries Analysis on Event Categories
 

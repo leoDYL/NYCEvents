@@ -15,6 +15,8 @@ missing-values-for-crimes-in-parks
 results
 events-and-parks-analysis
 top-event-categories-organizers-locations-and-durations
+top-events-categories-for-inidividual-organizers
+top-events-locations-for-inidividual-organizers
 most-diversified-park
 top-organizers-event-categories-and-locations-preferences
 most-lively-parks
