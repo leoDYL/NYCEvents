@@ -22,6 +22,8 @@ ratio-of-free-events-in-parks
 timeseries-analysis
 timeseries-analysis-on-nyc-parks-events
 timeseries-analysis-on-event-categories
+crimes-in-parks
+crimes-in-parks-overview
 spatial-analysis
 cost
 by-category

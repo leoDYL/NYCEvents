@@ -90,18 +90,18 @@ crime_quarters <- c(
 ```{r}
 nyc_events_joined <- nyc_event_listing_events %>%
   merge(
-    y = nyc_event_categories, 
-    by = "EvtId", 
+    y = nyc_event_categories,
+    by = "EvtId",
     all.x = TRUE,
     all.y = TRUE) %>%
   merge(
-    y = nyc_event_organizers, 
-    by = "EvtId", 
+    y = nyc_event_organizers,
+    by = "EvtId",
     all.x = TRUE,
     all.y = TRUE) %>%
   merge(
-    y = nyc_event_listing_locations, 
-    by = "EvtId", 
+    y = nyc_event_listing_locations,
+    by = "EvtId",
     all.x = TRUE,
     all.y = TRUE)
 
