@@ -25,39 +25,17 @@ top_categories <- nyc_event_categories %>%
 
 top_categories_levels <- levels(fct_reorder(top_categories$Cat, top_categories$count))
 
-ggplot(top_categories, aes(x = count, y = fct_reorder(Cat, count))) +
-  geom_point(color = "blue") +
-  ggtitle("Top Event Categories") +
-  labs(x = "Number of events", y = "Event Category") +
-  theme_linedraw()
-
 top_organizers <- nyc_event_organizers %>%
   group_by(Org) %>%
   summarize(count = n()) %>%
   arrange(desc(count)) %>%
   top_n(30)
 
-ggplot(top_organizers, aes(x = count, y = fct_reorder(Org, count))) +
-  geom_point(color = "blue") +
-  ggtitle("Top Event Organizers") +
-  labs(x = "Number of events", y = "Event Organizer") +
-  theme_linedraw()
-
-```
-
-```{r}
-
 top_locations <- nyc_event_listing_locations %>%
   group_by(LcNm) %>%
   summarize(count = n()) %>%
   arrange(desc(count)) %>%
   top_n(30)
-
-ggplot(top_locations, aes(x = count, y = fct_reorder(LcNm, count))) +
-  geom_point(color = "blue") +
-  ggtitle("Top Event Locations") +
-  labs(x = "Number of events", y = "Event Location") +
-  theme_linedraw()
 
 ```
 
@@ -71,38 +49,23 @@ nyc_event_listing_events %>%
   labs(x = "Event Duration", y = "Count of Events")
 ```
 
-### Top Events Categories for Inidividual Organizers
-```{r, fig.width=14, fig.height=14}
-nyc_events_left_joined %>%
-  drop_na(Org, Cat) %>%
-  subset(Org %in% top_organizers$Org) %>%
-  subset(Cat %in% top_categories$Cat) %>%
-  group_by(Org, Cat) %>%
-  summarize(Count=n_distinct(EvtId)) %>%
-  ggplot(aes(Cat, Count)) +
-  geom_col() +
-  facet_wrap(.~Org, ncol = 4) +
-  ggtitle("Barchart for Event Categories by Organizers") +
-  labs(x = "Event Category", y = "Count of Events") +
-  theme(axis.text.x = element_text(angle = 90, vjust = 1, hjust=1))
-  
-```
+### Most Diversified Organizers
+```{r}
 
-### Top Events Locations for Inidividual Organizers
-```{r, fig.width=14, fig.height=14}
 nyc_events_left_joined %>%
-  drop_na(Org, LcNm) %>%
-  subset(Org %in% top_organizers$Org) %>%
-  subset(LcNm %in% top_locations$LcNm) %>%
-  group_by(Org, LcNm) %>%
-  summarize(Count=n_distinct(EvtId)) %>%
-  ggplot(aes(LcNm, Count)) +
-  geom_col() +
-  facet_wrap(.~Org, ncol = 4) +
-  ggtitle("Barchart for Event Locations by Organizers") +
-  labs(x = "Event Location", y = "Count of Events") +
-  theme(axis.text.x = element_text(angle = 90, vjust = 1, hjust=1))
-  
+  drop_na(PkId, Org, Cat) %>%
+  group_by(Org) %>%
+  summarize(UniqueCats = n_distinct(Cat), UniquePkIds = n_distinct(PkId)) %>%
+  ggplot(aes(UniquePkIds, UniqueCats)) +
+  geom_point(alpha = 0.4, size = 2, stroke = 0) +
+  geom_text(aes(label = ifelse((UniquePkIds > 40) | (UniqueCats > 60), as.character(Org),'')), 
+            size = 3,
+            hjust = 1, 
+            vjust = 1) +
+  labs(x = "Count of Distinct Parks", y = "Count of Distinct Event Categories") + 
+  ggtitle("Organizers Organizing Different Event Categories Hosted by Different Parks") + 
+  theme(panel.background = element_blank())
+
 ```
 
 ### Most Diversified Park
@@ -178,14 +141,11 @@ TODO, WIP
 
 
 ```{r}
-
 nyc_events_left_joined[c("EvtId", "Org", "Cat")] %>%
   filter(Org %in% top_organizers$Org) %>%
   filter(Cat %in% top_categories$Cat) %>%
   group_by(Org, Cat) %>%
   summarize(UniqueEvts = n_distinct(EvtId))
-
-
 ```
 
 
@@ -194,22 +154,22 @@ nyc_events_left_joined[c("EvtId", "Org", "Cat")] %>%
 <!-- TODO Events with multiple organizers / the most "collaborative" organizers -->
 
 
-### Most lively parks
+<!-- ### Most lively parks -->
 
-```{r}
-nyc_events_left_joined %>%
-  drop_na(EvtId, LcNm) %>%
-  group_by(LcNm) %>%
-  summarize(num_events=n_distinct(EvtId)) %>%
-  arrange(desc(num_events)) %>%
-  top_n(20) %>%
-  ggplot(aes(x = num_events, y = fct_reorder(LcNm, num_events))) +
-  geom_point(color = "blue") +
-  ggtitle("Most lively parks") +
-  labs(x = "Number of events", y = "Park Location Name") +
-  theme_linedraw()
-
-```
+# ```{r}
+# nyc_events_left_joined %>%
+#   drop_na(EvtId, LcNm) %>%
+#   group_by(LcNm) %>%
+#   summarize(num_events=n_distinct(EvtId)) %>%
+#   arrange(desc(num_events)) %>%
+#   top_n(20) %>%
+#   ggplot(aes(x = num_events, y = fct_reorder(LcNm, num_events))) +
+#   geom_point(color = "blue") +
+#   ggtitle("Most lively parks") +
+#   labs(x = "Number of events", y = "Park Location Name") +
+#   theme_linedraw()
+# 
+# ```
 
 
 ### Ratio of free events in parks
@@ -254,20 +214,24 @@ Here, we observe a few things at first sight:
 * The seasonality pattern looks similar for each year.
 * There is definitely fewer events in winters around Janurary and generally more events in the summers.
 
-The previous plot, although helps us identify the general pattern, looks pretty noisy, so next let's take a different view, which is less noisy:
-
-```{r}
-nyc_events_timeseries_monthly <- nyc_event_listing_events %>%
+```{r, fig.width=10}
+nyc_events_timeseries_weekly <- nyc_event_listing_events %>%
   filter(Dt < as.Date("2019-01-01")) %>%
-  mutate(Year = year(Dt), Month = month(Dt, label = TRUE, abbr = TRUE)) %>%
-  group_by(Year, Month) %>%
+  mutate(Month = month(Dt, label=TRUE, abbr=TRUE), Wday = wday(Dt, label = TRUE, abbr = TRUE), Year=year(Dt)) %>%
+  group_by(Month, Wday, Year) %>%
   summarize(Count = n())
-
-ggplot(nyc_events_timeseries_monthly, aes(Month, Count)) +
-  geom_col() +
-  facet_grid(Year~.)+
-  ggtitle("Monthly Count of NYC Events in Parks")
+nyc_events_timeseries_weekly
+ggplot(nyc_events_timeseries_weekly, aes(Wday, Count)) +
+  geom_bar(stat="identity", color = "blue", fill = "lightblue") +
+  facet_grid(cols=vars(Month), rows=vars(Year))+
+  ylim(0,500) + 
+  ggtitle("Weekly Count of Park Events by Month") + 
+  labs(x = "Weekday", y = "Count of Events") +
+  ggtitle("Count of NYC Events in Parks By Weekday in Each Month") +
+  theme(axis.text.x = element_text(angle = 90, vjust = 1, hjust=1))
 ```
+
+The previous plot, although helps us identify the general pattern, looks pretty noisy, so next let's take a different view, which is less noisy:
 
 Here, we are aggregating the event counts by month, and plotted bar charts faceted by year. It is very clear from 
 these charts that the monthly counts and trends do indeed have a very similar pattern across the years 2013-2018. 
@@ -281,20 +245,6 @@ weekends than during weekdays. Here, since we have concluded in the previous sec
 similar across the years, we take a closer look at the number of listed events by day of week in 2017 
 to get an idea.
 
-```{r}
-nyc_events_timeseries %>%
-  filter(year(Dt) == "2017") %>%
-  ggplot(aes(Dt, Count)) +
-  geom_line(color = "grey30") + 
-  geom_point(size = 1) +
-  scale_x_date(date_labels = "%b",
-               date_breaks = "3 months") +
-  facet_grid(.~wday(Dt, label = TRUE)) + 
-  labs(x = "Date", y = "Count of Events") +
-  ggtitle("Count of NYC Events in Parks By Day of Week in 2017") +
-  theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust=1))
-```
-
 As expected, Saturdays do typically have a lot more events than the other days, especially during the summer 
 season. It is somewhat surprising that Sundays only have about similar number of events as Tuesdays, Wednesdays 
 and Thursdays. We speculate that for weekends, people prefer to stay at home with family and prepare for the new 
@@ -303,22 +253,6 @@ to organize events on Saturdays. It is not surprising that Monday have the fewes
 typically busy on the first business day of the week. Fridays also appear to have the 2nd fewest number of events 
 among the different days of week, as people wrap up the work for the week, and usually have corporate events or 
 team bonding activities on Fridays.
-
-```{r, fig.width=10}
-nyc_events_timeseries_weekly <- nyc_event_listing_events %>%
-  filter(Dt < as.Date("2019-01-01")) %>%
-  mutate(Month = month(Dt, label=TRUE, abbr=TRUE), Wday = wday(Dt, label = TRUE, abbr = TRUE)) %>%
-  group_by(Month, Wday) %>%
-  summarize(Count = n())
-
-ggplot(nyc_events_timeseries_weekly, aes(Wday, Count)) +
-  geom_bar(stat="identity", color = "blue", fill = "lightblue") +
-  facet_grid(.~Month)+
-  ggtitle("Weekly Count of Park Events by Month") + 
-  labs(x = "Weekday", y = "Count of Events") +
-  ggtitle("Count of NYC Events in Parks By Weekday in Each Month") +
-  theme(axis.text.x = element_text(angle = 90, vjust = 1, hjust=1))
-```
 
 ### Timeseries Analysis on Event Categories
 
@@ -349,7 +283,7 @@ nyc_events_categories_timeseries_monthly %>%
   summarize(Count = n()) %>%
   ungroup() %>%
   ggplot(aes(Year, Count)) +
-  geom_col() +
+  geom_col(color = "blue", fill = "lightblue") +
   facet_wrap(~Cat, ncol = 4) +
   ggtitle("Yearly Count of Events for top 30 Event Categories in NYC Parks") + 
   labs(x = "Year", y = "Count of Events") + 
@@ -373,7 +307,7 @@ nyc_events_categories_timeseries_monthly %>%
   summarize(Count = n()) %>%
   ungroup() %>%
   ggplot(aes(Month, Count)) +
-  geom_col() +
+  geom_col(color = "blue", fill = "lightblue") +
   scale_x_discrete(breaks=c("Mar", "Jun", "Sep", "Dec"),) + 
   facet_wrap(~Cat, ncol = 4) +
   ggtitle("Monthly Count of Events for top 30 Event Categories in NYC Parks") + 
@@ -398,8 +332,8 @@ nyc_events_categories_timeseries_monthly %>%
   group_by(DoW, Cat) %>%
   summarize(Count = n()) %>%
   ungroup() %>%
-  ggplot(aes(DoW, Count)) +
-  geom_col() +
+  ggplot(aes(DoW, Count), color = "blue", fill = "lightblue") +
+  geom_col(color = "blue", fill = "lightblue") +
   facet_wrap(~Cat, ncol = 4) +
   ggtitle("Day of Week Count of Events for top 30 Event Categories in NYC Parks") + 
   labs(x = "Day of Week", y = "Count of Events") + 
@@ -457,7 +391,29 @@ vcd::mosaic(CrimeType ~ Boro,
 
 The distribution of crime types in the different Boroughs of NYC over the years of 2014 through 2021 is actually different, especially around "Grand Larceny" and "Robbery" - for example, Manhattan has more "Grand Larceny" than "Robbery", whereas Staten Island and Bronx both have more "Robbery" than "Grand Larceny".
 
-
+### Crime Timeseries Analysis
+```{r, fig.width=10, fig.height=18}
+nyc_crimes_timeseries_weekly <- nyc_parks_crime %>%
+  drop_na(Boro, Qtr) %>%
+  group_by(Boro, Qtr) %>%
+  summarize(Mdr = sum(Mdr), 
+            Rape = sum(Rape), 
+            Rob = sum(Rob), 
+            Aslt = sum(Ass), 
+            Burg = sum(Burg), 
+            GL = sum(G_L), 
+            GLM = sum(GL_M_V),
+            Tot = sum(Tot)) %>%
+  pivot_longer(cols=3:10, names_to="Crime", values_to="Count")
+nyc_crimes_timeseries_weekly
+ggplot(nyc_crimes_timeseries_weekly, aes(Crime, Count)) +
+  geom_bar(stat="identity", color = "blue", fill = "lightblue") +
+  facet_grid(cols=vars(Boro), rows=vars(Qtr))+
+  ggtitle("Count of Park Crimes by Category") + 
+  labs(x = "Crime Category", y = "Count of Reports") +
+  ggtitle("Count of NYC Park Crimes in Parks By Quarter") +
+  theme(axis.text.x = element_text(angle = 90, vjust = 1, hjust=1))
+```
 ## Spatial Analysis
 
 ### Cost
