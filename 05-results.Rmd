@@ -59,9 +59,9 @@ nyc_events_left_joined %>%
   ggplot(aes(UniquePkIds, UniqueCats)) +
   geom_point(alpha = 0.4, size = 2, stroke = 0) +
   geom_text(aes(label = ifelse((UniquePkIds > 40) | (UniqueCats > 60), as.character(Org),'')), 
-            size = 3,
-            hjust = 1, 
-            vjust = 1) +
+            size = 2,
+            hjust = 0, 
+            vjust = 0) +
   labs(x = "Count of Distinct Parks", y = "Count of Distinct Event Categories") + 
   ggtitle("Organizers Organizing Different Event Categories Hosted by Different Parks") + 
   theme(panel.background = element_blank())
@@ -154,24 +154,6 @@ nyc_events_left_joined[c("EvtId", "Org", "Cat")] %>%
 <!-- TODO Events with multiple organizers / the most "collaborative" organizers -->
 
 
-<!-- ### Most lively parks -->
-
-# ```{r}
-# nyc_events_left_joined %>%
-#   drop_na(EvtId, LcNm) %>%
-#   group_by(LcNm) %>%
-#   summarize(num_events=n_distinct(EvtId)) %>%
-#   arrange(desc(num_events)) %>%
-#   top_n(20) %>%
-#   ggplot(aes(x = num_events, y = fct_reorder(LcNm, num_events))) +
-#   geom_point(color = "blue") +
-#   ggtitle("Most lively parks") +
-#   labs(x = "Number of events", y = "Park Location Name") +
-#   theme_linedraw()
-# 
-# ```
-
-
 ### Ratio of free events in parks
 ```{r}
 nyc_events_joined %>%
@@ -214,6 +196,8 @@ Here, we observe a few things at first sight:
 * The seasonality pattern looks similar for each year.
 * There is definitely fewer events in winters around Janurary and generally more events in the summers.
 
+The previous plot, although helps us identify the general pattern, looks pretty noisy, so next let's take a different view, which is less noisy:
+
 ```{r, fig.width=10}
 nyc_events_timeseries_weekly <- nyc_event_listing_events %>%
   filter(Dt < as.Date("2019-01-01")) %>%
@@ -230,8 +214,6 @@ ggplot(nyc_events_timeseries_weekly, aes(Wday, Count)) +
   ggtitle("Count of NYC Events in Parks By Weekday in Each Month") +
   theme(axis.text.x = element_text(angle = 90, vjust = 1, hjust=1))
 ```
-
-The previous plot, although helps us identify the general pattern, looks pretty noisy, so next let's take a different view, which is less noisy:
 
 Here, we are aggregating the event counts by month, and plotted bar charts faceted by year. It is very clear from 
 these charts that the monthly counts and trends do indeed have a very similar pattern across the years 2013-2018. 
@@ -392,7 +374,7 @@ vcd::mosaic(CrimeType ~ Boro,
 The distribution of crime types in the different Boroughs of NYC over the years of 2014 through 2021 is actually different, especially around "Grand Larceny" and "Robbery" - for example, Manhattan has more "Grand Larceny" than "Robbery", whereas Staten Island and Bronx both have more "Robbery" than "Grand Larceny".
 
 ### Crime Timeseries Analysis
-```{r, fig.width=10, fig.height=18}
+```{r, fig.width=9}
 nyc_crimes_timeseries_weekly <- nyc_parks_crime %>%
   drop_na(Boro, Qtr) %>%
   group_by(Boro, Qtr) %>%
@@ -405,14 +387,17 @@ nyc_crimes_timeseries_weekly <- nyc_parks_crime %>%
             GLM = sum(GL_M_V),
             Tot = sum(Tot)) %>%
   pivot_longer(cols=3:10, names_to="Crime", values_to="Count")
-nyc_crimes_timeseries_weekly
-ggplot(nyc_crimes_timeseries_weekly, aes(Crime, Count)) +
-  geom_bar(stat="identity", color = "blue", fill = "lightblue") +
-  facet_grid(cols=vars(Boro), rows=vars(Qtr))+
+ggplot(nyc_crimes_timeseries_weekly, aes(Qtr, Count, group=Boro, color=Boro)) +
+  geom_line(size = 0.5) +
+  facet_grid(rows=vars(Crime), scales="free_y")+
   ggtitle("Count of Park Crimes by Category") + 
-  labs(x = "Crime Category", y = "Count of Reports") +
+  labs(x = "Quarter", y = "Count of Reports") +
   ggtitle("Count of NYC Park Crimes in Parks By Quarter") +
-  theme(axis.text.x = element_text(angle = 90, vjust = 1, hjust=1))
+  theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust=1))
+        # axis.text.y = element_text(size = 12),
+        # axis.title = element_text(size = 14),
+        # strip.text.y = element_text(size = 14),
+       
 ```
 ## Spatial Analysis
 
