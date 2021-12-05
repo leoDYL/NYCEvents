@@ -125,17 +125,27 @@ nyc_events_left_joined <- nyc_event_listing_events %>%
 
 ```{r}
 # Event category monthly counts over time, used for interactive component
-nyc_event_listing_events %>%
+nyc_events_category_counts_monthly <- nyc_event_listing_events %>%
   merge(
     y = nyc_event_categories,
     by = "EvtId",
     all.x = TRUE) %>%
+  filter(Dt < as.Date("2019-01-01")) %>%
+  drop_na(Cat) %>%
   mutate(month = month(Dt, label=TRUE, abbr=TRUE), 
          year=year(Dt), 
          category = Cat, 
          date = as.yearmon(Dt)) %>%
   group_by(category, month, year, date) %>%
+  summarize(count = n()) 
+
+meaningful_timeseries_categories <- nyc_events_category_counts_monthly %>%
+  group_by(category) %>%
   summarize(count = n()) %>%
+  filter(count > 12) # Limit to categories with at least 12 distinct months of active event listings
+
+nyc_events_category_counts_monthly %>%
+  filter(category %in% meaningful_timeseries_categories$category) %>%
   write.csv("data/derived_data/monthly_category_counts.csv", row.names=FALSE)
 ```
 
