@@ -67,7 +67,7 @@ d3.csv("https://raw.githubusercontent.com/leoDYL/NYCEvents/main/data/derived_dat
             return xScale(formatDate(d.date)) 
           })
           .y(function(d) { 
-            return yScale(+d.count) 
+            return yScale(+d.count)
           })
         )
         .attr("stroke", categoryColorScheme("Accessible"))
