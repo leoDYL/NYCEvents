@@ -155,16 +155,40 @@ nyc_events_left_joined[c("EvtId", "Org", "Cat")] %>%
 
 
 ### Ratio of free events in parks
-```{r}
-nyc_events_joined %>%
-  drop_na(EvtId, Lat, Long, CsFr) %>%
-  mutate(gps_location=paste(Lat,Long, sep=",")) %>%
-  group_by(gps_location) %>%
-  #filter(n() > 100) %>%
-  summarize(free_ratio=sum(CsFr)/n()) %>%
-  ggplot(aes(free_ratio)) +
-  geom_histogram(color = "blue", fill = "lightblue", binwidth=0.1) +
-  ggtitle("Histogram of free event ratio")
+```{r, fig.width=9, fig.height=9}
+get_duration_category <- function(Dt, ST, ET) {
+  d <- as.numeric(difftime(strptime(paste(Dt, ET), "%Y-%m-%d %H:%M"), strptime(paste(Dt, ST), "%Y-%m-%d %H:%M")))/3600
+  case_when (
+    d < 1 ~ "< 1",
+    (d >= 1.00 & d < 3.00) ~ "1-3",
+    (d >= 3.00 & d < 5.00) ~ "3-5",
+    d >= 5.00 ~ ">= 5"
+  )
+}
+get_time_of_day <- function(ST){
+  hour = ST %>% map(~ as.numeric(strsplit(.x, ':')[[1]][1]))
+  case_when(
+   hour >= 0 & hour < 6 ~ "Night",
+   hour >= 6 & hour < 12 ~ "Morning",
+   hour >= 12 & hour < 18 ~ "Afternoon",
+   hour >= 18 & hour <24 ~ "Evening"
+ )
+}
+
+free_mosaic <- nyc_events_left_joined %>%
+  drop_na(Bo, CsFr, Dt, ST, ET) %>%
+  mutate(Duration=get_duration_category(Dt, ST, ET),
+         TimeofDay=get_time_of_day(ST))
+
+free_mosaic$CsFr = as.factor(ifelse(free_mosaic$CsFr == 0, "Not Free", "Free"))
+free_mosaic$Bo = as.factor(free_mosaic$Bo)
+free_mosaic$Duration = fct_relevel(free_mosaic$Duration, levels = c("< 1", "1-3", "3-5", ">=5"))
+free_mosaic$TimeofDay = fct_relevel(free_mosaic$TimeofDay, levels = c("Morning", "Afternoon", "Evening", "Night"))
+
+mosaic_select <- free_mosaic %>%
+  select(CsFr, Bo, Duration, TimeofDay)
+
+pairs(table(mosaic_select), highlighting=2)
 ```
 
 
