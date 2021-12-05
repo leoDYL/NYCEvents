@@ -129,8 +129,7 @@ nyc_event_listing_events %>%
   merge(
     y = nyc_event_categories,
     by = "EvtId",
-    all.x = TRUE,
-    all.y = TRUE) %>%
+    all.x = TRUE) %>%
   mutate(month = month(Dt, label=TRUE, abbr=TRUE), 
          year=year(Dt), 
          category = Cat, 
