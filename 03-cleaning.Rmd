@@ -7,6 +7,7 @@
 ```{r read raw daata}
 library(lubridate)
 library(tidyverse)
+library(zoo)
 
 nyc_event_listing_events <- read.csv("data/raw_data/nyc_parks_event_listing_events.csv", na.strings = "")
 names(nyc_event_listing_events) <- c(
@@ -130,9 +131,12 @@ nyc_event_listing_events %>%
     by = "EvtId",
     all.x = TRUE,
     all.y = TRUE) %>%
-  mutate(Month = month(Dt, label=TRUE, abbr=TRUE), Year=year(Dt), Category = Cat) %>%
-  group_by(Category, Month, Year) %>%
-  summarize(Count = n()) %>%
+  mutate(month = month(Dt, label=TRUE, abbr=TRUE), 
+         year=year(Dt), 
+         category = Cat, 
+         date = as.yearmon(Dt)) %>%
+  group_by(category, month, year, date) %>%
+  summarize(count = n()) %>%
   write.csv("data/derived_data/monthly_category_counts.csv", row.names=FALSE)
 ```
 
