@@ -3,5 +3,5 @@
 .Rhistory
 .RData
 .Ruserdata
-data/derived_data/*
+data/derived_data/nyc_parks_crime_data_all.csv
 data/raw_data/*
