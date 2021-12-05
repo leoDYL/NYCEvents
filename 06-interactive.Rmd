@@ -1,3 +1,28 @@
 # Interactive component
 
+## Monthly Event Count Time-series by Category
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+<meta name="author" content="Leo Du" />
+
+<!-- Load d3.js Version 6 -->
+<script src="https://d3js.org/d3.v6.js"></script>
+
+<!-- Initialize a select button for selecting event categories -->
+<b>Select an Event Category: </b>
+<select id="selectButton"></select>
+
+<!-- The div for the interactive event category monthly timeseries -->
+<div id="category_timeseries_svg"></div>
+<script src="scripts/category_timeseries.js"></script>
+
+</html>
 
