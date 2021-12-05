@@ -123,7 +123,7 @@ nyc_events_left_joined <- nyc_event_listing_events %>%
 ```
 
 
-```{r}
+```{r cleaning for interactive event category monthly counts}
 # Event category monthly counts over time, used for interactive component
 nyc_events_category_counts_monthly <- nyc_event_listing_events %>%
   merge(
