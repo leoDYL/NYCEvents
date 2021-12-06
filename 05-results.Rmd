@@ -155,7 +155,7 @@ nyc_events_left_joined[c("EvtId", "Org", "Cat")] %>%
 
 
 ### Ratio of free events in parks
-```{r, fig.width=9, fig.height=9}
+```{r, fig.width=12, fig.height=12}
 get_duration_category <- function(Dt, ST, ET) {
   d <- as.numeric(difftime(strptime(paste(Dt, ET), "%Y-%m-%d %H:%M"), strptime(paste(Dt, ST), "%Y-%m-%d %H:%M")))/3600
   case_when (
