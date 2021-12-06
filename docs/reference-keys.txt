@@ -25,6 +25,7 @@ timeseries-analysis-on-event-categories
 crimes-in-parks
 crimes-in-parks-overview
 crime-timeseries-analysis
+spatial-analysis
 cost
 by-category
 by-organizer

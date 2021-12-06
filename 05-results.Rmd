@@ -423,6 +423,7 @@ ggplot(nyc_crimes_timeseries_weekly, aes(Qtr, Count, group=Boro, color=Boro)) +
         # strip.text.y = element_text(size = 14),
        
 ```
+
 ## Spatial Analysis
 
 ### Cost
