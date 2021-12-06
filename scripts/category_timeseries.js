@@ -1,4 +1,3 @@
-
 // Set dimensions and margins
 const margin = {top: 10, right: 30, bottom: 30, left: 60},
     width = 720 - margin.left - margin.right,
@@ -19,7 +18,12 @@ d3.csv("https://raw.githubusercontent.com/leoDYL/NYCEvents/main/data/derived_dat
         return formatDate(a.date) - formatDate(b.date);
     }
 
-    data = data.sort(sortByDateAscending);
+    var bisect = d3.bisector(function(d) { 
+      return formatDate(d.date); 
+    }).left;
+
+    var currentData = data.filter(function(d){return d.category == "Accessible"});
+    currentData = currentData.sort(sortByDateAscending);
 
     // List of categories
     const categories = new Set(data.map(d => d.category))
@@ -61,27 +65,106 @@ d3.csv("https://raw.githubusercontent.com/leoDYL/NYCEvents/main/data/derived_dat
     const line = svg
       .append('g')
       .append("path")
-        .datum(data.filter(function(d){return d.category == "Accessible"}))
+        .datum(currentData)
         .attr("d", d3.line()
           .x(function(d) { 
             return xScale(formatDate(d.date)) 
           })
           .y(function(d) { 
-            return yScale(+d.count)
+            return yScale(+d.count) 
           })
         )
         .attr("stroke", categoryColorScheme("Accessible"))
         .style("stroke-width", 4)
         .style("fill", "none")
 
+    // Create the circle that travels along the curve of chart
+    var focus = svg
+      .append('g')
+      .append('circle')
+        .style("fill", "none")
+        .attr("stroke", "black")
+        .attr('r', 8.5)
+        .style("opacity", 0)
+
+    // Create the text that travels along the curve of chart
+    var focusText = svg
+      .append('g')
+      .append('text')
+        .style("opacity", 0)
+        .attr("text-anchor", "left")
+        .attr("alignment-baseline", "middle")
+
+    // Create a rect on top of the svg area: this rectangle recovers mouse position
+    svg
+      .append('rect')
+      .style("fill", "none")
+      .style("pointer-events", "all")
+      .attr('width', width)
+      .attr('height', height)
+      .on('mouseover', mouseover)
+      .on('mousemove', mousemove)
+      .on('mouseout', mouseout);
+
+    // What happens when the mouse move -> show the annotations at the right positions.
+    function mouseover(event) {
+      focus.style("opacity", 1)
+      focusText.style("opacity",1)
+    }
+
+    function mousemove(event) {
+      // recover coordinate we need
+      var x0 = xScale.invert(d3.pointer(event)[0]);
+
+      currentData = currentData.sort(sortByDateAscending);
+
+      var i = bisect(currentData, x0);
+
+      // To avoid uncaught errors when data is incomplete for some event categories
+      if (i == currentData.length) {
+        i -= 1;
+      }
+
+      selectedData = currentData[i];
+
+      focus
+        .attr("cx", xScale(formatDate(selectedData.date)))
+        .attr("cy", yScale(selectedData.count));
+
+      var formatFocusText = function () {
+        var x = xScale(formatDate(selectedData.date));
+        var y = yScale(selectedData.count);
+
+        if (formatDate(selectedData.date) >= formatDate("May 2018")) {
+          var dateStr = "<tspan x='"+(x-120)+"' y='"+(+y-25)+"'> Month:"+ selectedData.date + "</tspan>";
+          var countStr = "<tspan x='"+(x-120)+"' dy=15> Count:"+ selectedData.count + "</tspan>";
+        } else {
+          var dateStr = "<tspan x='"+(x-30)+"' y='"+(+y-25)+"'> Month:"+ selectedData.date + "</tspan>";
+          var countStr = "<tspan x='"+(x-30)+"' dy=15> Count:"+ selectedData.count + "</tspan>";
+        }
+
+        return dateStr + " " + countStr;
+      }
+
+
+      focusText
+        .html(formatFocusText());
+      }
+
+    function mouseout() {
+      focus.style("opacity", 0)
+      focusText.style("opacity", 0)
+    }
+
     // Function to update the chart whenever the selected event category changes
     function update(selectedCategory) {
 
-      const dataFilter = data.filter(function(d){return d.category == selectedCategory})
+      const filteredData = data.filter(function(d){return d.category == selectedCategory})
+      currentData = filteredData.sort(sortByDateAscending);
 
       // Update the data used for the line
       line
-          .datum(dataFilter)
+          .datum(currentData)
           .transition()
           .duration(500)
           .attr("d", d3.line()
