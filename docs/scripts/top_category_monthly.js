@@ -1,17 +1,18 @@
 
-// Set dimensions and margins
-const margin = {top: 10, right: 30, bottom: 150, left: 60},
-    width = 720 - margin.left - margin.right,
-    height = 750 - margin.top - margin.bottom;
-
-const svg = d3.select("#top_category_monthly_svg")
-  .append("svg")
-    .attr("width", width + margin.left + margin.right)
-    .attr("height", height + margin.top + margin.bottom)
-  .append("g")
-    .attr("transform", `translate(${margin.left}, ${margin.top})`);
-
 d3.csv("https://raw.githubusercontent.com/leoDYL/NYCEvents/main/data/derived_data/monthly_category_counts.csv").then( function(data) {
+  
+    // Set dimensions and margins
+    const margin = {top: 10, right: 30, bottom: 150, left: 60},
+        width = 720 - margin.left - margin.right,
+        height = 750 - margin.top - margin.bottom;
+    
+    const svg = d3.select("#top_category_monthly_svg")
+      .append("svg")
+        .attr("width", width + margin.left + margin.right)
+        .attr("height", height + margin.top + margin.bottom)
+      .append("g")
+        .attr("transform", `translate(${margin.left}, ${margin.top})`);
+
     const year = new Set([2013,2014,2015,2017,2017,2018])
     const month = new Set(["Jan", "Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"])
     const topCategory = [

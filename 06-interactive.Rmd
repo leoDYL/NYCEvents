@@ -4,8 +4,6 @@
 
 <html>
 
-<head>
-
 <meta charset="utf-8" />
 <meta name="generator" content="pandoc" />
 <meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
@@ -30,8 +28,6 @@
 
 <html>
 
-<head>
-
 <meta charset="utf-8" />
 <meta name="generator" content="pandoc" />
 <meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
@@ -49,4 +45,4 @@
 <div id="top_category_monthly_svg"></div>
 <script src="scripts/top_category_monthly.js"></script>
 
-
+</html>
