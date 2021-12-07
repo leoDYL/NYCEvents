@@ -2,6 +2,7 @@
 
 ```{r}
 library(ggmap)
+library(parcoords)
 library(leaflet)
 library(lubridate)
 library(vcd)
@@ -98,12 +99,12 @@ inside of "Conference House Park") listed as the location name in the datasets w
 scatterplot using `PkId`:
 
 ```{r}
-
-nyc_events_left_joined %>%
+parks_pkid_diversity <- nyc_events_left_joined %>%
   drop_na(PkId, Org, Cat) %>%
   group_by(PkId) %>%
-  summarize(UniqueCats = n_distinct(Cat), UniqueOrgs = n_distinct(Org)) %>%
-  ggplot(aes(UniqueOrgs, UniqueCats)) +
+  summarize(UniqueCats = n_distinct(Cat), UniqueOrgs = n_distinct(Org))
+
+ggplot(parks_pkid_diversity, aes(UniqueOrgs, UniqueCats)) +
   geom_point(alpha = 0.4, size = 2, stroke = 0) +
   geom_text(aes(label = ifelse((UniqueOrgs > 40) | (UniqueCats > 60), as.character(PkId),'')), 
             size = 3,
@@ -154,7 +155,8 @@ nyc_events_left_joined[c("EvtId", "Org", "Cat")] %>%
 <!-- TODO Events with multiple organizers / the most "collaborative" organizers -->
 
 
-### Ratio of free events in parks
+### Cost, Borough, Duration, and Time of Events
+
 ```{r, fig.width=9, fig.height=9}
 get_duration_category <- function(Dt, ST, ET) {
   d <- as.numeric(difftime(strptime(paste(Dt, ET), "%Y-%m-%d %H:%M"), strptime(paste(Dt, ST), "%Y-%m-%d %H:%M")))/3600
@@ -399,7 +401,7 @@ The distribution of crime types in the different Boroughs of NYC over the years 
 
 ### Crime Timeseries Analysis
 ```{r, fig.width=9}
-nyc_crimes_timeseries_weekly <- nyc_parks_crime %>%
+nyc_crimes_timeseries_quarterly <- nyc_parks_crime %>%
   drop_na(Boro, Qtr) %>%
   group_by(Boro, Qtr) %>%
   summarize(Mdr = sum(Mdr), 
@@ -411,7 +413,7 @@ nyc_crimes_timeseries_weekly <- nyc_parks_crime %>%
             GLM = sum(GL_M_V),
             Tot = sum(Tot)) %>%
   pivot_longer(cols=3:10, names_to="Crime", values_to="Count")
-ggplot(nyc_crimes_timeseries_weekly, aes(Qtr, Count, group=Boro, color=Boro)) +
+ggplot(nyc_crimes_timeseries_quarterly, aes(Qtr, Count, group=Boro, color=Boro)) +
   geom_line(size = 0.5) +
   facet_grid(rows=vars(Crime), scales="free_y")+
   ggtitle("Count of Park Crimes by Category") + 
@@ -423,6 +425,185 @@ ggplot(nyc_crimes_timeseries_weekly, aes(Qtr, Count, group=Boro, color=Boro)) +
         # strip.text.y = element_text(size = 14),
        
 ```
+
+
+### Crimes in parks and events in parks
+
+It is challenging to join the two datasets entirely based on the parks, as they come from two different data sources and do not share identifier keys for the parks. However, it is possible to manually select a few parks from both datasets and inspect the park names and try to match and join the data for those selected parks.
+
+```{r}
+top10_parks_most_crime <- nyc_parks_crime %>% 
+  group_by(Park) %>%
+  summarize(count_of_crimes = sum(Tot)) %>%
+  arrange(desc(count_of_crimes)) %>%
+  top_n(10)
+
+top10_parks_most_events <- nyc_event_listing_events[c("EvtId")] %>%
+  merge(
+    y = nyc_event_listing_locations, 
+    by = "EvtId", 
+    all.x = TRUE) %>%
+  drop_na(PkId) %>%
+  group_by(PkId) %>%
+  summarize(count_of_events = n()) %>%
+  arrange(desc(count_of_events)) %>%
+  top_n(10)
+
+knitr::kable(
+  list(top10_parks_most_crime, top10_parks_most_events),
+  booktabs = TRUE,
+  caption = 'Parks with most crimes and Parks with most events'
+)
+```
+
+A quick data aggregation gives us the top 10 parks with most crimes and top 10 parks with the most events, as shown in the data table above. However, we discovered that somehow the crimes data do not have any records for crimes in "Central Park" (M010). Together with our interests of the most diverse parks as analyzed in the [Most Diversified Park] section, we will select the following parks to analyze, and use this manually created mapping as the helper table to join our data:
+
+```{r}
+
+park_crime_event_mapping <- tibble(
+  PkId = c(
+    "Q099",
+    "B169",
+    "M104",
+    "M098",
+    "B073",
+    "M072",
+    "M089",
+    "X010",
+    "M008",
+    "X002",
+    "X040",
+    "X209",
+    "R006",
+    "B431",
+    "M029",
+    "X092",
+    "X039",
+    "X104",
+    "X045",
+    "M042"
+  ),
+  Park = c(
+    "FLUSHING MEADOWS CORONA PARK",
+    "CONEY ISLAND BEACH & BOARDWALK",
+    "RANDALL'S ISLAND PARK",
+    "WASHINGTON SQUARE PARK",
+    "PROSPECT PARK",
+    "RIVERSIDE PARK",
+    "UNION SQUARE PARK",
+    "CROTONA PARK",
+    "BRYANT PARK",
+    "BRONX PARK",
+    "POE PARK",
+    "WAVE HILL",
+    "CONFERENCE HOUSE PARK",
+    "BROOKLYN BRIDGE PARK",
+    "FORT TRYON PARK",
+    "VAN CORTLANDT PARK",
+    "PELHAM BAY PARK",
+    "WILLIAMSBRIDGE OVAL",
+    "ST. MARY'S PARK BRONX",
+    "INWOOD HILL PARK"
+  ),
+  "ParkName" = c(
+    "Flushing Meadows Corona Park",
+    "Coney Island Beach",
+    "Randall's Island",
+    "Washington Square Park",
+    "Prospect Park",
+    "Riverside Park",
+    "Union Square Park",
+    "Crotona Park",
+    "Bryant Park",
+    "Bronx Park",
+    "Poe Park",
+    "Wave Hill",
+    "Conference House Park",
+    "Brooklyn Bridge Park",
+    "Fort Tryon Park",
+    "Van Cortlandt Park",
+    "Pelham Bay Park",
+    "Williamsbridge Oval Skate Park",
+    "St. Mary’s Park",
+    "Inwood Hill Park"
+  )
+)
+
+knitr::kable(
+  park_crime_event_mapping,
+  booktabs = TRUE,
+  caption = 'Park in crime dataset to PkId in events dataset mapping to investigate'
+)
+```
+
+
+We understand the limitations of picking only the parks with most crimes or most events or most diverse, however, 
+it is very difficult for us to include parks with fewer events or crimes and link them from the two data sources, 
+for many reasons, some of which were outlined in previous [Missing values] chapter (that 20% of our event listing 
+data are missing `PkId`), and the [Most Diversified Park] section (that the same `PkId` includes many sub-areas 
+of parks, so that for smaller or less popular parks, it is super difficult for us to map the names across the two 
+datasets we have). Nevertheless, we still wanted to derive certain features of these parks and see what are some 
+interesting patterns we can find. 
+
+```{r}
+
+interesting_park_crimes_mapped <- park_crime_event_mapping %>%
+  merge(
+    y = nyc_parks_crime, 
+    by = "Park", 
+    all.x = TRUE) %>%
+  group_by(ParkName, Boro, Size) %>%
+  summarize(ViolentCrm = sum(Mdr) + sum(Rape) + sum(Rob) + sum(Ass), 
+            PropertyCrm = sum(Burg) + sum(G_L) + sum(GL_M_V),
+            TotCrm = sum(Tot))
+
+interesting_parks_events_mapped_summary <- nyc_event_listing_events %>%
+  merge(
+    y = nyc_event_listing_locations, 
+    by = "EvtId", 
+    all.x = TRUE) %>%
+  drop_na(PkId) %>%
+  merge(
+    y = park_crime_event_mapping, 
+    by = "PkId", 
+    all.y = TRUE) %>%
+  mutate(Duration=difftime(
+    strptime(paste(Dt, ET), "%Y-%m-%d %H:%M"), strptime(paste(Dt, ST), "%Y-%m-%d %H:%M"), units = "hours")) %>%
+  filter(Duration > 0) %>%
+  .[c("PkId", "EvtId", "Duration", "CsFr", "Park", "ParkName")] %>%
+  group_by(ParkName) %>%
+  summarize(EvtCnt = n(), AvgDur = sum(Duration)/n(), FrRatio = sum(CsFr)/n())
+
+
+parks_pkid_diversity %>%
+  merge(
+    y = park_crime_event_mapping, 
+    by = "PkId", 
+    all.y = TRUE) %>%
+  .[c("UniqueCats", "UniqueOrgs", "ParkName")] %>%
+  merge(
+    y = interesting_parks_events_mapped_summary,
+    by = "ParkName"
+  ) %>%
+  merge(
+    y = interesting_park_crimes_mapped,
+    by = "ParkName"
+  ) %>%
+  parcoords(
+    rownames = F,
+    brushMode = "1D-axes",
+    reorderable = T,
+    color = list(
+      colorBy = "Boro",
+      colorScale = "scaleOrdinal",
+      colorScheme = "schemeCategory10"
+    ),
+    withD3 = TRUE)
+
+```
+
+
+
 
 ## Spatial Analysis
 
