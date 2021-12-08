@@ -24,7 +24,7 @@
 
 </html>
 
-## Monthly Event Count by Category
+## Monthly Event Count by Most Active Organizers
 
 <html>
 

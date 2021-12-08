@@ -16,10 +16,8 @@ top-categories-with-missing-organizer
 missing-values-for-crimes-in-parks
 results
 events-and-parks-analysis
-top-event-categories-organizers-locations-and-durations
-most-diversified-organizers
 most-diversified-park
-top-organizers-event-categories-and-locations-preferences
+organizer-preferences-on-categories-and-locations
 cost-borough-duration-and-time-of-events
 timeseries-analysis
 timeseries-analysis-on-nyc-parks-events
@@ -35,5 +33,5 @@ by-organizer
 references
 interactive-component
 monthly-event-count-time-series-by-category
-monthly-event-count-by-category
+monthly-event-count-by-most-active-organizers
 conclusion
