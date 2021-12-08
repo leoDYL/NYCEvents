@@ -35,7 +35,20 @@ top_locations <- nyc_event_listing_locations %>%
 
 ### Most Diversified Park
 
+Since our main dataset is about the events in the different parks in NYC, very naturally, the first thing we'll look at is what are some of the parks and locations with the most events:
 
+```{r}
+ggplot(top_locations, aes(x = count, y = fct_reorder(LcNm, count))) +
+  geom_point(color = "blue") +
+  ggtitle("Top Event Locations") +
+  labs(x = "Number of events", y = "Event Location") +
+  theme_linedraw()
+```
+
+From this Cleveland Dot Plot of top 30 parks with the most number of events listed from 2013-2019 in our dataset, 
+we can see that the top 2 locations are prety much outliers from the rest of the group, with "Poe Park Visitor 
+Center" having more than 7000 events, followed by "Queens Botanical Garden", with more than 3000 events, and the 
+rest of the top 30 locations all have fewer than 2000 events over the years.
 
 After seeing that the top event locations are hosting several thousands of events over the years 2013-2019, we 
 wonder which of them are the most diverse ones, in the sense that they have a lot of distinct event organizers 
@@ -49,15 +62,24 @@ nyc_events_left_joined %>%
   summarize(UniqueCats = n_distinct(Cat), UniqueOrgs = n_distinct(Org)) %>%
   ggplot(aes(UniqueOrgs, UniqueCats)) +
   geom_point(alpha = 0.4, size = 2, stroke = 0) +
-  geom_text(aes(label = ifelse((UniqueOrgs > 24) | (UniqueCats > 45), as.character(LcNm),'')), 
-            size = 2,
-            hjust = 0.75, 
+  geom_text(aes(label = ifelse(
+  (UniqueOrgs > 24) | 
+  (UniqueCats > 45) | 
+  (LcNm == "Poe Park Visitor Center") |
+  (LcNm == "Queens Botanical Garden"), as.character(LcNm),'')), 
+            size = 2.3,
+            hjust = 0.82, 
             vjust = 0.9) +
   labs(x = "Count of Distinct Organizers", y = "Count of Distinct Event Categories") + 
   ggtitle("Parks Hosting Different Event Categories Organized by Different Event Organizers") + 
   theme(panel.background = element_blank())
-
 ```
+
+We have labeled the locations with more than 24 unique organizers who have hosted events, or have events of more 
+than 45 different event categories over the years, as well as the locations with most events - ""Poe Park Visitor 
+Center" and "Queens Botanical Garden" - interesting enough that for these two, we can notice although they have a 
+diverse number of event categories, they both had no more than 10 distinct organizers who have organized events 
+in them.
 
 Surprisingly, the most famous parks like "Central Park" and "Washington Square Park" do not show up. From the 
 location names, we realize these parks might be too large and have different sub locations (e.g. "Visitor Center" 
@@ -84,23 +106,48 @@ ggplot(parks_pkid_diversity, aes(UniqueOrgs, UniqueCats)) +
 
 A quick Googling using the longitude and latitude of these park ids tells us that, the labels from left to right are:
 
-* "X039" is "Pelham Bay Park"
-* "B073" is "Prospect Park"
-* "X104" is "Williamsbridge Oval Skate Park"
-* "X092" is "Van Cortlandt Park"
-* "X045" is "St. Mary's Park"
-* "M029" is "Fort Tryon Park"
-* "R006" is "Conference House Park" in Staten Island
-* "M098" is "Washington Square Park"
-* "M042" is "Inwood Hill Park"
-* "Q099" is "Flushing Meadows Corona Park"
-* "M010" is "Central Park"
+```{r}
+knitr::kable(
+  tibble(
+    "Park Id" = c(
+      "X039",
+      "B073",
+      "X104",
+      "X092",
+      "X045",
+      "M029",
+      "R006",
+      "M098",
+      "M042",
+      "Q099",
+      "M010"
+    ),
+    "Park Name" = c(
+      "Pelham Bay Park",
+      "Prospect Park",
+      "Williamsbridge Oval Skate Park",
+      "Van Cortlandt Park",
+      "St. Mary's Park",
+      "Fort Tryon Park",
+      "Conference House Park",
+      "Washington Square Park",
+      "Inwood Hill Park",
+      "Flushing Meadows Corona Park",
+      "Central Park"
+    )
+  ),
+  booktabs = TRUE,
+  caption = 'Park in crime dataset to PkId in events dataset mapping to investigate'
+)
+```
+
 
 all of which are more well-known parks in NYC.
 
 From this scatter plot, it is certainly apparent that there seems to be a correlation that the parks with more 
 diverse groups of organizers choosing them as event locations tend to have events with more diverse categories as 
-well, which makes us wonder if different organizers have preferences over certain event categories.
+well, which makes us wonder if different organizers have preferences over certain event categories, for which we 
+will analyze in the next section.
 
 ### Organizer Preferences on Categories and Locations
 
