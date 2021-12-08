@@ -14,9 +14,6 @@ library(tidyverse)
 
 ## Events and Parks Analysis
 
-### Top Event Categories, Organizers, Locations and Durations
-
-We first take a look at what are the top event categories, organizers, and parks locations
 
 ```{r}
 top_categories <- nyc_event_categories %>%
@@ -27,12 +24,6 @@ top_categories <- nyc_event_categories %>%
 
 top_categories_levels <- levels(fct_reorder(top_categories$Cat, top_categories$count))
 
-top_organizers <- nyc_event_organizers %>%
-  group_by(Org) %>%
-  summarize(count = n()) %>%
-  arrange(desc(count)) %>%
-  top_n(30)
-
 top_locations <- nyc_event_listing_locations %>%
   group_by(LcNm) %>%
   summarize(count = n()) %>%
@@ -41,36 +32,10 @@ top_locations <- nyc_event_listing_locations %>%
 
 ```
 
-```{r}
-nyc_event_listing_events %>%
-  mutate(Duration=difftime(strptime(paste(Dt, ET), "%Y-%m-%d %H:%M"), strptime(paste(Dt, ST), "%Y-%m-%d %H:%M"))/3600) %>%
-  filter(Duration > 0) %>%
-  ggplot(aes(Duration)) +
-  geom_histogram(binwidth=1, color = "blue", fill = "lightblue") +
-  ggtitle("Histogram for Event Durations") +
-  labs(x = "Event Duration", y = "Count of Events")
-```
-
-### Most Diversified Organizers
-```{r}
-
-nyc_events_left_joined %>%
-  drop_na(PkId, Org, Cat) %>%
-  group_by(Org) %>%
-  summarize(UniqueCats = n_distinct(Cat), UniquePkIds = n_distinct(PkId)) %>%
-  ggplot(aes(UniquePkIds, UniqueCats)) +
-  geom_point(alpha = 0.4, size = 2, stroke = 0) +
-  geom_text(aes(label = ifelse((UniquePkIds > 40) | (UniqueCats > 60), as.character(Org),'')), 
-            size = 2,
-            hjust = 0, 
-            vjust = 0) +
-  labs(x = "Count of Distinct Parks", y = "Count of Distinct Event Categories") + 
-  ggtitle("Organizers Organizing Different Event Categories Hosted by Different Parks") + 
-  theme(panel.background = element_blank())
-
-```
 
 ### Most Diversified Park
+
+
 
 After seeing that the top event locations are hosting several thousands of events over the years 2013-2019, we 
 wonder which of them are the most diverse ones, in the sense that they have a lot of distinct event organizers 
@@ -137,27 +102,40 @@ From this scatter plot, it is certainly apparent that there seems to be a correl
 diverse groups of organizers choosing them as event locations tend to have events with more diverse categories as 
 well, which makes us wonder if different organizers have preferences over certain event categories.
 
-### Top Organizers' Event Categories and Locations Preferences
-
-TODO, WIP
-
+### Organizer Preferences on Categories and Locations
 
 ```{r}
-nyc_events_left_joined[c("EvtId", "Org", "Cat")] %>%
-  filter(Org %in% top_organizers$Org) %>%
-  filter(Cat %in% top_categories$Cat) %>%
-  group_by(Org, Cat) %>%
-  summarize(UniqueEvts = n_distinct(EvtId))
+
+nyc_events_left_joined %>%
+  drop_na(PkId, Org, Cat) %>%
+  group_by(Org) %>%
+  summarize(UniqueCats = n_distinct(Cat), UniquePkIds = n_distinct(PkId)) %>%
+  ggplot(aes(UniquePkIds, UniqueCats)) +
+  geom_point(alpha = 0.4, size = 2, stroke = 0) +
+  geom_text(aes(label = ifelse((UniquePkIds > 40) | (UniqueCats > 60), as.character(Org),'')), 
+            size = 2,
+            hjust = 0, 
+            vjust = 0) +
+  labs(x = "Count of Distinct Parks", y = "Count of Distinct Event Categories") + 
+  ggtitle("Organizers Organizing Different Event Categories Hosted by Different Parks") + 
+  theme(panel.background = element_blank())
+
 ```
 
 
-<!-- TODO Top Park's Most Frequent Event Categories??? -->
-
-<!-- TODO Events with multiple organizers / the most "collaborative" organizers -->
-
-
-
 ### Cost, Borough, Duration, and Time of Events
+
+```{r}
+nyc_event_listing_events %>%
+  mutate(Duration=difftime(
+    strptime(paste(Dt, ET), "%Y-%m-%d %H:%M"), strptime(paste(Dt, ST), "%Y-%m-%d %H:%M"), units = "hours")) %>%
+  filter(Duration > 0) %>%
+  ggplot(aes(Duration)) +
+  geom_histogram(binwidth=1, color = "blue", fill = "lightblue") +
+  ggtitle("Histogram for Event Durations") +
+  labs(x = "Event Duration", y = "Count of Events")
+```
+
 
 ```{r, fig.width=9, fig.height=9}
 get_duration_category <- function(Dt, ST, ET) {
@@ -184,15 +162,20 @@ free_mosaic <- nyc_events_left_joined %>%
   mutate(Duration=get_duration_category(Dt, ST, ET),
          TimeofDay=get_time_of_day(ST))
 
-free_mosaic$CsFr = as.factor(ifelse(free_mosaic$CsFr == 0, "Not Free", "Free"))
-free_mosaic$Bo = as.factor(free_mosaic$Bo)
+free_mosaic$CostFree = as.factor(ifelse(free_mosaic$CsFr == 0, "Not Free", "Free"))
+free_mosaic$Borough = as.factor(free_mosaic$Bo)
 free_mosaic$Duration = fct_relevel(free_mosaic$Duration, levels = c("< 1", "1-3", "3-5", ">=5"))
 free_mosaic$TimeofDay = fct_relevel(free_mosaic$TimeofDay, levels = c("Morning", "Afternoon", "Evening", "Night"))
 
 mosaic_select <- free_mosaic %>%
-  select(CsFr, Bo, Duration, TimeofDay)
+  select(CostFree, Borough, Duration, TimeofDay)
 
-pairs(table(mosaic_select), highlighting=2)
+pairs(table(mosaic_select), 
+      highlighting=2, 
+      diag_panel = pairs_diagonal_text(
+        distribute = "margin", 
+        rot = 45)
+      )
 ```
 
 
@@ -695,8 +678,6 @@ top_organizers <- nyc_event_organizers %>%
   summarize(count = n()) %>%
   arrange(desc(count)) %>%
   top_n(8)
-
-top_organizers
 
 top_orgs_events_locations <- nyc_event_listing_events[c("EvtId")] %>%
   merge(
