@@ -268,21 +268,6 @@ Here we are going to perform an analysis on what are some interesting seasonal p
 <li>There is definitely fewer events in winters around Janurary and generally more events in the summers.</li>
 </ul>
 <p>The previous plot, although helps us identify the general pattern, looks pretty noisy, so next let’s take a different view, which is less noisy:</p>
-<pre><code>## # A tibble: 504 × 4
-## # Groups:   Month, Wday [84]
-##    Month Wday   Year Count
-##    &lt;ord&gt; &lt;ord&gt; &lt;dbl&gt; &lt;int&gt;
-##  1 Jan   Sun    2013    53
-##  2 Jan   Sun    2014    63
-##  3 Jan   Sun    2015    69
-##  4 Jan   Sun    2016    74
-##  5 Jan   Sun    2017    66
-##  6 Jan   Sun    2018    73
-##  7 Jan   Mon    2013    18
-##  8 Jan   Mon    2014    44
-##  9 Jan   Mon    2015    45
-## 10 Jan   Mon    2016    14
-## # … with 494 more rows</code></pre>
 <p><img src="finalproj_files/figure-html/unnamed-chunk-28-1.png" width="960" /></p>
 <p>Here, we are aggregating the event counts by month, and plotted bar charts faceted by year. It is very clear from
 these charts that the monthly counts and trends do indeed have a very similar pattern across the years 2013-2018.
@@ -600,7 +585,7 @@ interesting patterns we can find.</p>
 <h2><span class="header-section-number">5.4</span> Spatial Analysis</h2>
 <div id="cost" class="section level3" number="5.4.1">
 <h3><span class="header-section-number">5.4.1</span> Cost</h3>
-<p>From the missing values chapter, we do not have missing data for <code>CsFr</code>, <code>Lat</code>, <code>Long</code></p>
+<p>From the <a href="missing-values.html#missing-values">Missing values</a> chapter, we do not have missing data for <code>CsFr</code>, <code>Lat</code>, <code>Long</code></p>
 <p>TODO analyze weekends vs weekdays</p>
 <p>TODO Too much data for this, select a year maybe</p>
 <div id="htmlwidget-835d7834658f433d2d82" style="width:672px;height:480px;" class="leaflet html-widget"></div>

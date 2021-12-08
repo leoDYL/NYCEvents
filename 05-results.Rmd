@@ -262,7 +262,7 @@ nyc_events_timeseries_weekly <- nyc_event_listing_events %>%
   mutate(Month = month(Dt, label=TRUE, abbr=TRUE), Wday = wday(Dt, label = TRUE, abbr = TRUE), Year=year(Dt)) %>%
   group_by(Month, Wday, Year) %>%
   summarize(Count = n())
-nyc_events_timeseries_weekly
+
 ggplot(nyc_events_timeseries_weekly, aes(Wday, Count)) +
   geom_bar(stat="identity", color = "blue", fill = "lightblue") +
   facet_grid(cols=vars(Month), rows=vars(Year))+
@@ -652,7 +652,7 @@ ggparcoord(parks_events_crime_relation_tidy,
 
 ### Cost
 
-From the missing values chapter, we do not have missing data for `CsFr`, `Lat`, `Long`
+From the [Missing values] chapter, we do not have missing data for `CsFr`, `Lat`, `Long`
 
 TODO analyze weekends vs weekdays
 
