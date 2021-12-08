@@ -165,15 +165,15 @@ free_mosaic <- nyc_events_left_joined %>%
 free_mosaic$CostFree = as.factor(ifelse(free_mosaic$CsFr == 0, "Not Free", "Free"))
 free_mosaic$Borough = as.factor(free_mosaic$Bo)
 free_mosaic$Duration = fct_relevel(free_mosaic$Duration, levels = c("< 1", "1-3", "3-5", ">=5"))
-free_mosaic$TimeofDay = fct_relevel(free_mosaic$TimeofDay, levels = c("Morning", "Afternoon", "Evening", "Night"))
+free_mosaic$Time = fct_relevel(free_mosaic$TimeofDay, levels = c("Morning", "Afternoon", "Evening", "Night"))
 
 mosaic_select <- free_mosaic %>%
-  select(CostFree, Borough, Duration, TimeofDay)
+  select(CostFree, Borough, Duration, Time)
 
-pairs(table(mosaic_select), 
+pairs(table(mosaic_select),
       highlighting=2, 
       diag_panel = pairs_diagonal_text(
-        distribute = "margin", 
+        distribute = "margin",
         rot = 45)
       )
 ```
