@@ -111,7 +111,7 @@
 <li class="chapter" data-level="5.1.2" data-path="results.html"><a href="results.html#most-diversified-organizers"><i class="fa fa-check"></i><b>5.1.2</b> Most Diversified Organizers</a></li>
 <li class="chapter" data-level="5.1.3" data-path="results.html"><a href="results.html#most-diversified-park"><i class="fa fa-check"></i><b>5.1.3</b> Most Diversified Park</a></li>
 <li class="chapter" data-level="5.1.4" data-path="results.html"><a href="results.html#top-organizers-event-categories-and-locations-preferences"><i class="fa fa-check"></i><b>5.1.4</b> Top Organizers’ Event Categories and Locations Preferences</a></li>
-<li class="chapter" data-level="5.1.5" data-path="results.html"><a href="results.html#ratio-of-free-events-in-parks"><i class="fa fa-check"></i><b>5.1.5</b> Ratio of free events in parks</a></li>
+<li class="chapter" data-level="5.1.5" data-path="results.html"><a href="results.html#cost-borough-duration-and-time-of-events"><i class="fa fa-check"></i><b>5.1.5</b> Cost, Borough, Duration, and Time of Events</a></li>
 </ul></li>
 <li class="chapter" data-level="5.2" data-path="results.html"><a href="results.html#timeseries-analysis"><i class="fa fa-check"></i><b>5.2</b> Timeseries Analysis</a>
 <ul>
@@ -122,6 +122,7 @@
 <ul>
 <li class="chapter" data-level="5.3.1" data-path="results.html"><a href="results.html#crimes-in-parks-overview"><i class="fa fa-check"></i><b>5.3.1</b> Crimes in Parks Overview</a></li>
 <li class="chapter" data-level="5.3.2" data-path="results.html"><a href="results.html#crime-timeseries-analysis"><i class="fa fa-check"></i><b>5.3.2</b> Crime Timeseries Analysis</a></li>
+<li class="chapter" data-level="5.3.3" data-path="results.html"><a href="results.html#crimes-in-parks-and-events-in-parks"><i class="fa fa-check"></i><b>5.3.3</b> Crimes in parks and events in parks</a></li>
 </ul></li>
 <li class="chapter" data-level="5.4" data-path="results.html"><a href="results.html#spatial-analysis"><i class="fa fa-check"></i><b>5.4</b> Spatial Analysis</a>
 <ul>
@@ -220,9 +221,15 @@ well, which makes us wonder if different organizers have preferences over certai
 <!-- TODO Top Park's Most Frequent Event Categories??? -->
 <!-- TODO Events with multiple organizers / the most "collaborative" organizers -->
 </div>
+<<<<<<< HEAD
 <div id="ratio-of-free-events-in-parks" class="section level3" number="5.1.5">
 <h3><span class="header-section-number">5.1.5</span> Ratio of free events in parks</h3>
 <p><img src="finalproj_files/figure-html/unnamed-chunk-25-1.png" width="1152" /></p>
+=======
+<div id="cost-borough-duration-and-time-of-events" class="section level3" number="5.1.5">
+<h3><span class="header-section-number">5.1.5</span> Cost, Borough, Duration, and Time of Events</h3>
+<p><img src="finalproj_files/figure-html/unnamed-chunk-24-1.png" width="864" /></p>
+>>>>>>> main
 </div>
 </div>
 <div id="timeseries-analysis" class="section level2" number="5.2">
@@ -322,6 +329,250 @@ fewer in the winter” general rule, with some other interesting observations, m
 <div id="crime-timeseries-analysis" class="section level3" number="5.3.2">
 <h3><span class="header-section-number">5.3.2</span> Crime Timeseries Analysis</h3>
 <p><img src="finalproj_files/figure-html/unnamed-chunk-33-1.png" width="864" /></p>
+</div>
+<div id="crimes-in-parks-and-events-in-parks" class="section level3" number="5.3.3">
+<h3><span class="header-section-number">5.3.3</span> Crimes in parks and events in parks</h3>
+<p>It is challenging to join the two datasets entirely based on the parks, as they come from two different data sources and do not share identifier keys for the parks. However, it is possible to manually select a few parks from both datasets and inspect the park names and try to match and join the data for those selected parks.</p>
+<table class="kable_wrapper">
+<caption>
+<span id="tab:unnamed-chunk-33">Table 5.1: </span>Parks with most crimes and Parks with most events
+</caption>
+<tbody>
+<tr>
+<td>
+<table>
+<thead>
+<tr class="header">
+<th align="left">Park</th>
+<th align="right">count_of_crimes</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">FLUSHING MEADOWS CORONA PARK</td>
+<td align="right">386</td>
+</tr>
+<tr class="even">
+<td align="left">CONEY ISLAND BEACH &amp; BOARDWALK</td>
+<td align="right">275</td>
+</tr>
+<tr class="odd">
+<td align="left">RANDALL’S ISLAND PARK</td>
+<td align="right">275</td>
+</tr>
+<tr class="even">
+<td align="left">WASHINGTON SQUARE PARK</td>
+<td align="right">245</td>
+</tr>
+<tr class="odd">
+<td align="left">PROSPECT PARK</td>
+<td align="right">222</td>
+</tr>
+<tr class="even">
+<td align="left">RIVERSIDE PARK</td>
+<td align="right">203</td>
+</tr>
+<tr class="odd">
+<td align="left">UNION SQUARE PARK</td>
+<td align="right">188</td>
+</tr>
+<tr class="even">
+<td align="left">CROTONA PARK</td>
+<td align="right">145</td>
+</tr>
+<tr class="odd">
+<td align="left">BRYANT PARK</td>
+<td align="right">122</td>
+</tr>
+<tr class="even">
+<td align="left">BRONX PARK</td>
+<td align="right">121</td>
+</tr>
+</tbody>
+</table>
+</td>
+<td>
+<table>
+<thead>
+<tr class="header">
+<th align="left">PkId</th>
+<th align="right">count_of_events</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">M010</td>
+<td align="right">6486</td>
+</tr>
+<tr class="even">
+<td align="left">M008</td>
+<td align="right">5930</td>
+</tr>
+<tr class="odd">
+<td align="left">X040</td>
+<td align="right">4542</td>
+</tr>
+<tr class="even">
+<td align="left">X209</td>
+<td align="right">2784</td>
+</tr>
+<tr class="odd">
+<td align="left">R006</td>
+<td align="right">2441</td>
+</tr>
+<tr class="even">
+<td align="left">B073</td>
+<td align="right">2345</td>
+</tr>
+<tr class="odd">
+<td align="left">B431</td>
+<td align="right">2103</td>
+</tr>
+<tr class="even">
+<td align="left">M029</td>
+<td align="right">1479</td>
+</tr>
+<tr class="odd">
+<td align="left">X092</td>
+<td align="right">1363</td>
+</tr>
+<tr class="even">
+<td align="left">Q099</td>
+<td align="right">1218</td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+</tbody>
+</table>
+<p>A quick data aggregation gives us the top 10 parks with most crimes and top 10 parks with the most events, as shown in the data table above. However, we discovered that somehow the crimes data do not have any records for crimes in “Central Park” (M010). Together with our interests of the most diverse parks as analyzed in the <a href="results.html#most-diversified-park">Most Diversified Park</a> section, we will select the following parks to analyze, and use this manually created mapping as the helper table to join our data:</p>
+<table>
+<caption><span id="tab:unnamed-chunk-34">Table 5.2: </span>Park in crime dataset to PkId in events dataset mapping to investigate</caption>
+<thead>
+<tr class="header">
+<th align="left">PkId</th>
+<th align="left">Park</th>
+<th align="left">ParkName</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Q099</td>
+<td align="left">FLUSHING MEADOWS CORONA PARK</td>
+<td align="left">Flushing Meadows Corona Park</td>
+</tr>
+<tr class="even">
+<td align="left">B169</td>
+<td align="left">CONEY ISLAND BEACH &amp; BOARDWALK</td>
+<td align="left">Coney Island Beach</td>
+</tr>
+<tr class="odd">
+<td align="left">M104</td>
+<td align="left">RANDALL’S ISLAND PARK</td>
+<td align="left">Randall’s Island</td>
+</tr>
+<tr class="even">
+<td align="left">M098</td>
+<td align="left">WASHINGTON SQUARE PARK</td>
+<td align="left">Washington Square Park</td>
+</tr>
+<tr class="odd">
+<td align="left">B073</td>
+<td align="left">PROSPECT PARK</td>
+<td align="left">Prospect Park</td>
+</tr>
+<tr class="even">
+<td align="left">M072</td>
+<td align="left">RIVERSIDE PARK</td>
+<td align="left">Riverside Park</td>
+</tr>
+<tr class="odd">
+<td align="left">M089</td>
+<td align="left">UNION SQUARE PARK</td>
+<td align="left">Union Square Park</td>
+</tr>
+<tr class="even">
+<td align="left">X010</td>
+<td align="left">CROTONA PARK</td>
+<td align="left">Crotona Park</td>
+</tr>
+<tr class="odd">
+<td align="left">M008</td>
+<td align="left">BRYANT PARK</td>
+<td align="left">Bryant Park</td>
+</tr>
+<tr class="even">
+<td align="left">X002</td>
+<td align="left">BRONX PARK</td>
+<td align="left">Bronx Park</td>
+</tr>
+<tr class="odd">
+<td align="left">X040</td>
+<td align="left">POE PARK</td>
+<td align="left">Poe Park</td>
+</tr>
+<tr class="even">
+<td align="left">X209</td>
+<td align="left">WAVE HILL</td>
+<td align="left">Wave Hill</td>
+</tr>
+<tr class="odd">
+<td align="left">R006</td>
+<td align="left">CONFERENCE HOUSE PARK</td>
+<td align="left">Conference House Park</td>
+</tr>
+<tr class="even">
+<td align="left">B431</td>
+<td align="left">BROOKLYN BRIDGE PARK</td>
+<td align="left">Brooklyn Bridge Park</td>
+</tr>
+<tr class="odd">
+<td align="left">M029</td>
+<td align="left">FORT TRYON PARK</td>
+<td align="left">Fort Tryon Park</td>
+</tr>
+<tr class="even">
+<td align="left">X092</td>
+<td align="left">VAN CORTLANDT PARK</td>
+<td align="left">Van Cortlandt Park</td>
+</tr>
+<tr class="odd">
+<td align="left">X039</td>
+<td align="left">PELHAM BAY PARK</td>
+<td align="left">Pelham Bay Park</td>
+</tr>
+<tr class="even">
+<td align="left">X104</td>
+<td align="left">WILLIAMSBRIDGE OVAL</td>
+<td align="left">Williamsbridge Oval Skate Park</td>
+</tr>
+<tr class="odd">
+<td align="left">X045</td>
+<td align="left">ST. MARY’S PARK BRONX</td>
+<td align="left">St. Mary’s Park</td>
+</tr>
+<tr class="even">
+<td align="left">M042</td>
+<td align="left">INWOOD HILL PARK</td>
+<td align="left">Inwood Hill Park</td>
+</tr>
+</tbody>
+</table>
+<p>We understand the limitations of picking only the parks with most crimes or most events or most diverse, however,
+it is very difficult for us to include parks with fewer events or crimes and link them from the two data sources,
+for many reasons, some of which were outlined in previous <a href="missing-values.html#missing-values">Missing values</a> chapter (that 20% of our event listing
+data are missing <code>PkId</code>), and the <a href="results.html#most-diversified-park">Most Diversified Park</a> section (that the same <code>PkId</code> includes many sub-areas
+of parks, so that for smaller or less popular parks, it is super difficult for us to map the names across the two
+datasets we have). Nevertheless, we still wanted to derive certain features of these parks and see what are some
+interesting patterns we can find.</p>
+<p><img src="finalproj_files/figure-html/unnamed-chunk-36-1.png" width="672" /></p>
+<ul>
+<li>We can still observe the “diverse” correlation in terms of categories and organizers.</li>
+<li>More events actually mean fewer crimes</li>
+<li>Longer average duration actually mean fewer crimes</li>
+<li>Free events ratio and average duration relationship</li>
+</ul>
 </div>
 </div>
 <div id="spatial-analysis" class="section level2" number="5.4">

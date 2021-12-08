@@ -1,3 +1,5 @@
+tab:unnamed-chunk-33
+tab:unnamed-chunk-34
 introduction
 data-sources
 data-transformation
@@ -18,13 +20,14 @@ top-event-categories-organizers-locations-and-durations
 most-diversified-organizers
 most-diversified-park
 top-organizers-event-categories-and-locations-preferences
-ratio-of-free-events-in-parks
+cost-borough-duration-and-time-of-events
 timeseries-analysis
 timeseries-analysis-on-nyc-parks-events
 timeseries-analysis-on-event-categories
 crimes-in-parks
 crimes-in-parks-overview
 crime-timeseries-analysis
+crimes-in-parks-and-events-in-parks
 spatial-analysis
 cost
 by-category
