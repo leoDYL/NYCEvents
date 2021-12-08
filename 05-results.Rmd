@@ -137,7 +137,7 @@ knitr::kable(
     )
   ),
   booktabs = TRUE,
-  caption = 'Park in crime dataset to PkId in events dataset mapping to investigate'
+  caption = 'Park Id to Park Name Mapping for Diverse Parks'
 )
 ```
 
