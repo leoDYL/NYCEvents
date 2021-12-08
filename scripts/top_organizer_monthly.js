@@ -1,12 +1,12 @@
 
-d3.csv("https://raw.githubusercontent.com/leoDYL/NYCEvents/main/data/derived_data/monthly_category_counts.csv").then( function(data) {
+d3.csv("https://raw.githubusercontent.com/leoDYL/NYCEvents/main/data/derived_data/monthly_organizer_counts.csv").then( function(data) {
   
     // Set dimensions and margins
     const margin = {top: 10, right: 30, bottom: 150, left: 60},
         width = 720 - margin.left - margin.right,
         height = 750 - margin.top - margin.bottom;
     
-    const svg = d3.select("#top_category_monthly_svg")
+    const svg = d3.select("#top_organizer_monthly_svg")
       .append("svg")
         .attr("width", width + margin.left + margin.right)
         .attr("height", height + margin.top + margin.bottom)
@@ -15,29 +15,21 @@ d3.csv("https://raw.githubusercontent.com/leoDYL/NYCEvents/main/data/derived_dat
 
     const year = new Set([2013,2014,2015,2017,2017,2018])
     const month = new Set(["Jan", "Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"])
-    const topCategory = [
-       "Best for Kids","Nature","Fitness","Education","Art",
-       "Seniors","History","Tours","Accessible","Sports",
-       "Arts & Crafts","Volunteer","Outdoor Fitness","Waterfront",
-       "Historic House Trust Sites","Games","Festivals",
-       "Poe Park Visitor Center","It's My Park",
-       "Northern Manhattan Parks","Concerts","Film","Urban Park Rangers",
-       "Talks","Dance","Birding","Free Summer Movies","City Parks Foundation",
-       "Theater","Free Summer Concerts"
-    ].sort()
-    const topData = data.filter(function(d) { return topCategory.includes(d.category) })
-      .sort(function(a, b) { return d3.ascending(a.category, b.category)} )
+    const topOrganizer = d3.map(data, function(d){return(d.organizer)}).keys()
+    console.log(topOrganizer)
+    const topData = data.filter(function(d) { return topOrganizer.includes(d.organizer) })
+      .sort(function(a, b) { return d3.ascending(a.organizer, b.organizer)} )
 
     function getDataToPopulate(dataInDate){
       var dataToPopulate = []
-      topCategory.forEach(cat => {
+      topOrganizer.forEach(cat => {
           dataToPopulate.push({
-            category: cat,
+            organizer: cat,
             count:0
           })
       })
       dataInDate.forEach(data => {
-        dataToPopulate[topCategory.indexOf(data.category)].count = data.count
+        dataToPopulate[topOrganizer.indexOf(data.organizer)].count = data.count
       })
       return dataToPopulate
     }
@@ -66,7 +58,7 @@ d3.csv("https://raw.githubusercontent.com/leoDYL/NYCEvents/main/data/derived_dat
 
     dataInDate = topData.filter(function(d){return d.date == dateStr})
 
-    xScale.domain(topCategory)
+    xScale.domain(topOrganizer)
     yScale.domain([0, d3.max(topData, function(d) { return +d.count; })]);
     svg.append("g")
        .attr("transform", `translate(0, ${height})`)
@@ -85,7 +77,7 @@ d3.csv("https://raw.githubusercontent.com/leoDYL/NYCEvents/main/data/derived_dat
       .enter()
       .append("rect")
       .attr("class", "bar")
-      .attr("x", function(d) { return xScale(d.category) })
+      .attr("x", function(d) { return xScale(d.organizer) })
       .attr("y", function(d) { return yScale(d.count) })
       .attr("width", xScale.bandwidth())
       .attr("height", function(d) { return height - yScale(d.count)})

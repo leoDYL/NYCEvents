@@ -42,7 +42,7 @@
 <select id="yearButton"></select>
 <select id="monthButton"></select>
 
-<div id="top_category_monthly_svg"></div>
-<script src="scripts/top_category_monthly.js"></script>
+<div id="top_organizer_monthly_svg"></div>
+<script src="scripts/top_organizer_monthly.js"></script>
 
 </html>
