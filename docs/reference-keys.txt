@@ -35,4 +35,5 @@ by-organizer
 references
 interactive-component
 monthly-event-count-time-series-by-category
+monthly-event-count-by-category
 conclusion

@@ -156,6 +156,7 @@ nyc_events_left_joined[c("EvtId", "Org", "Cat")] %>%
 <!-- TODO Events with multiple organizers / the most "collaborative" organizers -->
 
 
+
 ### Cost, Borough, Duration, and Time of Events
 
 ```{r, fig.width=9, fig.height=9}

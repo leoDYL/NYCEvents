@@ -148,7 +148,30 @@ nyc_events_category_counts_monthly %>%
   filter(category %in% meaningful_timeseries_categories$category) %>%
   write.csv("data/derived_data/monthly_category_counts.csv", row.names=FALSE)
 ```
+```{r}
+nyc_events_organizer_counts_monthly <- nyc_event_listing_events %>%
+  merge(
+    y = nyc_event_organizers,
+    by = "EvtId",
+    all.x = TRUE) %>%
+  filter(Dt < as.Date("2019-01-01")) %>%
+  drop_na(Org) %>%
+  mutate(month = month(Dt, label=TRUE, abbr=TRUE), 
+         year=year(Dt), 
+         organizer = Org, 
+         date = as.yearmon(Dt)) %>%
+  group_by(organizer, month, year, date) %>%
+  summarize(count = n()) 
 
+meaningful_timeseries_organizers <- nyc_events_organizer_counts_monthly %>%
+  group_by(organizer) %>%
+  summarize(count = n()) %>%
+  top_n(30) 
+
+nyc_events_organizer_counts_monthly %>%
+  filter(organizer %in% meaningful_timeseries_organizers$organizer) %>%
+  write.csv("data/derived_data/monthly_organizer_counts.csv", row.names=FALSE)
+```
 
 (TOOD: No longer accurate)
 The events listing data is the main data table, therefore, we want to keep all rows in the events listing table even if there is no matching row in the other tables. As a result, we are performing left outer joins and keeping all rows of the `nyc_event_listing_events` data frame.
