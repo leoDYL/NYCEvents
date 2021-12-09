@@ -573,12 +573,16 @@ of parks, so that for smaller or less popular parks, it is super difficult for u
 datasets we have). Nevertheless, we still wanted to derive certain features of these parks and see what are some
 interesting patterns we can find.</p>
 <p><img src="finalproj_files/figure-html/unnamed-chunk-38-1.png" width="672" /></p>
-<ul>
-<li>We can still observe the “diverse” correlation in terms of categories and organizers.</li>
-<li>More events actually mean fewer crimes</li>
-<li>Longer average duration actually mean fewer crimes</li>
-<li>Free events ratio and average duration relationship</li>
-</ul>
+<p>For this parallel coordinates plot, we have arranged the x-axis columns to highlight interesting patterns, and the “Average Duration” (<code>AvgDur</code>) has been drawn twice for this reason too. From the several interesting dimensions we have derived from our events and crimes data for the 20 parks mentioned, there are a few interesting observations we can notice:</p>
+<ol style="list-style-type: decimal">
+<li>Other than a few outliers parks, for the 20 parks we analyzed, a lot of them have similar sizes and have similar ratio of free events out of all events.</li>
+<li>We can again observe the “diversity” correlation (similarly observed in <a href="results.html#most-diversified-park">Most Diversified Park</a> section) in terms of categories and organizers</li>
+<li>Out of the 20 parks analyzed, larger parks have better diversity in terms of event categories and organizers</li>
+<li>It is somewhat surprising to see that the more diverse parks actually listed fewer events</li>
+<li>There appear to be a negative association between the number of events in parks and the number of crimes in parks, as can be seen by the lines flowing in opposite directions and form “crosses” between the <code>EvtCnt</code> and <code>TotCrm</code> columns on the plot.</li>
+<li>We can similarly observe a negative association between the average duration of events (<code>AvgDur</code>) and the number of crimes (<code>TotCrm</code>), (and for both violent crime types (<code>ViolentCrm</code>) and property crime types (<code>PropertyCrm</code>)) in the 20 parks. This fact, together with observation number 5, makes us suspect that crimes more frequently happen when there are not a lot of people/events in the parks.</li>
+<li>Other than a few outliers, it appears that parks with more violent crime types tend to have more property crime types as well.</li>
+</ol>
 </div>
 </div>
 <div id="spatial-analysis" class="section level2" number="5.4">
