@@ -10,6 +10,7 @@ library(vcd)
 library(vcdExtra)
 library(RColorBrewer)
 library(tidyverse)
+library(ggrepel)
 ```
 
 ## Events and Parks Analysis
@@ -157,12 +158,11 @@ nyc_events_left_joined %>%
   drop_na(PkId, Org, Cat) %>%
   group_by(Org) %>%
   summarize(UniqueCats = n_distinct(Cat), UniquePkIds = n_distinct(PkId)) %>%
-  ggplot(aes(UniquePkIds, UniqueCats)) +
+  ggplot(aes(UniquePkIds, UniqueCats) ) +
+  geom_text_repel(aes(label = ifelse((UniquePkIds > 50) | (UniqueCats > 50), as.character(Org),'')),
+            size = 3,
+            max.overlaps = 30) +
   geom_point(alpha = 0.4, size = 2, stroke = 0) +
-  geom_text(aes(label = ifelse((UniquePkIds > 40) | (UniqueCats > 60), as.character(Org),'')), 
-            size = 2,
-            hjust = 0, 
-            vjust = 0) +
   labs(x = "Count of Distinct Parks", y = "Count of Distinct Event Categories") + 
   ggtitle("Organizers Organizing Different Event Categories Hosted in Different Parks") + 
   theme(panel.background = element_blank())
@@ -173,14 +173,24 @@ nyc_events_left_joined %>%
 ### Cost, Borough, Duration, and Time of Events
 
 ```{r}
-nyc_event_listing_events %>%
-  mutate(Duration=difftime(
-    strptime(paste(Dt, ET), "%Y-%m-%d %H:%M"), strptime(paste(Dt, ST), "%Y-%m-%d %H:%M"), units = "hours")) %>%
+nyc_events_with_duration <- nyc_events_left_joined %>%
+  drop_na(Dt, ET, ST, Cat) %>%
+  mutate(Duration=as.numeric(difftime(
+    strptime(paste(Dt, ET), "%Y-%m-%d %H:%M"), strptime(paste(Dt, ST), "%Y-%m-%d %H:%M"), units = "hours"))) %>%
   filter(Duration > 0) %>%
-  ggplot(aes(Duration)) +
-  geom_histogram(binwidth=1, color = "blue", fill = "lightblue") +
-  ggtitle("Histogram for Event Durations") +
-  labs(x = "Event Duration", y = "Count of Events")
+  select(c('Cat', 'Duration'))
+top_category <- nyc_events_left_joined %>%
+  group_by(Cat) %>%
+  summarize(count = n()) %>%
+  arrange(-count) %>%
+  top_n(10) %>% select(c('Cat'))
+nyc_events_with_duration %>%
+  merge(top_category, by = c('Cat'), all.y=TRUE) %>%
+  ggplot2::ggplot(aes(Duration, reorder(Cat,-Duration, median))) + 
+    geom_boxplot() + 
+    labs(title="Boxplots of event duration\nfor top 10 event categories") +
+    ylab("Category") + 
+    theme_grey(14)
 ```
 
 
