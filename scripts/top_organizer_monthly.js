@@ -70,7 +70,19 @@ d3.csv("https://raw.githubusercontent.com/leoDYL/NYCEvents/main/data/derived_dat
 
     svg.append("g")
      .call(d3.axisLeft(yScale))
-
+    
+    const tooltip = d3.select("body")
+        .append("div")
+        .attr("class","d3-tooltip")
+        .style("position", "absolute")
+        .style("z-index", "10")
+        .style("visibility", "hidden")
+        .style("padding", "15px")
+        .style("background", "rgba(0,0,0,0.6)")
+        .style("border-radius", "5px")
+        .style("color", "#fff")
+        .text("a simple tooltip")
+    
     const bars = svg.selectAll("rect")
       .data(getDataToPopulate(dataInDate))
       .enter()
@@ -80,6 +92,19 @@ d3.csv("https://raw.githubusercontent.com/leoDYL/NYCEvents/main/data/derived_dat
       .attr("y", function(d) { return yScale(d.count) })
       .attr("width", xScale.bandwidth())
       .attr("height", function(d) { return height - yScale(d.count)})
+      .on("mouseover", function(event, d){ 
+        d3.select(this).attr("fill", "orange")
+        tooltip.html(`Count: ${d.count}`).style("visibility", "visible")
+      })
+      .on("mousemove", function(){
+          tooltip
+            .style("top", (event.pageY-10)+"px")
+            .style("left",(event.pageX+10)+"px");
+        })
+      .on("mouseout", function(){ 
+        d3.select(this).attr("fill", "black")
+        tooltip.html(``).style("visibility", "hidden")
+      });
 
     function upateBarchart(month, year) {
       var dateStr = month+' '+year

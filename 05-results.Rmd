@@ -151,6 +151,7 @@ well, which makes us wonder if different organizers have preferences over certai
 will analyze in the next section.
 
 ### Organizer Preferences on Categories and Locations
+We can use the same method to take a look at organizer's preferences on event locations and categories. In the scatted plot below, it's not hard to discover that most organizers have their favorite parks to host events. Most organizers only host their events within 5 parks. And less than 30 of the 2168 organizers have hosted events in more than 15 parks. However, organizers can get diversified in terms of the types of event they host. We can see that many organizers have hosted up to around 17 different types of events. Also quite a few organizers have hosted between 20 to 40 different types of events. Organizers that have hosted more than 50 different types of events are: Staten Island Greenbelt Conservancy, Conference House Park, Urban Park Rangers, NYC Parks, Partnerships for Parks. The organizers that have hosted in morethan 50 parks are: New York City Mayor's Office of Media and Entertainment, Stewardship Team, Bike New York, Mayor's Office of Media and Entertainment, GreenThumb, Manhattan Borough Recreation, NYC Parks: Queens Recreation, Arts, Culture & Fun, City Parks Foundataion, Urban Park Rangers, NYC Parks, Partnerships for Parks. 
 
 ```{r}
 
@@ -171,6 +172,8 @@ nyc_events_left_joined %>%
 
 
 ### Cost, Borough, Duration, and Time of Events
+In the top 10 event categories, most of them have median duration between 1 to 2 hours. Given New York's high pace of life, it is not surprising that most events do not take a long time. The only exception is art related events, with a median duration of 6 hours. Some art events, like exhibitions, usually last longer times since the organizers would hope that more people can participate. In the meantime, art events might also take longer time for organizers to prepare the site, e.g. laying out exhibits, arranging concert stages. 
+
 
 ```{r}
 nyc_events_with_duration <- nyc_events_left_joined %>%
@@ -183,16 +186,17 @@ top_category <- nyc_events_left_joined %>%
   group_by(Cat) %>%
   summarize(count = n()) %>%
   arrange(-count) %>%
-  top_n(10) %>% select(c('Cat'))
+  top_n(10) #%>% select(c('Cat'))
 nyc_events_with_duration %>%
   merge(top_category, by = c('Cat'), all.y=TRUE) %>%
-  ggplot2::ggplot(aes(Duration, reorder(Cat,-Duration, median))) + 
+  ggplot2::ggplot(aes(Duration, reorder(Cat,Duration, median))) + 
     geom_boxplot() + 
+    scale_x_continuous(breaks=pretty(c(0,20),10)) +
     labs(title="Boxplots of event duration\nfor top 10 event categories") +
     ylab("Category") + 
     theme_grey(14)
 ```
-
+In the graph below, we put cost, duration, start time (morning: 6-12, afternnon: 12-18, evening: 18-24, night: 0-6) and borough information for NYC park events in a pairs mosaic chart. From the individual arguments, we can tell that most of the events are free; Manhatan has the most events; most events are between 1-3 hours long and event start times are mostly during the day between and more likely to be in the morning. When we look at the correlation between cost and other arguments, it appears that the ratio of non-free events are higher in Queens and Bronx compared to other boroughs. In terms of event duration, we can see that the non-free event ratio is higher for events that last more than 5 hours, which could be because that the preparation for those events cost more economically. The correlation between duration and borough shows that Manhantan has the highest ratio of events less than 1 hour and Staten Island has the highest ratio of events lasting more than 5 hours. Between borough and start time, Brooklyn has the highest ratio of evening events but lowest ratio of morning events. And Bronx has the lowest ratio of evening events. At last, it's not surprising that most of the events last more than 5 hours starts in the morning and none of those events happen at night. Events with duration between 1-3 hours has the most evenly distributed start time range, since they would not cause inconvenience to participants and parks starting at any time during the day. However, much to our surprises, events that last less than an hour often starts earlier in the day. It's likely that a lot of them happen early in the morning on people's way to work.  
 
 ```{r, fig.width=9, fig.height=9}
 get_duration_category <- function(Dt, ST, ET) {
@@ -283,7 +287,7 @@ ggplot(nyc_events_timeseries_weekly, aes(Wday, Count)) +
   theme(axis.text.x = element_text(angle = 90, vjust = 1, hjust=1))
 ```
 
-Here, we are aggregating the event counts by month, and plotted bar charts faceted by year. It is very clear from 
+Here, we aggregate the event count by the weekdays of a month in each year from 2013 to 2018. It is very clear from 
 these charts that the monthly counts and trends do indeed have a very similar pattern across the years 2013-2018. 
 Other than some fluctuations, January through March are typically the more quiet months with fewer than 500 events
 in most years, then the number of events gradually increases in April, May and June, and peaks in July or August 
@@ -442,6 +446,8 @@ vcd::mosaic(CrimeType ~ Boro,
 The distribution of crime types in the different Boroughs of NYC over the years of 2014 through 2021 is actually different, especially around "Grand Larceny" and "Robbery" - for example, Manhattan has more "Grand Larceny" than "Robbery", whereas Staten Island and Bronx both have more "Robbery" than "Grand Larceny".
 
 ### Crime Timeseries Analysis
+In the crime time series chart below, we take a look into the tendency of different types of crimes at different quarter of a year. It's apparent that there is a strong seasonal pattern within most of the crime types. The third quarter of the year is when assaults, grand larcenies and robberies happens the most. Over the years, we notice that the number of total crimes, grand larcenies and robberies have reduced in the year of 2020 and 2021. We suspect that the pandemic caused such decrements. However, we couldn't conclude on any patterns on burglaries, grand larcenies of motor vehicles, murders and rapes, since they don't happen that often overall. 
+
 ```{r, fig.width=9}
 nyc_crimes_timeseries_quarterly <- nyc_parks_crime %>%
   drop_na(Boro, Qtr) %>%
