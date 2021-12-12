@@ -1,2 +1,13 @@
 # Conclusion
 
+Visit parks during busy times is safer.
+
+As analyzed in our [Timeseries Analysis on NYC Parks Events] section, we only have complete data from start of 
+2013 up to only the end of year of 2018. 
+Also not easy to join datasets
+
+Future directions:
+* Population / ethnicity
+* Political events
+* Interactive map based on event category
+

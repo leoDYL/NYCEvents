@@ -16,11 +16,12 @@ We’re very fascinated by the different events hosted by different organization
 
 ### Questions to Explore
 
-We are primarily interested in focusing on the following three questions:
+We are primarily interested in focusing on the following four questions:
 
-1. Does ethnicity distribution of a neighborhood affect the types and frequencies of events in the NYC public facilities?
-2. Do crime rates near the different parks and/or police precincts have any relationships with the parks and events?
-3. How do real world affairs trigger the events in NYC parks?
+1. What are the most active and diverse parks in the New York City? Do event organizers have preferences over parks and event types?
+2. What are some interesting facts of the events in the parks? Do they vary for different boroughs of the New York City?
+3. Are there any seasonality and trend patterns for the events in parks? Do they vary for different event categories? 
+4. Is there any association between crimes in parks and events in parks that we can identify?
 
 
 ### Bookdown Book

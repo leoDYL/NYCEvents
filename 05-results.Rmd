@@ -1,7 +1,6 @@
 # Results
 
 ```{r}
-library(ggmap)
 library(parcoords)
 library(GGally)
 library(leaflet)
@@ -34,7 +33,7 @@ top_locations <- nyc_event_listing_locations %>%
 ```
 
 
-### Most Diversified Park
+### Most Diverse Park
 
 Since our main dataset is about the events in the different parks in NYC, very naturally, the first thing we'll look at is what are some of the parks and locations with the most events:
 
@@ -72,7 +71,7 @@ nyc_events_left_joined %>%
             hjust = 0.82, 
             vjust = 0.9) +
   labs(x = "Count of Distinct Organizers", y = "Count of Distinct Event Categories") + 
-  ggtitle("Parks Hosting Different Event Categories Organized by Different Event Organizers") + 
+  ggtitle("Parks Hosting Different Event Categories Organized by Event Organizers") + 
   theme(panel.background = element_blank())
 ```
 
@@ -100,7 +99,7 @@ ggplot(parks_pkid_diversity, aes(UniqueOrgs, UniqueCats)) +
             hjust = 1, 
             vjust = 1) +
   labs(x = "Count of Distinct Organizers", y = "Count of Distinct Event Categories") + 
-  ggtitle("Parks Hosting Different Event Categories Organized by Different Event Organizers") + 
+  ggtitle("Parks Hosting Different Event Categories Organized by Event Organizers") + 
   theme(panel.background = element_blank())
 
 ```
@@ -498,7 +497,7 @@ knitr::kable(
 )
 ```
 
-A quick data aggregation gives us the top 10 parks with most crimes and top 10 parks with the most events, as shown in the data table above. However, we discovered that somehow the crimes data do not have any records for crimes in "Central Park" (M010). Together with our interests of the most diverse parks as analyzed in the [Most Diversified Park] section, we will select the following parks to analyze, and use this manually created mapping as the helper table to join our data:
+A quick data aggregation gives us the top 10 parks with most crimes and top 10 parks with the most events, as shown in the data table above. However, we discovered that somehow the crimes data do not have any records for crimes in "Central Park" (M010). Together with our interests of the most diverse parks as analyzed in the [Most Diverse Park] section, we will select the following parks to analyze, and use this manually created mapping as the helper table to join our data:
 
 ```{r}
 
@@ -582,7 +581,7 @@ knitr::kable(
 We understand the limitations of picking only the parks with most crimes or most events or most diverse, however, 
 it is very difficult for us to include parks with fewer events or crimes and link them from the two data sources, 
 for many reasons, some of which were outlined in previous [Missing values] chapter (that 20% of our event listing 
-data are missing `PkId`), and the [Most Diversified Park] section (that the same `PkId` includes many sub-areas 
+data are missing `PkId`), and the [Most Diverse Park] section (that the same `PkId` includes many sub-areas 
 of parks, so that for smaller or less popular parks, it is super difficult for us to map the names across the two 
 datasets we have). Nevertheless, we still wanted to derive certain features of these parks and see what are some 
 interesting patterns we can find. 
@@ -652,7 +651,7 @@ ggparcoord(parks_events_crime_relation_tidy,
 For this parallel coordinates plot, we have arranged the x-axis columns to highlight interesting patterns, and the "Average Duration" (`AvgDur`) has been drawn twice for this reason too. From the several interesting dimensions we have derived from our events and crimes data for the 20 parks mentioned, there are a few interesting observations we can notice:
 
 1. Other than a few outliers parks, for the 20 parks we analyzed, a lot of them have similar sizes and have similar ratio of free events out of all events.
-2. We can again observe the "diversity" correlation (similarly observed in [Most Diversified Park] section) in terms of categories and organizers
+2. We can again observe the "diversity" correlation (similarly observed in [Most Diverse Park] section) in terms of categories and organizers
 3. Out of the 20 parks analyzed, larger parks have better diversity in terms of event categories and organizers
 4. It is somewhat surprising to see that the more diverse parks actually listed fewer events
 5. There appear to be a negative association between the number of events in parks and the number of crimes in parks, as can be seen by the lines flowing in opposite directions and form "crosses" between the `EvtCnt` and `TotCrm` columns on the plot.
@@ -661,74 +660,12 @@ For this parallel coordinates plot, we have arranged the x-axis columns to highl
 
 ## Spatial Analysis
 
-### Cost
-
-From the [Missing values] chapter, we do not have missing data for `CsFr`, `Lat`, `Long`
-
-TODO analyze weekends vs weekdays
-
-```{r}
-nyc_events_fee_location <- nyc_event_listing_events[c("EvtId", "CsFr", "Dt")] %>%
-  merge(
-    y = nyc_event_listing_locations, 
-    by = "EvtId", 
-    all.x = TRUE) %>% 
-  .[c("EvtId", "CsFr", "Lat", "Long", "Dt")] %>%
-  filter(year(.$Dt) == 2018) %>%
-  filter(wday(Dt) == 7)
-  #group_by(CsFr, Lat, Long) %>%
-  #summarize(count = n()) %>%
-  #ungroup()
-
-# qmplot(Long, Lat, data = test, maptype = "toner-lite", color = I("red"))
-```
+From the [Missing values] chapter, we do not have missing data for `Lat`, `Long`, which certainly prompted us to perform a detailed Spatial Analysis on the events in the NYC parks.
 
 
-TODO Too much data for this, select a year maybe
+### Spatial Analysis of Events By Organizer
 
-```{r}
-cost_palette <- colorFactor(palette='RdBu', domain=nyc_events_fee_location$CsFr)
-
-leaflet(nyc_events_fee_location) %>%
-  addTiles() %>%
-  setView(-74.00, 40.71, zoom = 10) %>%
-  addCircleMarkers(~Long, ~Lat, radius = 5, stroke=FALSE, fillOpacity = 0.5, fillColor = ~ cost_palette(CsFr)) %>%
-  addLegend("topright", pal = cost_palette, values = nyc_events_fee_location$CsFr, title = "Is Free")
-```
-
-
-
-### By Category
-
-```{r}
-
-test_cats <- c("Waterfront", "Games", "Festivals")
-
-top_category_events_locations <- nyc_event_listing_events[c("EvtId")] %>%
-  merge(
-    y = nyc_event_categories, 
-    by = "EvtId", 
-    all.x = TRUE) %>%
-  merge(
-    y = nyc_event_listing_locations, 
-    by = "EvtId", 
-    all.x = TRUE) %>% 
-  .[c("EvtId", "Cat", "Lat", "Long")] %>%
-  filter(Cat %in% test_cats)
-  #filter(Cat %in% top_categories$Cat)
-
-categories_palette <- colorFactor(palette='Set1', domain=top_category_events_locations$Cat)
-  
-leaflet(top_category_events_locations) %>%
-  addTiles() %>%
-  setView(-74.00, 40.71, zoom = 10) %>%
-  addCircleMarkers(~Long, ~Lat, radius = 5, stroke=FALSE, fillOpacity = 0.5, fillColor = ~ categories_palette(Cat)) %>%
-  addLegend("topright", pal = categories_palette, values = top_category_events_locations$Cat, title = "Category")
-```
-
-
-### By Organizer
-
+From our analysis in the [Organizer Preferences on Categories and Locations] section, there certainly appears to be preferences of different organizers on the parks they usually organize events in. As a result, we want to take a look at the top 8 event organizers and see where they are hosting most of their events:
 
 ```{r}
 top_organizers <- nyc_event_organizers %>%
@@ -754,13 +691,85 @@ organizers_palette <- colorFactor(palette='Set1', domain=top_orgs_events_locatio
 leaflet(top_orgs_events_locations) %>%
   addTiles() %>%
   setView(-74.00, 40.71, zoom = 10) %>%
-  addCircleMarkers(~Long, ~Lat, radius = 5, stroke=FALSE, fillOpacity = 0.5, fillColor = ~ organizers_palette(Org)) %>%
+  addCircleMarkers(~Long, ~Lat, radius = 3, stroke=FALSE, fillOpacity = 0.5, fillColor = ~ organizers_palette(Org)) %>%
   addLegend("topright", pal = organizers_palette, values = top_orgs_events_locations$Org, title = "Organizer")
 ```
 
 
-## References
 
-D. Kahle and H. Wickham. ggmap: Spatial Visualization with ggplot2. The R Journal, 5(1), 144-161. URL
-  http://journal.r-project.org/archive/2013-1/kahle-wickham.pdf
+Not surprisingly, we can see the organizer preferences on location of events very clearly:
+
+* "Bryant Park Corp." solely organizes events in midtown Manhattan near Bryant Park.
+* "Central Park Conservancy" organizes all of its events in Central Park.
+* "Poe Visitor Center" only has events in Poe Park.
+* "Prospect Park Alliance" events are all in Prospect Park.
+* "Summer on the Hudson" events happen in different parks but all along the Hudson river.
+* Most of "Queens Botanical Garden" events are in Queens Botanical Garden but they also organize some events outside of the Queens Botanical Garden, but mostly in Queens.
+* "NYC Parks" and "Urban Park Rangers" are the more diverse organizers out of the top 8 active organizers that they organize events in more locations throughout the whole NYC areas in all boroughs, as similarly identified in the [Organizer Preferences on Categories and Locations] section. We can also observe an interesting preference of "Urban Park Rangers" to have more events along waterfronts when compared to "NYC Parks".
+
+It is certainly very tempting for us to analyze the spatial distribution of events for different event categories,
+however, based on our previous analysis, we feel we have too many events categories to have a clean spatial plot 
+to analyze, also, as analyzed in the [Most Diverse Park] section, many parks are having more than 20 distinct 
+categories of events, it would certainly give us lots of over-plotting, thus we refrain ourselves from doing a 
+deep dive of the spatial distribution of different event categories here. However, there are also interesting 
+findings in our previous analysis in the [Cost, Borough, Duration, and Time of Events] section, we 
+particularly feel it is very interesting to see the distribution of the events on the map based on their start time of the day.
+
+### Spatial Analysis on Events Start Time of the Day
+
+Here, we have included the following spatial graph of events colored by their start time of the day, note that 
+due to the large amount of data, we have only included events in 2018 in this plot, but it is very representative 
+of all the years:
+
+
+```{r}
+
+spatial_events_w_tod_2018 <- nyc_event_listing_events[c("EvtId", "Dt", "ST")] %>%
+  merge(
+    y = nyc_event_listing_locations, 
+    by = "EvtId", 
+    all.x = TRUE) %>% 
+  .[c("EvtId", "ST", "Lat", "Long", "Dt")] %>%
+  drop_na(Dt, ST) %>%
+  mutate(TimeOfDay = get_time_of_day(ST)) %>%
+  drop_na(TimeOfDay) %>%
+  filter(year(.$Dt) == 2018)
+
+
+spatial_events_w_tod_2018$TimeOfDay <- fct_relevel(
+  factor(spatial_events_w_tod_2018$TimeOfDay), 
+  levels = c("Night", "Evening", "Afternoon", "Morning"))
+```
+
+```{r}
+time_palette <- colorFactor(palette='viridis', domain=spatial_events_w_tod_2018$TimeOfDay)
+
+leaflet(spatial_events_w_tod_2018) %>%
+  addTiles() %>%
+  setView(-74.00, 40.71, zoom = 10) %>%
+  addCircleMarkers(
+    ~Long, 
+    ~Lat, 
+    radius = 3, 
+    stroke=FALSE, 
+    fillOpacity = 0.5, 
+    fillColor = ~ time_palette(TimeOfDay)) %>%
+  addLegend("topright", 
+            pal = time_palette, 
+            values = spatial_events_w_tod_2018$TimeOfDay,
+            title = "Event Start Time")
+```
+
+
+
+From the spatial plot here, it is easy to see that, as also analyzed in section 
+[Cost, Borough, Duration, and Time of Events], Brooklyn certainly has a lower ratio of morning events and higher 
+ratio of evening events when compared to the other boroughs. Manhattan has a pretty balanced diversity of 
+morning/afternoon/evening events. Manhattan also certainly has more densely organized events.
+
+It is also interesting but not surprising to see that there are more evening events along different waterfront 
+parks - who doesn't enjoy the night waterfront city view? For the "inner" located parks, there are certainly more 
+morning/afternoon events than evening events, which certainly explains why Bronx has the highest ratio of 
+morning events and lowest ratio of evening events out of all boroughs. 
+
 
