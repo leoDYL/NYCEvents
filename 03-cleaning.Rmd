@@ -1,9 +1,9 @@
 # Data transformation
 
-(Work in progress)
+In order to start our study on NYC park events and crimes, we need to do some cleaning and transforming to the data. The first thing to do is combining all the park event information into one dataframe, since they are originally separated in for csv files. Fortunately, all event datasets contain an event id with wich we can merge all for data files into one event dataframe. As for the park crime dataset, we simply concatenated all the data file for each quarter into one crime dataframe. 
 
 ## Read Raw Data
-
+First, we read all the data files. After that, we merge all event dataframes by event id. The crime data has previously been contatenated and written out as one csv file. So we only need to read it as a dataframe. 
 ```{r read raw daata}
 library(lubridate)
 library(tidyverse)
@@ -88,7 +88,7 @@ crime_quarters <- c(
 ```
 
 ## Joining events with other tables
-
+After reading all event datafames (listing, category, organizer, location). We merge them by event id. After comparing the results in [Using Full Outer Joins] and [Using Left Outer Joins], we chose the left outer joined dataset as our main event dataset.
 ```{r}
 nyc_events_joined <- nyc_event_listing_events %>%
   merge(
@@ -122,7 +122,8 @@ nyc_events_left_joined <- nyc_event_listing_events %>%
     all.x = TRUE)
 ```
 
-
+## Transformation for interactive components
+In the interactive section, we created time series charts on category and organizers. In order to do that, we create two dataframes that contain the count of events for each category/organizer in each month from 2014 to 2018.
 ```{r cleaning for interactive event category monthly counts}
 # Event category monthly counts over time, used for interactive component
 nyc_events_category_counts_monthly <- nyc_event_listing_events %>%
@@ -173,76 +174,73 @@ nyc_events_organizer_counts_monthly %>%
   write.csv("data/derived_data/monthly_organizer_counts.csv", row.names=FALSE)
 ```
 
-(TOOD: No longer accurate)
-The events listing data is the main data table, therefore, we want to keep all rows in the events listing table even if there is no matching row in the other tables. As a result, we are performing left outer joins and keeping all rows of the `nyc_event_listing_events` data frame.
-
 
 ```{r events join categories}
-nyc_events_with_categories <- 
-  merge(x = nyc_event_listing_events, 
-        y = nyc_event_categories, 
-        by = "EvtId", 
-        all.x = TRUE)
-
-nyc_events_with_category_counts <- nyc_event_categories %>%
-  drop_na() %>%
-  group_by(EvtId) %>%
-  summarize(CatCt = n()) %>%
-  ungroup()
-nyc_events_with_category_counts
+# nyc_events_with_categories <- 
+#   merge(x = nyc_event_listing_events, 
+#         y = nyc_event_categories, 
+#         by = "EvtId", 
+#         all.x = TRUE)
+# 
+# nyc_events_with_category_counts <- nyc_event_categories %>%
+#   drop_na() %>%
+#   group_by(EvtId) %>%
+#   summarize(CatCt = n()) %>%
+#   ungroup()
+# nyc_events_with_category_counts
 ```
 
 
 ```{r}
-nyc_events_with_categories %>%
-  group_by(Cat) %>%
-  summarize(count=n())
+# nyc_events_with_categories %>%
+#   group_by(Cat) %>%
+#   summarize(count=n())
 ```
 
 ```{r}
-nyc_events_with_organizer_counts <- nyc_event_organizers %>%
-  drop_na() %>%
-  group_by(EvtId) %>%
-  summarize(OrgCt = n()) %>%
-  ungroup()
-nyc_events_with_organizer_counts
+# nyc_events_with_organizer_counts <- nyc_event_organizers %>%
+#   drop_na() %>%
+#   group_by(EvtId) %>%
+#   summarize(OrgCt = n()) %>%
+#   ungroup()
+# nyc_events_with_organizer_counts
 ```
 
 ```{r events with organizer and category counts}
-nyc_events_with_cat_org_counts <- nyc_event_listing_events %>%
-  merge(y = nyc_events_with_category_counts, 
-        by = "EvtId", 
-        all.x = TRUE, all.y = TRUE) %>%
-  merge(y = nyc_events_with_organizer_counts, 
-        by = "EvtId", 
-        all.x = TRUE, all.y = TRUE)
+# nyc_events_with_cat_org_counts <- nyc_event_listing_events %>%
+#   merge(y = nyc_events_with_category_counts, 
+#         by = "EvtId", 
+#         all.x = TRUE, all.y = TRUE) %>%
+#   merge(y = nyc_events_with_organizer_counts, 
+#         by = "EvtId", 
+#         all.x = TRUE, all.y = TRUE)
 ```
 
 
 
 
 ```{r scratch work}
-test <- nyc_event_organizers %>%
-  mutate(Org = str_sub(Org, 1, 30)) %>%
-  group_by(Org) %>%
-  summarize(count=n()) %>%
-  drop_na()
-test
+# test <- nyc_event_organizers %>%
+#   mutate(Org = str_sub(Org, 1, 30)) %>%
+#   group_by(Org) %>%
+#   summarize(count=n()) %>%
+#   drop_na()
+# test
 ```
 
 ```{r}
-library(stringdist)
-
-test_grp <- test %>%
-  mutate(grp = 
-           cutree(hclust(stringdistmatrix(test$Org, method = "lv")), 
-                  h = 15)) %>%
-  group_by(grp) 
+# library(stringdist)
+# 
+# test_grp <- test %>%
+#   mutate(grp = 
+#            cutree(hclust(stringdistmatrix(test$Org, method = "lv")), 
+#                   h = 15)) %>%
+#   group_by(grp) 
 
 ```
 
 ```{r}
 # Does not work very well
-test_grp %>%
-  arrange(grp, count)
+# test_grp %>%
+#   arrange(grp, count)
 ```

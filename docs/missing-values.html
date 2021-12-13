@@ -87,6 +87,7 @@
 <ul>
 <li class="chapter" data-level="3.1" data-path="data-transformation.html"><a href="data-transformation.html#read-raw-data"><i class="fa fa-check"></i><b>3.1</b> Read Raw Data</a></li>
 <li class="chapter" data-level="3.2" data-path="data-transformation.html"><a href="data-transformation.html#joining-events-with-other-tables"><i class="fa fa-check"></i><b>3.2</b> Joining events with other tables</a></li>
+<li class="chapter" data-level="3.3" data-path="data-transformation.html"><a href="data-transformation.html#transformation-for-interactive-components"><i class="fa fa-check"></i><b>3.3</b> Transformation for interactive components</a></li>
 </ul></li>
 <li class="chapter" data-level="4" data-path="missing-values.html"><a href="missing-values.html"><i class="fa fa-check"></i><b>4</b> Missing values</a>
 <ul>
@@ -199,7 +200,7 @@ tables we analyze.</p>
 <p>As for the location data for the park events, as we can see from the chart below, there are decent amount of
 missing fields in the data set. Almost 50% of the data are missing Address (<code>Addr</code>), and unfortunately we have almost 40% of the data missing field is zip (<code>Zip</code>), which we were hoping to use to help us allocate the
 parks into smaller regions for further location-based studies. Then the only location information for us to
-perform fine-grained regionalization of the parks is thelongitude (<code>Long</code>) and latitude (<code>Lat</code>) field pair, for
+perform fine-grained regionalization of the parks is the longitude (<code>Long</code>) and latitude (<code>Lat</code>) field pair, for
 which we fortunately have 0 missing data. But the complexity would be much higher. It is interesting that the data
 set has complete longitude and latitude records for the events while a lot of the data are missing the zip code
 data. With zip code being the apparent easier location data to acquire, we suspect that the longitude and
