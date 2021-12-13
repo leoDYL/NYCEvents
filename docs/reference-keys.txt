@@ -1,6 +1,3 @@
-tab:unnamed-chunk-23
-tab:unnamed-chunk-35
-tab:unnamed-chunk-36
 introduction
 data-sources
 data-transformation
@@ -17,7 +14,7 @@ top-categories-with-missing-organizer
 missing-values-for-crimes-in-parks
 results
 events-and-parks-analysis
-most-diversified-park
+most-diverse-park
 organizer-preferences-on-categories-and-locations
 cost-borough-duration-and-time-of-events
 timeseries-analysis
@@ -28,11 +25,11 @@ crimes-in-parks-overview
 crime-timeseries-analysis
 crimes-in-parks-and-events-in-parks
 spatial-analysis
-cost
-by-category
-by-organizer
-references
+spatial-analysis-of-events-by-organizer
+spatial-analysis-on-events-start-time-of-the-day
 interactive-component
 monthly-event-count-time-series-by-category
 monthly-event-count-by-most-active-organizers
 conclusion
+limitations
+future-directions

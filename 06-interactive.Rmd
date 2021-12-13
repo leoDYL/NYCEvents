@@ -24,6 +24,12 @@
 
 </html>
 
+You can play with our plot by selecting the different event categories from the dropdown and see how the count of 
+events are changing over time. You can also mouse-over the plot to see the month and exact count of events for 
+that month for your selected event category. It's certainly interesting to see some similar patterns as we 
+analyzed in the [Timeseries Analysis on NYC Parks Events] section but in a more interactive view and for many more 
+event categories that we were not able to include in that section.
+
 ## Monthly Event Count by Most Active Organizers
 
 <html>
