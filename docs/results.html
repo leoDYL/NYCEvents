@@ -133,7 +133,11 @@
 <li class="chapter" data-level="6.1" data-path="interactive-component.html"><a href="interactive-component.html#monthly-event-count-time-series-by-category"><i class="fa fa-check"></i><b>6.1</b> Monthly Event Count Time-series by Category</a></li>
 <li class="chapter" data-level="6.2" data-path="interactive-component.html"><a href="interactive-component.html#monthly-event-count-by-most-active-organizers"><i class="fa fa-check"></i><b>6.2</b> Monthly Event Count by Most Active Organizers</a></li>
 </ul></li>
-<li class="chapter" data-level="7" data-path="conclusion.html"><a href="conclusion.html"><i class="fa fa-check"></i><b>7</b> Conclusion</a></li>
+<li class="chapter" data-level="7" data-path="conclusion.html"><a href="conclusion.html"><i class="fa fa-check"></i><b>7</b> Conclusion</a>
+<ul>
+<li class="chapter" data-level="7.1" data-path="conclusion.html"><a href="conclusion.html#limitations"><i class="fa fa-check"></i><b>7.1</b> Limitations</a></li>
+<li class="chapter" data-level="7.2" data-path="conclusion.html"><a href="conclusion.html#future-directions"><i class="fa fa-check"></i><b>7.2</b> Future Directions</a></li>
+</ul></li>
 <li class="divider"></li>
 <li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
 </ul>
@@ -160,7 +164,7 @@
 <div id="most-diverse-park" class="section level3" number="5.1.1">
 <h3><span class="header-section-number">5.1.1</span> Most Diverse Park</h3>
 <p>Since our main dataset is about the events in the different parks in NYC, very naturally, the first thing we’ll look at is what are some of the parks and locations with the most events:</p>
-<p><img src="finalproj_files/figure-html/unnamed-chunk-20-1.png" width="672" /></p>
+<p><img src="finalproj_files/figure-html/Most%20Diverse%20Park%20Cleveland%20Dot%20Plot-1.png" width="672" /></p>
 <p>From this Cleveland Dot Plot of top 30 parks with the most number of events listed from 2013-2019 in our dataset,
 we can see that the top 2 locations are prety much outliers from the rest of the group, with “Poe Park Visitor
 Center” having more than 7000 events, followed by “Queens Botanical Garden”, with more than 3000 events, and the
@@ -168,7 +172,7 @@ rest of the top 30 locations all have fewer than 2000 events over the years.</p>
 <p>After seeing that the top event locations are hosting several thousands of events over the years 2013-2019, we
 wonder which of them are the most diverse ones, in the sense that they have a lot of distinct event organizers
 organizing events of different categories in them.</p>
-<p><img src="finalproj_files/figure-html/unnamed-chunk-21-1.png" width="672" /></p>
+<p><img src="finalproj_files/figure-html/Most%20Diverse%20Park%20location%20scatter-1.png" width="672" /></p>
 <p>We have labeled the locations with more than 24 unique organizers who have hosted events, or have events of more
 than 45 different event categories over the years, as well as the locations with most events - "“Poe Park Visitor
 Center” and “Queens Botanical Garden” - interesting enough that for these two, we can notice although they have a
@@ -178,10 +182,10 @@ in them.</p>
 location names, we realize these parks might be too large and have different sub locations (e.g. “Visitor Center”
 inside of “Conference House Park”) listed as the location name in the datasets we have. We then again plot the
 scatterplot using <code>PkId</code>:</p>
-<p><img src="finalproj_files/figure-html/unnamed-chunk-22-1.png" width="672" /></p>
+<p><img src="finalproj_files/figure-html/Most%20Diverse%20Park%20park%20id%20scatter-1.png" width="672" /></p>
 <p>A quick Googling using the longitude and latitude of these park ids tells us that, the labels from left to right are:</p>
 <table>
-<caption><span id="tab:unnamed-chunk-23">Table 5.1: </span>Park Id to Park Name Mapping for Diverse Parks</caption>
+<caption>(#tab:Most Diverse Park mapping table)Park Id to Park Name Mapping for Diverse Parks</caption>
 <thead>
 <tr class="header">
 <th align="left">Park Id</th>
@@ -243,12 +247,12 @@ will analyze in the next section.</p>
 </div>
 <div id="organizer-preferences-on-categories-and-locations" class="section level3" number="5.1.2">
 <h3><span class="header-section-number">5.1.2</span> Organizer Preferences on Categories and Locations</h3>
-<p><img src="finalproj_files/figure-html/unnamed-chunk-24-1.png" width="672" /></p>
+<p><img src="finalproj_files/figure-html/Organizer%20Preferences%20on%20Categories%20and%20Locations%20scatter-1.png" width="672" /></p>
 </div>
 <div id="cost-borough-duration-and-time-of-events" class="section level3" number="5.1.3">
 <h3><span class="header-section-number">5.1.3</span> Cost, Borough, Duration, and Time of Events</h3>
-<p><img src="finalproj_files/figure-html/unnamed-chunk-25-1.png" width="672" /></p>
-<p><img src="finalproj_files/figure-html/unnamed-chunk-26-1.png" width="864" /></p>
+<p><img src="finalproj_files/figure-html/Cost,%20Borough,%20Duration,%20and%20Time%20of%20Events%20box-1.png" width="672" /></p>
+<p><img src="finalproj_files/figure-html/Cost,%20Borough,%20Duration,%20and%20Time%20of%20Events%20pairs-1.png" width="864" /></p>
 </div>
 </div>
 <div id="timeseries-analysis" class="section level2" number="5.2">
@@ -258,7 +262,7 @@ Here we are going to perform an analysis on what are some interesting seasonal p
 <div id="timeseries-analysis-on-nyc-parks-events" class="section level3" number="5.2.1">
 <h3><span class="header-section-number">5.2.1</span> Timeseries Analysis on NYC Parks Events</h3>
 <p>First, we simply take an overview look at the count of listed events over time:</p>
-<p><img src="finalproj_files/figure-html/unnamed-chunk-27-1.png" width="672" /></p>
+<p><img src="finalproj_files/figure-html/Timeseries%20Analysis%20on%20NYC%20Parks%20Events%20line-1.png" width="672" /></p>
 <p>Here, we observe a few things at first sight:</p>
 <ul>
 <li>The data counts appears to be abnormally low after the start of 2019, probably due to limited data availablility in the dataset, therefore, we are going to only use data prior to 2019 in our following timeseries analysis on the events daata in this section.</li>
@@ -266,7 +270,7 @@ Here we are going to perform an analysis on what are some interesting seasonal p
 <li>There is definitely fewer events in winters around Janurary and generally more events in the summers.</li>
 </ul>
 <p>The previous plot, although helps us identify the general pattern, looks pretty noisy, so next let’s take a different view, which is less noisy:</p>
-<p><img src="finalproj_files/figure-html/unnamed-chunk-28-1.png" width="960" /></p>
+<p><img src="finalproj_files/figure-html/Timeseries%20Analysis%20on%20NYC%20Parks%20Events%20less%20noisy-1.png" width="960" /></p>
 <p>Here, we are aggregating the event counts by month, and plotted bar charts faceted by year. It is very clear from
 these charts that the monthly counts and trends do indeed have a very similar pattern across the years 2013-2018.
 Other than some fluctuations, January through March are typically the more quiet months with fewer than 500 events
@@ -291,7 +295,7 @@ team bonding activities on Fridays.</p>
 <p>After the initial timeseries analysis, we feel that it’s likely that other than the general seasonality and weekly
 trends, different event sub-categories could have very different trends. Thus we will take a closer look at the top 30 categories for NYC parks events in this section.</p>
 <p>First, we look at if there are trends in the numbers of events for different categories over the years.</p>
-<p><img src="finalproj_files/figure-html/unnamed-chunk-30-1.png" width="672" /></p>
+<p><img src="finalproj_files/figure-html/Timeseries%20Analysis%20on%20Event%20Categories%20yearly-1.png" width="672" /></p>
 <p>We can notice on this plot that for most of the top categories, the number of events listed in each year from 2013
 to 2018 more or less just fluctuates and stays mostly flat. However, for category “Education”, there is a very
 noticeable increase for year 2018, and for categories “Seniors”, “Accessible”, “Film”, “Dance”, “Free Summer
@@ -299,7 +303,7 @@ Movies”, there appear to be an uptrend, whereas for categories like “Games�
 downtrend.</p>
 <p>Next, we look at if all categories follow the general seasonality discussed in the previous section, or there are
 noticeable differences in the different categories.</p>
-<p><img src="finalproj_files/figure-html/unnamed-chunk-31-1.png" width="672" /></p>
+<p><img src="finalproj_files/figure-html/Timeseries%20Analysis%20on%20Event%20Categories%20monthly-1.png" width="672" /></p>
 <p>Here, we can see that yes, for most of the top 30 categories, they mostly follow the “more events in the summer,
 fewer in the winter” general rule, with some other interesting observations, most noticeably:</p>
 <ul>
@@ -310,7 +314,7 @@ fewer in the winter” general rule, with some other interesting observations, m
 <li>“Birding” has peaks in April and May.</li>
 </ul>
 <p>Lastly, we also inspect the day of week pattern of when the top 30 event categories happen.</p>
-<p><img src="finalproj_files/figure-html/unnamed-chunk-32-1.png" width="672" /></p>
+<p><img src="finalproj_files/figure-html/Timeseries%20Analysis%20on%20Event%20Categories%20day%20of%20week-1.png" width="672" /></p>
 <p>As we can see from this plot, most of the top 30 event categories again follow the general “most events on Saturdays, fewest on Mondays” rule, again with some other interesting observations, most noticeably:</p>
 <ul>
 <li>“Seniors” has fewest events on Sundays and most events on Tuesdays, and relatively about the same count of events for different days of the week.</li>
@@ -327,19 +331,19 @@ fewer in the winter” general rule, with some other interesting observations, m
 <p>Now we take a look at the crimes in the NYC parks recorded by NYPD.</p>
 <div id="crimes-in-parks-overview" class="section level3" number="5.3.1">
 <h3><span class="header-section-number">5.3.1</span> Crimes in Parks Overview</h3>
-<p><img src="finalproj_files/figure-html/unnamed-chunk-33-1.png" width="672" /></p>
+<p><img src="finalproj_files/figure-html/Crimes%20in%20Parks%20Overview-1.png" width="672" /></p>
 <p>The distribution of crime types in the different Boroughs of NYC over the years of 2014 through 2021 is actually different, especially around “Grand Larceny” and “Robbery” - for example, Manhattan has more “Grand Larceny” than “Robbery”, whereas Staten Island and Bronx both have more “Robbery” than “Grand Larceny”.</p>
 </div>
 <div id="crime-timeseries-analysis" class="section level3" number="5.3.2">
 <h3><span class="header-section-number">5.3.2</span> Crime Timeseries Analysis</h3>
-<p><img src="finalproj_files/figure-html/unnamed-chunk-34-1.png" width="864" /></p>
+<p><img src="finalproj_files/figure-html/Crime%20Timeseries%20Analysis-1.png" width="864" /></p>
 </div>
 <div id="crimes-in-parks-and-events-in-parks" class="section level3" number="5.3.3">
 <h3><span class="header-section-number">5.3.3</span> Crimes in parks and events in parks</h3>
 <p>It is challenging to join the two datasets entirely based on the parks, as they come from two different data sources and do not share identifier keys for the parks. However, it is possible to manually select a few parks from both datasets and inspect the park names and try to match and join the data for those selected parks.</p>
 <table class="kable_wrapper">
 <caption>
-<span id="tab:unnamed-chunk-35">Table 5.2: </span>Parks with most crimes and Parks with most events
+(#tab:Crimes in parks and events in parks top crimes table)Parks with most crimes and Parks with most events
 </caption>
 <tbody>
 <tr>
@@ -452,7 +456,7 @@ fewer in the winter” general rule, with some other interesting observations, m
 </table>
 <p>A quick data aggregation gives us the top 10 parks with most crimes and top 10 parks with the most events, as shown in the data table above. However, we discovered that somehow the crimes data do not have any records for crimes in “Central Park” (M010). Together with our interests of the most diverse parks as analyzed in the <a href="results.html#most-diverse-park">Most Diverse Park</a> section, we will select the following parks to analyze, and use this manually created mapping as the helper table to join our data:</p>
 <table>
-<caption><span id="tab:unnamed-chunk-36">Table 5.3: </span>Park in crime dataset to PkId in events dataset mapping to investigate</caption>
+<caption>(#tab:Crimes in parks and events in parks mapping table)Park in crime dataset to PkId in events dataset mapping to investigate</caption>
 <thead>
 <tr class="header">
 <th align="left">PkId</th>
@@ -570,7 +574,7 @@ data are missing <code>PkId</code>), and the <a href="results.html#most-diverse-
 of parks, so that for smaller or less popular parks, it is super difficult for us to map the names across the two
 datasets we have). Nevertheless, we still wanted to derive certain features of these parks and see what are some
 interesting patterns we can find.</p>
-<p><img src="finalproj_files/figure-html/unnamed-chunk-38-1.png" width="672" /></p>
+<p><img src="finalproj_files/figure-html/Crimes%20in%20parks%20and%20events%20in%20parks%20pcp-1.png" width="672" /></p>
 <p>For this parallel coordinates plot, we have arranged the x-axis columns to highlight interesting patterns, and the “Average Duration” (<code>AvgDur</code>) has been drawn twice for this reason too. From the several interesting dimensions we have derived from our events and crimes data for the 20 parks mentioned, there are a few interesting observations we can notice:</p>
 <ol style="list-style-type: decimal">
 <li>Other than a few outliers parks, for the 20 parks we analyzed, a lot of them have similar sizes and have similar ratio of free events out of all events.</li>

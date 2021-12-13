@@ -15,7 +15,7 @@ library(ggrepel)
 ## Events and Parks Analysis
 
 
-```{r}
+```{r Events and Parks Analysis data prep}
 top_categories <- nyc_event_categories %>%
   group_by(Cat) %>%
   summarize(count = n()) %>%
@@ -29,7 +29,6 @@ top_locations <- nyc_event_listing_locations %>%
   summarize(count = n()) %>%
   arrange(desc(count)) %>%
   top_n(30)
-
 ```
 
 
@@ -37,7 +36,7 @@ top_locations <- nyc_event_listing_locations %>%
 
 Since our main dataset is about the events in the different parks in NYC, very naturally, the first thing we'll look at is what are some of the parks and locations with the most events:
 
-```{r}
+```{r Most Diverse Park Cleveland Dot Plot}
 ggplot(top_locations, aes(x = count, y = fct_reorder(LcNm, count))) +
   geom_point(color = "blue") +
   ggtitle("Top Event Locations") +
@@ -54,7 +53,7 @@ After seeing that the top event locations are hosting several thousands of event
 wonder which of them are the most diverse ones, in the sense that they have a lot of distinct event organizers 
 organizing events of different categories in them.
 
-```{r}
+```{r Most Diverse Park location scatter}
 
 nyc_events_left_joined %>%
   drop_na(LcNm, Org, Cat) %>%
@@ -86,7 +85,7 @@ location names, we realize these parks might be too large and have different sub
 inside of "Conference House Park") listed as the location name in the datasets we have. We then again plot the 
 scatterplot using `PkId`:
 
-```{r}
+```{r Most Diverse Park park id scatter}
 parks_pkid_diversity <- nyc_events_left_joined %>%
   drop_na(PkId, Org, Cat) %>%
   group_by(PkId) %>%
@@ -106,7 +105,7 @@ ggplot(parks_pkid_diversity, aes(UniqueOrgs, UniqueCats)) +
 
 A quick Googling using the longitude and latitude of these park ids tells us that, the labels from left to right are:
 
-```{r}
+```{r Most Diverse Park mapping table}
 knitr::kable(
   tibble(
     "Park Id" = c(
@@ -151,7 +150,7 @@ will analyze in the next section.
 
 ### Organizer Preferences on Categories and Locations
 
-```{r}
+```{r Organizer Preferences on Categories and Locations scatter}
 
 nyc_events_left_joined %>%
   drop_na(PkId, Org, Cat) %>%
@@ -171,7 +170,7 @@ nyc_events_left_joined %>%
 
 ### Cost, Borough, Duration, and Time of Events
 
-```{r}
+```{r Cost, Borough, Duration, and Time of Events box}
 nyc_events_with_duration <- nyc_events_left_joined %>%
   drop_na(Dt, ET, ST, Cat) %>%
   mutate(Duration=as.numeric(difftime(
@@ -193,7 +192,7 @@ nyc_events_with_duration %>%
 ```
 
 
-```{r, fig.width=9, fig.height=9}
+```{r Cost, Borough, Duration, and Time of Events pairs, fig.width=9, fig.height=9}
 get_duration_category <- function(Dt, ST, ET) {
   d <- as.numeric(difftime(strptime(paste(Dt, ET), "%Y-%m-%d %H:%M"), strptime(paste(Dt, ST), "%Y-%m-%d %H:%M")))/3600
   case_when (
@@ -245,7 +244,7 @@ Here we are going to perform an analysis on what are some interesting seasonal p
 
 First, we simply take an overview look at the count of listed events over time:
 
-```{r}
+```{r Timeseries Analysis on NYC Parks Events line}
 nyc_events_timeseries <- nyc_event_listing_events %>%
   group_by(Dt) %>%
   summarize(Count = n()) %>%
@@ -265,7 +264,7 @@ Here, we observe a few things at first sight:
 
 The previous plot, although helps us identify the general pattern, looks pretty noisy, so next let's take a different view, which is less noisy:
 
-```{r, fig.width=10}
+```{r Timeseries Analysis on NYC Parks Events less noisy, fig.width=10}
 nyc_events_timeseries_weekly <- nyc_event_listing_events %>%
   filter(Dt < as.Date("2019-01-01")) %>%
   mutate(Month = month(Dt, label=TRUE, abbr=TRUE), Wday = wday(Dt, label = TRUE, abbr = TRUE), Year=year(Dt)) %>%
@@ -308,7 +307,7 @@ team bonding activities on Fridays.
 After the initial timeseries analysis, we feel that it's likely that other than the general seasonality and weekly
 trends, different event sub-categories could have very different trends. Thus we will take a closer look at the top 30 categories for NYC parks events in this section.
 
-```{r}
+```{r Timeseries Analysis on Event Categories data prep}
 nyc_events_categories_timeseries_monthly <- nyc_event_listing_events %>%
   merge(
     y = nyc_event_categories, 
@@ -325,7 +324,7 @@ nyc_events_categories_timeseries_monthly <- nyc_event_listing_events %>%
 First, we look at if there are trends in the numbers of events for different categories over the years.
 
 
-```{r, fig.height=9}
+```{r Timeseries Analysis on Event Categories yearly, fig.height=9}
 
 nyc_events_categories_timeseries_monthly %>%
   group_by(Year, Cat) %>%
@@ -350,7 +349,7 @@ Next, we look at if all categories follow the general seasonality discussed in t
 noticeable differences in the different categories.
 
 
-```{r, fig.height=9}
+```{r Timeseries Analysis on Event Categories monthly, fig.height=9}
 nyc_events_categories_timeseries_monthly %>%
   group_by(Month, Cat) %>%
   summarize(Count = n()) %>%
@@ -376,7 +375,7 @@ fewer in the winter" general rule, with some other interesting observations, mos
 
 Lastly, we also inspect the day of week pattern of when the top 30 event categories happen.
 
-```{r, fig.height=9}
+```{r Timeseries Analysis on Event Categories day of week, fig.height=9}
 nyc_events_categories_timeseries_monthly %>%
   group_by(DoW, Cat) %>%
   summarize(Count = n()) %>%
@@ -404,7 +403,7 @@ Now we take a look at the crimes in the NYC parks recorded by NYPD.
 
 ### Crimes in Parks Overview
 
-```{r}
+```{r Crimes in Parks Overview}
 fills7 <- brewer.pal(7, 'Accent')
 
 nyc_parks_crimes_total <- nyc_parks_crime %>%
@@ -441,7 +440,7 @@ vcd::mosaic(CrimeType ~ Boro,
 The distribution of crime types in the different Boroughs of NYC over the years of 2014 through 2021 is actually different, especially around "Grand Larceny" and "Robbery" - for example, Manhattan has more "Grand Larceny" than "Robbery", whereas Staten Island and Bronx both have more "Robbery" than "Grand Larceny".
 
 ### Crime Timeseries Analysis
-```{r, fig.width=9}
+```{r Crime Timeseries Analysis, fig.width=9}
 nyc_crimes_timeseries_quarterly <- nyc_parks_crime %>%
   drop_na(Boro, Qtr) %>%
   group_by(Boro, Qtr) %>%
@@ -472,7 +471,7 @@ ggplot(nyc_crimes_timeseries_quarterly, aes(Qtr, Count, group=Boro, color=Boro))
 
 It is challenging to join the two datasets entirely based on the parks, as they come from two different data sources and do not share identifier keys for the parks. However, it is possible to manually select a few parks from both datasets and inspect the park names and try to match and join the data for those selected parks.
 
-```{r}
+```{r Crimes in parks and events in parks top crimes table}
 top10_parks_most_crime <- nyc_parks_crime %>% 
   group_by(Park) %>%
   summarize(count_of_crimes = sum(Tot)) %>%
@@ -499,7 +498,7 @@ knitr::kable(
 
 A quick data aggregation gives us the top 10 parks with most crimes and top 10 parks with the most events, as shown in the data table above. However, we discovered that somehow the crimes data do not have any records for crimes in "Central Park" (M010). Together with our interests of the most diverse parks as analyzed in the [Most Diverse Park] section, we will select the following parks to analyze, and use this manually created mapping as the helper table to join our data:
 
-```{r}
+```{r Crimes in parks and events in parks mapping table}
 
 park_crime_event_mapping <- tibble(
   PkId = c(
@@ -586,7 +585,7 @@ of parks, so that for smaller or less popular parks, it is super difficult for u
 datasets we have). Nevertheless, we still wanted to derive certain features of these parks and see what are some 
 interesting patterns we can find. 
 
-```{r}
+```{r Crimes in parks and events in parks pcp data prep}
 
 interesting_park_crimes_mapped <- park_crime_event_mapping %>%
   merge(
@@ -637,7 +636,7 @@ parks_events_crime_relation_tidy <- parks_events_crime_relation_tidy[, c(2:6, 8:
 parks_events_crime_relation_tidy <- parks_events_crime_relation_tidy[, c(6, 1:3, 9, 4, 7:8, 4, 5)]
 ```
 
-```{r}
+```{r Crimes in parks and events in parks pcp}
 ggparcoord(parks_events_crime_relation_tidy, 
            columns = 1:10, 
            scale = "std", 
@@ -667,7 +666,7 @@ From the [Missing values] chapter, we do not have missing data for `Lat`, `Long`
 
 From our analysis in the [Organizer Preferences on Categories and Locations] section, there certainly appears to be preferences of different organizers on the parks they usually organize events in. As a result, we want to take a look at the top 8 event organizers and see where they are hosting most of their events:
 
-```{r}
+```{r Spatial Analysis of Events By Organizer}
 top_organizers <- nyc_event_organizers %>%
   group_by(Org) %>%
   summarize(count = n()) %>%
@@ -722,7 +721,7 @@ due to the large amount of data, we have only included events in 2018 in this pl
 of all the years:
 
 
-```{r}
+```{r Spatial Analysis on Events Start Time of the Day}
 
 spatial_events_w_tod_2018 <- nyc_event_listing_events[c("EvtId", "Dt", "ST")] %>%
   merge(

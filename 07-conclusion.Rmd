@@ -1,13 +1,39 @@
 # Conclusion
 
-Visit parks during busy times is safer.
+To conclude, we have certainly found many interesting facts about public events, their categories and organizers, 
+in NYC parks, as well as how crimes in parks potentially relate to events in the parks. One recommendation we 
+would have is that visiting parks during their busy times (when there are events happening) might be not only 
+exciting, but also safer.
 
-As analyzed in our [Timeseries Analysis on NYC Parks Events] section, we only have complete data from start of 
-2013 up to only the end of year of 2018. 
-Also not easy to join datasets
+## Limitations
 
-Future directions:
-* Population / ethnicity
-* Political events
-* Interactive map based on event category
+As analyzed in our [Timeseries Analysis on NYC Parks Events] section, we 
+only have complete events data from start of 2013 up to only the end of year of 2018. It'd be interesting to see 
+how things have since changed, if any, especially during and after the pandemic. Also, quite a few variables of the
+events listing dataset have lots of missing data as described in the [Missing values] chapter and we mostly 
+skipped the analysis of those dimensions. For example, spatial analysis based on zip codes might also have been 
+interesting if we did not have almost 40% of data missing zip codes. 
+
+Another limitation of our study is that probably due to data collection errors, typos, or name changes, we found 
+out that there were lots of (smaller) organizers having very similar names that we suspected they are the same 
+entities. As a result we only focused on the top active organizers in most of our deep dive analysis on specific 
+organizers. Similarly, there are many event categories (with fewer events) that are similar that we feel we could 
+have combined them but due to the amount of work involved to manually perform the task, we decided to skip this 
+thought. 
+
+As mentioned in the [Crimes in parks and events in parks] section, one more limitation we'd like to re-iterate is 
+that it was challenging for us to relate the parks in the two different datasets (events tables and crimes tables) 
+because they come from two distinct data sources. We opted to manually construct a mapping table to join the two 
+datasets for 20 selected parks in that section but it would have been more ideal if we can join the two datasets 
+entirely and analyze the association of events and crimes on the entire datasets for all the parks in NYC in some 
+way.
+
+## Future Directions
+
+Some follow up research and study that we think would be interesting to analyze:
+
+* How the events in parks relate to the population and ethnic diversity of their neighborhoods? 
+* How do traffic, visitor patterns at NYC airports / train/bus/subway stations, and national/cultural holidays impact the number of events and crimes in the NYC parks?
+* How political events affect the events and crimes in parks?
+* Create an interactive map to show the spatial distribution of events based on one selected event category.
 
