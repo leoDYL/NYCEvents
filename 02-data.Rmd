@@ -10,6 +10,9 @@ The data we are using for this project are listed as following:
 
 [NYC Parks Events Listing – Event Organizers](https://data.cityofnewyork.us/City-Government/NYC-Parks-Events-Listing-Event-Organizers/jk6k-yab4), which can be [downloaded as a CSV file](https://data.cityofnewyork.us/api/views/jk6k-yab4/rows.csv?accessType=DOWNLOAD)
 
+[NYC Parks Crime Statistics](https://www1.nyc.gov/site/nypd/stats/crime-statistics/park-crime-stats.page) This data source contains multiple data files for each quarter from 2014 to the third quarter of 2021.
+
 You can use our prepared script at https://github.com/leoDYL/NYCEvents/blob/main/scripts/download_raw_data.R to download all the source raw data we used in this project. 
 This script will create a `data/raw_data` directory under the project root (please run this scrip under the project root) and download all the source data files we used under this directory.
 
+In the event listing data sets, which contains the data from 2014 to 2018, we can take a look at the diversity of parks from the organizer, event category and time's perspectives. Based on the number of events hosted at different time and organized by different organizers, we can study on the liveliness of the parks. Other than that, since the datasets include detailed time information for each event from year to minute, we can study the time patterns that exist that are presented by the events. In the NYC Parks Crime dataset, we look into the location and seasonal characteristics of NYC park crimes through the number of events happening in each borough and each quarter of the year. 

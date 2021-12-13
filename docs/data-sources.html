@@ -87,6 +87,7 @@
 <ul>
 <li class="chapter" data-level="3.1" data-path="data-transformation.html"><a href="data-transformation.html#read-raw-data"><i class="fa fa-check"></i><b>3.1</b> Read Raw Data</a></li>
 <li class="chapter" data-level="3.2" data-path="data-transformation.html"><a href="data-transformation.html#joining-events-with-other-tables"><i class="fa fa-check"></i><b>3.2</b> Joining events with other tables</a></li>
+<li class="chapter" data-level="3.3" data-path="data-transformation.html"><a href="data-transformation.html#transformation-for-interactive-components"><i class="fa fa-check"></i><b>3.3</b> Transformation for interactive components</a></li>
 </ul></li>
 <li class="chapter" data-level="4" data-path="missing-values.html"><a href="missing-values.html"><i class="fa fa-check"></i><b>4</b> Missing values</a>
 <ul>
@@ -164,8 +165,10 @@
 <p><a href="https://data.cityofnewyork.us/City-Government/NYC-Parks-Events-Listing-Event-Categories/xtsw-fqvh">NYC Parks Events Listing – Event Categories</a>, which can be <a href="https://data.cityofnewyork.us/api/views/xtsw-fqvh/rows.csv?accessType=DOWNLOAD">downloaded as a CSV file</a></p>
 <p><a href="https://data.cityofnewyork.us/City-Government/NYC-Parks-Events-Listing-Event-Locations/cpcm-i88g">NYC Parks Events Listing – Event Locations</a>, which can be <a href="https://data.cityofnewyork.us/api/views/cpcm-i88g/rows.csv?accessType=DOWNLOAD">downloaded as a CSV file</a></p>
 <p><a href="https://data.cityofnewyork.us/City-Government/NYC-Parks-Events-Listing-Event-Organizers/jk6k-yab4">NYC Parks Events Listing – Event Organizers</a>, which can be <a href="https://data.cityofnewyork.us/api/views/jk6k-yab4/rows.csv?accessType=DOWNLOAD">downloaded as a CSV file</a></p>
+<p><a href="https://www1.nyc.gov/site/nypd/stats/crime-statistics/park-crime-stats.page">NYC Parks Crime Statistics</a> This data source contains multiple data files for each quarter from 2014 to the third quarter of 2021.</p>
 <p>You can use our prepared script at <a href="https://github.com/leoDYL/NYCEvents/blob/main/scripts/download_raw_data.R" class="uri">https://github.com/leoDYL/NYCEvents/blob/main/scripts/download_raw_data.R</a> to download all the source raw data we used in this project.
 This script will create a <code>data/raw_data</code> directory under the project root (please run this scrip under the project root) and download all the source data files we used under this directory.</p>
+<p>In the event listing data sets, which contains the data from 2014 to 2018, we can take a look at the diversity of parks from the organizer, event category and time’s perspectives. Based on the number of events hosted at different time and organized by different organizers, we can study on the liveliness of the parks. Other than that, since the datasets include detailed time information for each event from year to minute, we can study the time patterns that exist that are presented by the events. In the NYC Parks Crime dataset, we look into the location and seasonal characteristics of NYC park crimes through the number of events happening in each borough and each quarter of the year.</p>
 
 </div>
             </section>

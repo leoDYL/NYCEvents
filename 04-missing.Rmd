@@ -62,7 +62,7 @@ tables we analyze.
 As for the location data for the park events, as we can see from the chart below, there are decent amount of 
 missing fields in the data set. Almost 50% of the data are missing Address (`Addr`), and unfortunately we have almost 40% of the data missing field is zip (`Zip`), which we were hoping to use to help us allocate the 
 parks into smaller regions for further location-based studies. Then the only location information for us to 
-perform fine-grained regionalization of the parks is thelongitude (`Long`) and latitude (`Lat`) field pair, for 
+perform fine-grained regionalization of the parks is the longitude (`Long`) and latitude (`Lat`) field pair, for 
 which we fortunately have 0 missing data. But the complexity would be much higher. It is interesting that the data
 set has complete longitude and latitude records for the events while a lot of the data are missing the zip code 
 data. With zip code being the apparent easier location data to acquire, we suspect that the longitude and 
