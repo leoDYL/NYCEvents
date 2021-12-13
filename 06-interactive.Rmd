@@ -46,3 +46,6 @@
 <script src="scripts/top_organizer_monthly.js"></script>
 
 </html>
+
+In the interactive chart above, we allow users to see the number of events hosted by different organizers in each month. By selecting the month and year in the dropdown boxes, the chart will make a transition accordingly. The organizers shown in the chart are 10 who have organized the most events in our dataset. They are sorted alphabetically on the horizontal axis to facilitate the observation of monthly transitions for each organizer. Once hovering the mouse cursor on the bar, a tooltip will appear inidicating the value of that bar. 
+In this chart there are some interesting findings. Some parks follow a seasonal pattern where they become more active in summer months such as Bryan Park Corp. Also some organizer do not have a seasonal pattern. For example, City Parks Foundation is only significantly more active in October. 
