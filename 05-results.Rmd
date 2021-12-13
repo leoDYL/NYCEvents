@@ -657,6 +657,12 @@ For this parallel coordinates plot, we have arranged the x-axis columns to highl
 6. We can similarly observe a negative association between the average duration of events (`AvgDur`) and the number of crimes (`TotCrm`), (and for both violent crime types (`ViolentCrm`) and property crime types (`PropertyCrm`)) in the 20 parks. This fact, together with observation number 5, makes us suspect that crimes more frequently happen when there are not a lot of people/events in the parks.
 7. Other than a few outliers, it appears that parks with more violent crime types tend to have more property crime types as well.
 
+Our observations number 6 and 7 are actually contrasting our discoveries in the previous 
+[Crime Timeseries Analysis] section. We think that the macro-level seasonal positive correlation between number 
+of park events and crimes can only tell us that summer tends to be the more active season, while our negative 
+association discovered in this section might actually be a more meaningful discovery, that the "busier" or more 
+"active" parks in terms of events actually tend to have fewer crimes.
+
 ## Spatial Analysis
 
 From the [Missing values] chapter, we do not have missing data for `Lat`, `Long`, which certainly prompted us to perform a detailed Spatial Analysis on the events in the NYC parks.
