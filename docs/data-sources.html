@@ -24,7 +24,7 @@
 <meta name="author" content="Leo Du, Hao Li" />
 
 
-<meta name="date" content="2021-12-12" />
+<meta name="date" content="2021-12-13" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -82,7 +82,11 @@
 
 <li class="divider"></li>
 <li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Introduction</a></li>
-<li class="chapter" data-level="2" data-path="data-sources.html"><a href="data-sources.html"><i class="fa fa-check"></i><b>2</b> Data sources</a></li>
+<li class="chapter" data-level="2" data-path="data-sources.html"><a href="data-sources.html"><i class="fa fa-check"></i><b>2</b> Data sources</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="data-sources.html"><a href="data-sources.html#nyc-parks-events-data"><i class="fa fa-check"></i><b>2.1</b> NYC Parks Events Data</a></li>
+<li class="chapter" data-level="2.2" data-path="data-sources.html"><a href="data-sources.html#nyc-parks-crimes-data"><i class="fa fa-check"></i><b>2.2</b> NYC Parks Crimes Data</a></li>
+</ul></li>
 <li class="chapter" data-level="3" data-path="data-transformation.html"><a href="data-transformation.html"><i class="fa fa-check"></i><b>3</b> Data transformation</a>
 <ul>
 <li class="chapter" data-level="3.1" data-path="data-transformation.html"><a href="data-transformation.html#read-raw-data"><i class="fa fa-check"></i><b>3.1</b> Read Raw Data</a></li>
@@ -160,16 +164,241 @@
             <section class="normal" id="section-">
 <div id="data-sources" class="section level1" number="2">
 <h1><span class="header-section-number">Chapter 2</span> Data sources</h1>
-<p>The data we are using for this project are listed as following:</p>
-<p><a href="https://data.cityofnewyork.us/City-Government/NYC-Parks-Events-Listing-Event-Listing/fudw-fgrp">NYC Parks Events Listing – Event Listing</a>, which can be <a href="https://data.cityofnewyork.us/api/views/fudw-fgrp/rows.csv?accessType=DOWNLOAD">downloaded as a CSV file</a>.</p>
-<p><a href="https://data.cityofnewyork.us/City-Government/NYC-Parks-Events-Listing-Event-Categories/xtsw-fqvh">NYC Parks Events Listing – Event Categories</a>, which can be <a href="https://data.cityofnewyork.us/api/views/xtsw-fqvh/rows.csv?accessType=DOWNLOAD">downloaded as a CSV file</a></p>
-<p><a href="https://data.cityofnewyork.us/City-Government/NYC-Parks-Events-Listing-Event-Locations/cpcm-i88g">NYC Parks Events Listing – Event Locations</a>, which can be <a href="https://data.cityofnewyork.us/api/views/cpcm-i88g/rows.csv?accessType=DOWNLOAD">downloaded as a CSV file</a></p>
-<p><a href="https://data.cityofnewyork.us/City-Government/NYC-Parks-Events-Listing-Event-Organizers/jk6k-yab4">NYC Parks Events Listing – Event Organizers</a>, which can be <a href="https://data.cityofnewyork.us/api/views/jk6k-yab4/rows.csv?accessType=DOWNLOAD">downloaded as a CSV file</a></p>
-<p><a href="https://www1.nyc.gov/site/nypd/stats/crime-statistics/park-crime-stats.page">NYC Parks Crime Statistics</a> This data source contains multiple data files for each quarter from 2014 to the third quarter of 2021.</p>
-<p>You can use our prepared script at <a href="https://github.com/leoDYL/NYCEvents/blob/main/scripts/download_raw_data.R" class="uri">https://github.com/leoDYL/NYCEvents/blob/main/scripts/download_raw_data.R</a> to download all the source raw data we used in this project.
-This script will create a <code>data/raw_data</code> directory under the project root (please run this scrip under the project root) and download all the source data files we used under this directory.</p>
-<p>In the event listing data sets, which contains the data from 2014 to 2018, we can take a look at the diversity of parks from the organizer, event category and time’s perspectives. Based on the number of events hosted at different time and organized by different organizers, we can study on the liveliness of the parks. Other than that, since the datasets include detailed time information for each event from year to minute, we can study the time patterns that exist that are presented by the events. In the NYC Parks Crime dataset, we look into the location and seasonal characteristics of NYC park crimes through the number of events happening in each borough and each quarter of the year.</p>
+<p>The data we use for this project consist of two datasets. NYC Parks Events data and NYC Parks Crimes data. NYC Parks Events dataset is acquired through the NYC OpenData api. The data is collected by the Department of Parks and Recreation of the City of New York. The NYC Parks Crime dataset is acquired through the NYC.gov api. The data is provided by the New York Police Department.</p>
+<p>You can use our prepared script at <a href="https://github.com/leoDYL/NYCEvents/blob/main/scripts/download_raw_data.R" class="uri">https://github.com/leoDYL/NYCEvents/blob/main/scripts/download_raw_data.R</a> to download all the source raw data we used in this project. This script will create a <code>data/raw_data</code> directory under the project root (please run this scrip under the project root) and download all the source data files we used under this directory.</p>
+<div id="nyc-parks-events-data" class="section level2" number="2.1">
+<h2><span class="header-section-number">2.1</span> NYC Parks Events Data</h2>
+<p>In the event listing datasets, which contains data from 2014 to 2018, we can take a look at the diversity of parks from the organizer, event category and time’s perspectives. Based on the number of events hosted at different time and organized by different organizers, we can study on the liveliness of the parks. Other than that, since the datasets include detailed time information for each event from year to minute, we can study the time patterns that are presented in the data. Below, we introduce each data file for the park events.</p>
+<p><a href="https://data.cityofnewyork.us/City-Government/NYC-Parks-Events-Listing-Event-Listing/fudw-fgrp">NYC Parks Events Listing – Event Listing</a>, which can be <a href="https://data.cityofnewyork.us/api/views/fudw-fgrp/rows.csv?accessType=DOWNLOAD">downloaded as a CSV file</a>. (74.9k rows, 15 columns) This is the main file that contains a table where each row contains the basic information of an event, which includes the following:</p>
+<table>
+<caption><span id="tab:unnamed-chunk-4">Table 2.1: </span>Data Schema for Park Events Listing Table</caption>
+<thead>
+<tr class="header">
+<th align="left">Column Name</th>
+<th align="left">Data Type</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">event_id</td>
+<td align="left">Number</td>
+</tr>
+<tr class="even">
+<td align="left">title</td>
+<td align="left">Text</td>
+</tr>
+<tr class="odd">
+<td align="left">date</td>
+<td align="left">Date &amp; Time</td>
+</tr>
+<tr class="even">
+<td align="left">start_time</td>
+<td align="left">Text</td>
+</tr>
+<tr class="odd">
+<td align="left">end_time</td>
+<td align="left">Text</td>
+</tr>
+<tr class="even">
+<td align="left">location_description</td>
+<td align="left">Text</td>
+</tr>
+<tr class="odd">
+<td align="left">description</td>
+<td align="left">Text</td>
+</tr>
+<tr class="even">
+<td align="left">snippet</td>
+<td align="left">Text</td>
+</tr>
+<tr class="odd">
+<td align="left">phone</td>
+<td align="left">Text</td>
+</tr>
+<tr class="even">
+<td align="left">email</td>
+<td align="left">Text</td>
+</tr>
+<tr class="odd">
+<td align="left">cost_free</td>
+<td align="left">Number</td>
+</tr>
+<tr class="even">
+<td align="left">cost_description</td>
+<td align="left">Text</td>
+</tr>
+<tr class="odd">
+<td align="left">must_see</td>
+<td align="left">Number</td>
+</tr>
+<tr class="even">
+<td align="left">url</td>
+<td align="left">Text</td>
+</tr>
+<tr class="odd">
+<td align="left">notice</td>
+<td align="left">Number</td>
+</tr>
+</tbody>
+</table>
+<p><a href="https://data.cityofnewyork.us/City-Government/NYC-Parks-Events-Listing-Event-Categories/xtsw-fqvh">NYC Parks Events Listing – Event Categories</a>, which can be <a href="https://data.cityofnewyork.us/api/views/xtsw-fqvh/rows.csv?accessType=DOWNLOAD">downloaded as a CSV file</a> (270k rows, 2 columns) This table contains records to describe the category of events. There could be more categories associated with one event.</p>
+<table>
+<caption><span id="tab:unnamed-chunk-5">Table 2.2: </span>Data Schema for Park Events Category Table</caption>
+<thead>
+<tr class="header">
+<th align="left">Column Name</th>
+<th align="left">Data Type</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">event_id</td>
+<td align="left">Text</td>
+</tr>
+<tr class="even">
+<td align="left">name</td>
+<td align="left">Text</td>
+</tr>
+</tbody>
+</table>
+<p><a href="https://data.cityofnewyork.us/City-Government/NYC-Parks-Events-Listing-Event-Locations/cpcm-i88g">NYC Parks Events Listing – Event Locations</a>, which can be <a href="https://data.cityofnewyork.us/api/views/cpcm-i88g/rows.csv?accessType=DOWNLOAD">downloaded as a CSV file</a> (95.8k rows, 9 columns) This table contains the location information for events. Each event can take place at multiple locations.</p>
+<table>
+<caption><span id="tab:unnamed-chunk-6">Table 2.3: </span>Data Schema for Park Events Location Table</caption>
+<thead>
+<tr class="header">
+<th align="left">Column Name</th>
+<th align="left">Data Type</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">event_id</td>
+<td align="left">Text</td>
+</tr>
+<tr class="even">
+<td align="left">name</td>
+<td align="left">Text</td>
+</tr>
+<tr class="odd">
+<td align="left">park_id</td>
+<td align="left">Text</td>
+</tr>
+<tr class="even">
+<td align="left">lat</td>
+<td align="left">Number</td>
+</tr>
+<tr class="odd">
+<td align="left">long</td>
+<td align="left">Number</td>
+</tr>
+<tr class="even">
+<td align="left">address</td>
+<td align="left">Text</td>
+</tr>
+<tr class="odd">
+<td align="left">zip</td>
+<td align="left">Text</td>
+</tr>
+<tr class="even">
+<td align="left">borough</td>
+<td align="left">Text</td>
+</tr>
+<tr class="odd">
+<td align="left">accessible</td>
+<td align="left">Text</td>
+</tr>
+</tbody>
+</table>
+<p><a href="https://data.cityofnewyork.us/City-Government/NYC-Parks-Events-Listing-Event-Organizers/jk6k-yab4">NYC Parks Events Listing – Event Organizers</a>, which can be <a href="https://data.cityofnewyork.us/api/views/jk6k-yab4/rows.csv?accessType=DOWNLOAD">downloaded as a CSV file</a> (97k rows, 2 columns) This table contains the organizers for events. Each event can be organized by multiple organizers.</p>
+<table>
+<caption><span id="tab:unnamed-chunk-7">Table 2.4: </span>Data Schema for Park Events Organizers Table</caption>
+<thead>
+<tr class="header">
+<th align="left">Column Name</th>
+<th align="left">Data Type</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">event_id</td>
+<td align="left">Text</td>
+</tr>
+<tr class="even">
+<td align="left">event_organizer</td>
+<td align="left">Text</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="nyc-parks-crimes-data" class="section level2" number="2.2">
+<h2><span class="header-section-number">2.2</span> NYC Parks Crimes Data</h2>
+<p>In the NYC Parks Crime dataset, we look into the location and seasonal characteristics of NYC park crimes through the number of events happening in each borough and each quarter of the year.</p>
+<p><a href="https://www1.nyc.gov/site/nypd/stats/crime-statistics/park-crime-stats.page">NYC Parks Crime Statistics</a> This data source contains multiple data files for each quarter from 2014 to the third quarter of 2021. In total, it contains 32312 rows and 13 columns Below is the schema of the dataset.</p>
+<table>
+<caption><span id="tab:unnamed-chunk-8">Table 2.5: </span>Data Schema for Park Events Organizers Table</caption>
+<thead>
+<tr class="header">
+<th align="left">Column Name</th>
+<th align="left">Data Type</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">PARK</td>
+<td align="left">Text</td>
+</tr>
+<tr class="even">
+<td align="left">BOROUGH</td>
+<td align="left">Text</td>
+</tr>
+<tr class="odd">
+<td align="left">SIZE(ACRES)</td>
+<td align="left">Number</td>
+</tr>
+<tr class="even">
+<td align="left">CATEGORY</td>
+<td align="left">Text</td>
+</tr>
+<tr class="odd">
+<td align="left">MURDER</td>
+<td align="left">Number</td>
+</tr>
+<tr class="even">
+<td align="left">RAPE</td>
+<td align="left">Number</td>
+</tr>
+<tr class="odd">
+<td align="left">ROBBERY</td>
+<td align="left">Number</td>
+</tr>
+<tr class="even">
+<td align="left">FELONY ASSAULT</td>
+<td align="left">Number</td>
+</tr>
+<tr class="odd">
+<td align="left">BURGLARY</td>
+<td align="left">Number</td>
+</tr>
+<tr class="even">
+<td align="left">GRAND LARCENY</td>
+<td align="left">Number</td>
+</tr>
+<tr class="odd">
+<td align="left">GRAND LARCENY OF MOTOR VEHICLE</td>
+<td align="left">Number</td>
+</tr>
+<tr class="even">
+<td align="left">TOTAL</td>
+<td align="left">Number</td>
+</tr>
+<tr class="odd">
+<td align="left">QUARTER</td>
+<td align="left">Text</td>
+</tr>
+</tbody>
+</table>
 
+</div>
 </div>
             </section>
 
