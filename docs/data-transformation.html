@@ -89,8 +89,8 @@
 </ul></li>
 <li class="chapter" data-level="3" data-path="data-transformation.html"><a href="data-transformation.html"><i class="fa fa-check"></i><b>3</b> Data transformation</a>
 <ul>
-<li class="chapter" data-level="3.1" data-path="data-transformation.html"><a href="data-transformation.html#read-raw-data"><i class="fa fa-check"></i><b>3.1</b> Read Raw Data</a></li>
-<li class="chapter" data-level="3.2" data-path="data-transformation.html"><a href="data-transformation.html#joining-events-with-other-tables"><i class="fa fa-check"></i><b>3.2</b> Joining events with other tables</a></li>
+<li class="chapter" data-level="3.1" data-path="data-transformation.html"><a href="data-transformation.html#transformation-of-nyc-park-events-data"><i class="fa fa-check"></i><b>3.1</b> Transformation of NYC Park Events Data</a></li>
+<li class="chapter" data-level="3.2" data-path="data-transformation.html"><a href="data-transformation.html#transformation-of-nyc-parks-crimes-data"><i class="fa fa-check"></i><b>3.2</b> Transformation of NYC Parks Crimes Data</a></li>
 <li class="chapter" data-level="3.3" data-path="data-transformation.html"><a href="data-transformation.html#transformation-for-interactive-components"><i class="fa fa-check"></i><b>3.3</b> Transformation for interactive components</a></li>
 </ul></li>
 <li class="chapter" data-level="4" data-path="missing-values.html"><a href="missing-values.html"><i class="fa fa-check"></i><b>4</b> Missing values</a>
@@ -164,14 +164,15 @@
             <section class="normal" id="section-">
 <div id="data-transformation" class="section level1" number="3">
 <h1><span class="header-section-number">Chapter 3</span> Data transformation</h1>
-<p>In order to start our study on NYC park events and crimes, we need to do some cleaning and transforming to the data. The first thing to do is combining all the park event information into one dataframe, since they are originally separated in for csv files. Fortunately, all event datasets contain an event id with wich we can merge all for data files into one event dataframe. As for the park crime dataset, we simply concatenated all the data file for each quarter into one crime dataframe.</p>
-<div id="read-raw-data" class="section level2" number="3.1">
-<h2><span class="header-section-number">3.1</span> Read Raw Data</h2>
-<p>First, we read all the data files. After that, we merge all event dataframes by event id. The crime data has previously been contatenated and written out as one csv file. So we only need to read it as a dataframe.</p>
+<p>In order to start our study on NYC park events and crimes, we need to do some cleaning and transforming to the data. The first thing to do is merging all the park event information into one dataframe, since they are originally separated in for csv files. Fortunately, all event datasets contain an event id with which we can merge all for data files into one event dataframe. As for the park crime dataset, we unified the quarter column format simply concatenated all the data file for each quarter into one crime dataframe.</p>
+<div id="transformation-of-nyc-park-events-data" class="section level2" number="3.1">
+<h2><span class="header-section-number">3.1</span> Transformation of NYC Park Events Data</h2>
+<p>For each separate data tables in for NYC park events, the first thing we do after reading them is to change the column names into abbrevations for display purpose. Those short forms of column names are explained when we discuss the charts. Additionally, as discussed in <a href="results.html#cost-borough-duration-and-time-of-events">Cost, Borough, Duration, and Time of Events</a>, in order to get a cleaner mosaic pair chart for duration and start time arguments, we create bins to have fewer blocks in the chart. Similarly, in <a href="results.html#timeseries-analysis">Timeseries Analysis</a>, we created weekday bins to count the events and analyze the time patterns.</p>
+<p>After reading all event datafames (listing, category, organizer, location). We merge them by event id. Since there are a decent amount of missing data in the data tables, as discussed in <a href="missing-values.html#missing-values-by-individual-tables">Missing Values By Individual Tables</a>, we have to discard some of the columns that have a great amount of missing data and are also irrelevant to our analysis. Also, as mentioned in <a href="data-sources.html#nyc-parks-events-data">NYC Parks Events Data</a>, each event can have multiple organizers, locations and categories. After comparing the results in <a href="missing-values.html#using-full-outer-joins">Using Full Outer Joins</a> and <a href="missing-values.html#using-left-outer-joins">Using Left Outer Joins</a>, we chose the left outer joined dataset as our main event dataset.</p>
 </div>
-<div id="joining-events-with-other-tables" class="section level2" number="3.2">
-<h2><span class="header-section-number">3.2</span> Joining events with other tables</h2>
-<p>After reading all event datafames (listing, category, organizer, location). We merge them by event id. After comparing the results in <a href="missing-values.html#using-full-outer-joins">Using Full Outer Joins</a> and <a href="missing-values.html#using-left-outer-joins">Using Left Outer Joins</a>, we chose the left outer joined dataset as our main event dataset.</p>
+<div id="transformation-of-nyc-parks-crimes-data" class="section level2" number="3.2">
+<h2><span class="header-section-number">3.2</span> Transformation of NYC Parks Crimes Data</h2>
+<p>The transformation of NYC Parks Crimes data is more straightforward compared to the event data. We also changed the column names to their shortened forms. Since the original data is separated into different files by quarter of the year and hence do not include any time information, we need to manually add a column to show the quarter and year for each record. After that, the different quarterly dataframes are concatenated into one crime dataframe.</p>
 </div>
 <div id="transformation-for-interactive-components" class="section level2" number="3.3">
 <h2><span class="header-section-number">3.3</span> Transformation for interactive components</h2>
