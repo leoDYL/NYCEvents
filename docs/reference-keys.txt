@@ -8,8 +8,8 @@ data-sources
 nyc-parks-events-data
 nyc-parks-crimes-data
 data-transformation
-read-raw-data
-joining-events-with-other-tables
+transformation-of-nyc-park-events-data
+transformation-of-nyc-parks-crimes-data
 transformation-for-interactive-components
 missing-values
 missing-values-by-individual-tables

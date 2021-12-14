@@ -89,8 +89,8 @@
 </ul></li>
 <li class="chapter" data-level="3" data-path="data-transformation.html"><a href="data-transformation.html"><i class="fa fa-check"></i><b>3</b> Data transformation</a>
 <ul>
-<li class="chapter" data-level="3.1" data-path="data-transformation.html"><a href="data-transformation.html#read-raw-data"><i class="fa fa-check"></i><b>3.1</b> Read Raw Data</a></li>
-<li class="chapter" data-level="3.2" data-path="data-transformation.html"><a href="data-transformation.html#joining-events-with-other-tables"><i class="fa fa-check"></i><b>3.2</b> Joining events with other tables</a></li>
+<li class="chapter" data-level="3.1" data-path="data-transformation.html"><a href="data-transformation.html#transformation-of-nyc-park-events-data"><i class="fa fa-check"></i><b>3.1</b> Transformation of NYC Park Events Data</a></li>
+<li class="chapter" data-level="3.2" data-path="data-transformation.html"><a href="data-transformation.html#transformation-of-nyc-parks-crimes-data"><i class="fa fa-check"></i><b>3.2</b> Transformation of NYC Parks Crimes Data</a></li>
 <li class="chapter" data-level="3.3" data-path="data-transformation.html"><a href="data-transformation.html#transformation-for-interactive-components"><i class="fa fa-check"></i><b>3.3</b> Transformation for interactive components</a></li>
 </ul></li>
 <li class="chapter" data-level="4" data-path="missing-values.html"><a href="missing-values.html"><i class="fa fa-check"></i><b>4</b> Missing values</a>
@@ -168,7 +168,7 @@
 <p>You can use our prepared script at <a href="https://github.com/leoDYL/NYCEvents/blob/main/scripts/download_raw_data.R" class="uri">https://github.com/leoDYL/NYCEvents/blob/main/scripts/download_raw_data.R</a> to download all the source raw data we used in this project. This script will create a <code>data/raw_data</code> directory under the project root (please run this scrip under the project root) and download all the source data files we used under this directory.</p>
 <div id="nyc-parks-events-data" class="section level2" number="2.1">
 <h2><span class="header-section-number">2.1</span> NYC Parks Events Data</h2>
-<p>In the event listing datasets, which contains data from 2014 to 2018, we can take a look at the diversity of parks from the organizer, event category and time’s perspectives. Based on the number of events hosted at different time and organized by different organizers, we can study on the liveliness of the parks. Other than that, since the datasets include detailed time information for each event from year to minute, we can study the time patterns that are presented in the data. Below, we introduce each data file for the park events.</p>
+<p>In the event listing datasets, which contains data from 2013 to 2019, we can take a look at the diversity of parks from the organizer, event category and time’s perspectives. Based on the number of events hosted at different time and organized by different organizers, we can study on the liveliness of the parks. Other than that, since the datasets include detailed time information for each event from year to minute, we can study the time patterns that are presented in the data. Below, we introduce each data file for the park events.</p>
 <p><a href="https://data.cityofnewyork.us/City-Government/NYC-Parks-Events-Listing-Event-Listing/fudw-fgrp">NYC Parks Events Listing – Event Listing</a>, which can be <a href="https://data.cityofnewyork.us/api/views/fudw-fgrp/rows.csv?accessType=DOWNLOAD">downloaded as a CSV file</a>. (74.9k rows, 15 columns) This is the main file that contains a table where each row contains the basic information of an event, which includes the following:</p>
 <table>
 <caption><span id="tab:unnamed-chunk-4">Table 2.1: </span>Data Schema for Park Events Listing Table</caption>
@@ -333,7 +333,7 @@
 <div id="nyc-parks-crimes-data" class="section level2" number="2.2">
 <h2><span class="header-section-number">2.2</span> NYC Parks Crimes Data</h2>
 <p>In the NYC Parks Crime dataset, we look into the location and seasonal characteristics of NYC park crimes through the number of events happening in each borough and each quarter of the year.</p>
-<p><a href="https://www1.nyc.gov/site/nypd/stats/crime-statistics/park-crime-stats.page">NYC Parks Crime Statistics</a> This data source contains multiple data files for each quarter from 2014 to the third quarter of 2021. In total, it contains 32312 rows and 13 columns Below is the schema of the dataset.</p>
+<p><a href="https://www1.nyc.gov/site/nypd/stats/crime-statistics/park-crime-stats.page">NYC Parks Crime Statistics</a> This data source contains multiple data files for each quarter from 2014 to the third quarter of 2021. After preprocessing and concatenation, it contains 32312 rows and 13 columns Below is the schema of the dataset. The details of the processing is mentioned in <a href="data-transformation.html#transformation-of-nyc-parks-crimes-data">Transformation of NYC Parks Crimes Data</a>.</p>
 <table>
 <caption><span id="tab:unnamed-chunk-8">Table 2.5: </span>Data Schema for Park Events Organizers Table</caption>
 <thead>
