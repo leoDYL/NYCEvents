@@ -1,18 +1,170 @@
+```{r}
+library(tidyverse)
+```
+
 # Data sources
 
-The data we are using for this project are listed as following:
+The data we use for this project consist of two datasets. NYC Parks Events data and NYC Parks Crimes data. NYC Parks Events dataset is acquired through the NYC OpenData  api. The data is collected by the Department of Parks and Recreation of the City of New York. The NYC Parks Crime dataset is acquired through the NYC.gov api. The data is provided by the New York Police Department. 
 
-[NYC Parks Events Listing – Event Listing](https://data.cityofnewyork.us/City-Government/NYC-Parks-Events-Listing-Event-Listing/fudw-fgrp), which can be [downloaded as a CSV file](https://data.cityofnewyork.us/api/views/fudw-fgrp/rows.csv?accessType=DOWNLOAD).
+You can use our prepared script at https://github.com/leoDYL/NYCEvents/blob/main/scripts/download_raw_data.R to download all the source raw data we used in this project. This script will create a `data/raw_data` directory under the project root (please run this scrip under the project root) and download all the source data files we used under this directory.
 
-[NYC Parks Events Listing – Event Categories](https://data.cityofnewyork.us/City-Government/NYC-Parks-Events-Listing-Event-Categories/xtsw-fqvh), which can be [downloaded as a CSV file](https://data.cityofnewyork.us/api/views/xtsw-fqvh/rows.csv?accessType=DOWNLOAD)
+## NYC Parks Events Data
+In the event listing datasets, which contains data from 2014 to 2018, we can take a look at the diversity of parks from the organizer, event category and time's perspectives. Based on the number of events hosted at different time and organized by different organizers, we can study on the liveliness of the parks. Other than that, since the datasets include detailed time information for each event from year to minute, we can study the time patterns that are presented in the data. Below, we introduce each data file for the park events. 
 
-[NYC Parks Events Listing – Event Locations](https://data.cityofnewyork.us/City-Government/NYC-Parks-Events-Listing-Event-Locations/cpcm-i88g), which can be [downloaded as a CSV file](https://data.cityofnewyork.us/api/views/cpcm-i88g/rows.csv?accessType=DOWNLOAD)
+[NYC Parks Events Listing – Event Listing](https://data.cityofnewyork.us/City-Government/NYC-Parks-Events-Listing-Event-Listing/fudw-fgrp), which can be [downloaded as a CSV file](https://data.cityofnewyork.us/api/views/fudw-fgrp/rows.csv?accessType=DOWNLOAD). (74.9k rows, 15 columns) This is the main file that contains a table where each row contains the basic information of an event, which includes the following:
+```{r}
+knitr::kable(
+  tibble(
+    "Column Name" = c(
+      "event_id",
+      "title",
+      "date",
+      "start_time",
+      "end_time",
+      "location_description",
+      "description",
+      "snippet",
+      "phone",
+      "email",
+      "cost_free",
+      "cost_description",
+      "must_see",
+      "url",
+      "notice"
+    ),
+    "Data Type" = c(
+      "Number",
+      "Text",
+      "Date & Time",
+      "Text",
+      "Text",
+      "Text",
+      "Text",
+      "Text",
+      "Text",
+      "Text",
+      "Number",
+      "Text",
+      "Number",
+      "Text",
+      "Number"
+    )
+  ),
+  booktabs = TRUE,
+  caption = 'Data Schema for Park Events Listing Table'
+)
+```
 
-[NYC Parks Events Listing – Event Organizers](https://data.cityofnewyork.us/City-Government/NYC-Parks-Events-Listing-Event-Organizers/jk6k-yab4), which can be [downloaded as a CSV file](https://data.cityofnewyork.us/api/views/jk6k-yab4/rows.csv?accessType=DOWNLOAD)
+[NYC Parks Events Listing – Event Categories](https://data.cityofnewyork.us/City-Government/NYC-Parks-Events-Listing-Event-Categories/xtsw-fqvh), which can be [downloaded as a CSV file](https://data.cityofnewyork.us/api/views/xtsw-fqvh/rows.csv?accessType=DOWNLOAD) (270k rows, 2 columns) This table contains records to describe the category of events. There could be more categories associated with one event.  
+```{r}
+knitr::kable(
+  tibble(
+    "Column Name" = c(
+      "event_id",
+      "name"
+    ),
+    "Data Type" = c(
+      "Text",
+      "Text"
+    )
+  ),
+  booktabs = TRUE,
+  caption = 'Data Schema for Park Events Category Table'
+)
+```
 
-[NYC Parks Crime Statistics](https://www1.nyc.gov/site/nypd/stats/crime-statistics/park-crime-stats.page) This data source contains multiple data files for each quarter from 2014 to the third quarter of 2021.
+[NYC Parks Events Listing – Event Locations](https://data.cityofnewyork.us/City-Government/NYC-Parks-Events-Listing-Event-Locations/cpcm-i88g), which can be [downloaded as a CSV file](https://data.cityofnewyork.us/api/views/cpcm-i88g/rows.csv?accessType=DOWNLOAD) (95.8k rows, 9 columns) This table contains the location information for events. Each event can take place at multiple locations.
+```{r}
+knitr::kable(
+  tibble(
+    "Column Name" = c(
+      "event_id",
+      "name",
+      "park_id",
+      "lat",
+      "long",
+      "address",
+      "zip",
+      "borough",
+      "accessible"
+    ),
+    "Data Type" = c(
+      "Text",
+      "Text",
+      "Text",
+      "Number",
+      "Number",
+      "Text",
+      "Text",
+      "Text",
+      "Text"
+    )
+  ),
+  booktabs = TRUE,
+  caption = 'Data Schema for Park Events Location Table'
+)
+```
 
-You can use our prepared script at https://github.com/leoDYL/NYCEvents/blob/main/scripts/download_raw_data.R to download all the source raw data we used in this project. 
-This script will create a `data/raw_data` directory under the project root (please run this scrip under the project root) and download all the source data files we used under this directory.
+[NYC Parks Events Listing – Event Organizers](https://data.cityofnewyork.us/City-Government/NYC-Parks-Events-Listing-Event-Organizers/jk6k-yab4), which can be [downloaded as a CSV file](https://data.cityofnewyork.us/api/views/jk6k-yab4/rows.csv?accessType=DOWNLOAD) (97k rows, 2 columns) This table contains the organizers for events. Each event can be organized by multiple organizers.
+```{r}
+knitr::kable(
+  tibble(
+    "Column Name" = c(
+      "event_id",
+      "event_organizer"
+    ),
+    "Data Type" = c(
+      "Text",
+      "Text"
+    )
+  ),
+  booktabs = TRUE,
+  caption = 'Data Schema for Park Events Organizers Table'
+)
+```
 
-In the event listing data sets, which contains the data from 2014 to 2018, we can take a look at the diversity of parks from the organizer, event category and time's perspectives. Based on the number of events hosted at different time and organized by different organizers, we can study on the liveliness of the parks. Other than that, since the datasets include detailed time information for each event from year to minute, we can study the time patterns that exist that are presented by the events. In the NYC Parks Crime dataset, we look into the location and seasonal characteristics of NYC park crimes through the number of events happening in each borough and each quarter of the year. 
+## NYC Parks Crimes Data
+In the NYC Parks Crime dataset, we look into the location and seasonal characteristics of NYC park crimes through the number of events happening in each borough and each quarter of the year. 
+
+[NYC Parks Crime Statistics](https://www1.nyc.gov/site/nypd/stats/crime-statistics/park-crime-stats.page) This data source contains multiple data files for each quarter from 2014 to the third quarter of 2021. In total, it contains 32312 rows and 13 columns Below is the schema of the dataset. 
+```{r}
+knitr::kable(
+  tibble(
+    "Column Name" = c(
+      "PARK",
+      "BOROUGH",
+      "SIZE(ACRES)",
+      "CATEGORY",
+      "MURDER",
+      "RAPE",
+      "ROBBERY",
+      "FELONY ASSAULT",
+      "BURGLARY",
+      "GRAND LARCENY",
+      "GRAND LARCENY OF MOTOR VEHICLE",
+      "TOTAL",
+      "QUARTER"
+    ),
+    "Data Type" = c(
+      "Text",
+      "Text",
+      "Number",
+      "Text",
+      "Number",
+      "Number",
+      "Number",
+      "Number",
+      "Number",
+      "Number",
+      "Number",
+      "Number",
+      "Text"
+      
+    )
+  ),
+  booktabs = TRUE,
+  caption = 'Data Schema for Park Events Organizers Table'
+)
+```
+
+

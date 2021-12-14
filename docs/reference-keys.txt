@@ -1,5 +1,12 @@
+tab:unnamed-chunk-4
+tab:unnamed-chunk-5
+tab:unnamed-chunk-6
+tab:unnamed-chunk-7
+tab:unnamed-chunk-8
 introduction
 data-sources
+nyc-parks-events-data
+nyc-parks-crimes-data
 data-transformation
 read-raw-data
 joining-events-with-other-tables
