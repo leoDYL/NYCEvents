@@ -1,9 +1,9 @@
 # Data transformation
 
-In order to start our study on NYC park events and crimes, we need to do some cleaning and transforming to the data. The first thing to do is merging all the park event information into one dataframe, since they are originally separated in for csv files. Fortunately, all event datasets contain an event id with which we can merge all for data files into one event dataframe. As for the park crime dataset, we unified the quarter column format simply concatenated all the data file for each quarter into one crime dataframe. 
+In order to start our study on NYC park events and crimes, we needed to perform some cleaning and transforming to the data. The first thing we did was merging all the park event information into one dataframe, since they had been originally separated in for csv files. Fortunately, all event datasets contain an event id with which we could merge all data files into one event dataframe. As for the park crime dataset, we normalized the file formats and concatenated all the data file for each quarter into one crime dataframe. 
 
 ## Transformation of NYC Park Events Data
-For each separate data tables in for NYC park events, the first thing we do after reading them is to change the column names into abbrevations for display purpose. Those short forms of column names are explained when we discuss the charts. Additionally, as discussed in [Cost, Borough, Duration, and Time of Events], in order to get a cleaner mosaic pair chart for duration and start time arguments, we create bins to have fewer blocks in the chart. Similarly, in [Timeseries Analysis], we created weekday bins to count the events and analyze the time patterns. 
+For each separate data tables in for NYC park events, the first thing we did after reading them is to change the column names into abbreviations for display purpose. Those short forms of column names will be explained when we discuss the charts in the future sections. Additionally, as discussed in [Cost, Borough, Duration, and Time of Events], in order to get a cleaner mosaic pair chart for duration and start time arguments, we created bins to have fewer blocks in the chart. Similarly, in [Timeseries Analysis], we created weekday bins to count the events and analyze the time patterns. 
 ```{r read raw daata}
 library(lubridate)
 library(tidyverse)
@@ -39,7 +39,7 @@ names(nyc_event_listing_locations) <- c(
 )
 ```
 
-After reading all event datafames (listing, category, organizer, location). We merge them by event id. Since there are a decent amount of missing data in the data tables, as discussed in [Missing Values By Individual Tables], we have to discard some of the columns that have a great amount of missing data and are also irrelevant to our analysis. Also, as mentioned in [NYC Parks Events Data], each event can have multiple organizers, locations and categories. After comparing the results in [Using Full Outer Joins] and [Using Left Outer Joins], we chose the left outer joined dataset as our main event dataset.
+After reading all event datafames (listing, category, organizer, location), we merged them by event id. Since there were a decent amount of missing data in the original data tables, as discussed in [Missing Values By Individual Tables], we had to discard some of the columns that had a great amount of missing data and were also irrelevant to our analysis. Also, as mentioned in [NYC Parks Events Data], each event can have multiple organizers, locations and categories. After comparing the results in [Using Full Outer Joins] and [Using Left Outer Joins], we chose the left-outer-joined dataset as our main event dataset.
 ```{r}
 nyc_events_joined <- nyc_event_listing_events %>%
   merge(
@@ -74,7 +74,7 @@ nyc_events_left_joined <- nyc_event_listing_events %>%
 ```
 
 ## Transformation of NYC Parks Crimes Data
-The transformation of NYC Parks Crimes data is more straightforward compared to the event data. We also changed the column names to their shortened forms. Since the original data is separated into different files by quarter of the year and hence do not include any time information, we need to manually add a column to show the quarter and year for each record. After that, the different quarterly dataframes are concatenated into one crime dataframe.  
+The transformation of NYC Parks Crimes data was more straightforward compared to the event data. However the data files had some format inconsistencies that we had to resolve. We also changed the column names to their shortened forms. Since the original data was separated into different files by quarter of the year and hence did not include any time information, we needed to manually add a column to show the quarter and year for each record. After that, the different quarterly dataframes were concatenated into one crime dataframe.  
 ```{r}
 nyc_parks_crime <- read.csv("data/derived_data/nyc_parks_crime_data_all.csv", na.strings = "")
 names(nyc_parks_crime) <- c(
@@ -128,7 +128,7 @@ crime_quarters <- c(
 
 
 ## Transformation for interactive components
-In the interactive section, we created time series charts on category and organizers. In order to do that, we create two dataframes that contain the count of events for each category/organizer in each month from 2014 to 2018.
+In the interactive section, we created time series charts on category and organizers. In order to do that, we created two dataframes that contain the count of events for each category/organizer in each month from 2014 to 2018.
 ```{r cleaning for interactive event category monthly counts}
 # Event category monthly counts over time, used for interactive component
 nyc_events_category_counts_monthly <- nyc_event_listing_events %>%
