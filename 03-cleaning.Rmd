@@ -3,7 +3,7 @@
 In order to start our study on NYC park events and crimes, we need to do some cleaning and transforming to the data. The first thing to do is merging all the park event information into one dataframe, since they are originally separated in for csv files. Fortunately, all event datasets contain an event id with which we can merge all for data files into one event dataframe. As for the park crime dataset, we unified the quarter column format simply concatenated all the data file for each quarter into one crime dataframe. 
 
 ## Transformation of NYC Park Events Data
-For each separate data tables in for NYC park events, the first thing we do after reading them is to change the column names into abbrevations for display purpose. Those short forms of column names are explained when we discuss the charts.  
+For each separate data tables in for NYC park events, the first thing we do after reading them is to change the column names into abbrevations for display purpose. Those short forms of column names are explained when we discuss the charts. Additionally, as discussed in [Cost, Borough, Duration, and Time of Events], in order to get a cleaner mosaic pair chart for duration and start time arguments, we create bins to have fewer blocks in the chart. Similarly, in [Timeseries Analysis], we created weekday bins to count the events and analyze the time patterns. 
 ```{r read raw daata}
 library(lubridate)
 library(tidyverse)
